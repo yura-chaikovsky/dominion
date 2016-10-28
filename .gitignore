@@ -1,0 +1,5 @@
+syntax: glob
+.idea/*
+.lock
+node_modules
+media
