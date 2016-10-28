@@ -577,7 +577,7 @@ ms@0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.1.tgz#9cd13c03adbff25b65effde7ce864ee952017098"
 
-mysql2@^1.0.0-rc.3:
+mysql2@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/mysql2/-/mysql2-1.1.1.tgz#c0de9a1818844cb244c8e973b13ac86aef0433bb"
   dependencies:
