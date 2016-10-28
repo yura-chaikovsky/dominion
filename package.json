@@ -1,10 +1,10 @@
 {
-  "name": "dominion-api",
-  "version": "1.0.0",
+  "name": "dominion",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "directories": {
-    "test": "tests"
+    "test": "specs"
   },
   "dependencies": {
     "mysql2": "^1.0.0-rc.3",
@@ -22,6 +22,6 @@
   "scripts": {
     "postinstall": "node -e \"var fs=require('fs'); var paths = [{path: '../components',link: 'node_modules/components'},{path: '../core',link: 'node_modules/core'},{path: '../config', link: 'node_modules/config' }]; paths.forEach(item=>{ fs.exists(item.link,function(e){e||fs.symlinkSync(item.path,item.link,'dir')}); });\""
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Yura Chaikovsky",
+  "license": "MIT"
 }
