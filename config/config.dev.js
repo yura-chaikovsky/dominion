@@ -5,6 +5,7 @@ module.exports = {
     },
 
     router: {
+        // e.g. api/v2/
         urlPrefix: ''
     },
     
