@@ -1,5 +1,5 @@
 module.exports = {
-    models: [],
+    factories: [],
     controllers: [
         __dirname + '/controller'
     ],

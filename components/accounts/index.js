@@ -1,6 +1,6 @@
 module.exports = {
-    models: [
-        __dirname + '/model'
+    factories: [
+        __dirname + '/factory'
     ],
     controllers: [
         __dirname + '/controller',

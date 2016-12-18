@@ -11,7 +11,7 @@ let Server = function () {
         requestInterceptors: new Set(),
         responseInterceptors: new Set(),
         controllers: new Set(),
-        models: new Set()
+        factories: new Set()
     };
 
     this.router = Router;

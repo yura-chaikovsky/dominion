@@ -1,6 +1,7 @@
 module.exports = {
-    models: [
-        __dirname + '/sms/model'
+    factories: [
+        __dirname + '/mail/factory',
+        __dirname + '/sms/factory'
     ],
     controllers: [],
     requestInterceptors: [],
