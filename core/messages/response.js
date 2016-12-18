@@ -12,6 +12,9 @@ function Response(res){
 }
 
 const responsePrototype = {
+    get status (){
+        return this._response.status;
+    },
     set status (newStatus){
         this._response.status = newStatus;
     },
