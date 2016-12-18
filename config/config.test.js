@@ -3,7 +3,11 @@ module.exports = {
         host: 'localhost',
         port: 3001
     },
-    
+
+    router: {
+        urlPrefix: ''
+    },
+
     database: {
         host: 'localhost',
         user: 'root',

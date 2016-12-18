@@ -1,61 +1,44 @@
 const Messages                  = use('core/messages');
 const Errors                    = use('core/errors');
 
+const makeRoute                 = require('./makeRoute');
 
 const registeredRoutes = new Map();
 
-module.exports = class Router {
-    static addRoutes (handlersDefinitions) {
-        if (handlersDefinitions == null) {
-            throw new Errors.Fatal('handlersDefinitions is missed');
+class Router {
+    static makeRoute (){
+        return makeRoute.apply(this, arguments);
+    }
+
+    static addRoutes (routes) {
+        if (!routes) {
+            throw new Errors.Fatal('Routes definitions is missing');
         }
 
-        handlersDefinitions.forEach((handler) => {
+        routes.forEach((route) => {
             let handlersMap;
 
-            if (!registeredRoutes.has(handler.method)) {
-                registeredRoutes.set(handler.method, new Map());
+            if (!registeredRoutes.has(route.method)) {
+                registeredRoutes.set(route.method, new Map());
             }
-            handlersMap = registeredRoutes.get(handler.method);
+            handlersMap = registeredRoutes.get(route.method);
 
-            if (handler.annotation.path) {
-
-                let ArrAnnotation = handler.annotation.path;
-
-                handlersMap.set(new RegExp(`^${ArrAnnotation}$`), handler);
-
-            } else {
-
-                if (handlersMap.has(handler.arguments.args.pattern)) {
-                    throw new Errors.Fatal(`Route for ${handler.method} ${handler.arguments.args.pattern} is already defined`);
-                }
-
-                handlersMap.set(handler.arguments.args.pattern, handler);
-
+            if (handlersMap.has(route.pattern)) {
+                throw new Errors.Fatal(`Route for ${route.method} ${route.pattern} is already defined`);
             }
+
+            handlersMap.set(route.pattern, route);
 
         });
 
-        return handlersDefinitions;
+        return routes;
     };
 
     static handle (req, res) {
         const message = new Messages(req, res);
         const [args, handler] = findRoute(message.request.method, message.request.path);
 
-        let permission;
-        if (handler.annotations && handler.annotations.find(annotation => annotation.key === 'permission').length > 0){
-            permission = handler.annotations.find(annotation => annotation.key === 'permission')[0];
-        }
-        else{
-            permission = handler.permission;
-        }
-
-        message.request.handler = {
-            permission,
-            URLParameters: handler.arguments,
-            annotations: handler.annotations
-        };
+        message.request.handler = handler;
 
         const handlers = [...Messages.request.getInterceptors(),
             handler.handler.bind(message, ...args),
@@ -93,7 +76,7 @@ module.exports = class Router {
                 this.response.send();
             }.bind(message));
     };
-};
+}
 
 const findRoute = function (method, path) {
     const handlersMap = registeredRoutes.get(method);
@@ -109,12 +92,7 @@ const findRoute = function (method, path) {
         }
     }
 
-    return [[], {
-        method,
-        handler: function(){this.response.status = this.response.statuses._501_NotImplemented;},
-        arguments: {},
-        annotation: {},
-        permission: null
-    }];
+    return [[],makeRoute(method, function(){this.response.status = this.response.statuses._501_NotImplemented})];
 };
 
+module.exports = Router;
