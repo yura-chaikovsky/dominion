@@ -4,19 +4,18 @@ global.use = function (path) {
 };
 
 const Dominion                  = use('core/server');
-const config                    = use('config');
 const Message                   = use('core/messages');
 
-const server = new Dominion();
+const Server = new Dominion();
 
-server.addComponent(require('./components/sessions'));
-server.addComponent(require('./components/permissions'));
-server.addComponent(require('./components/accounts'));
-server.addComponent(require('./components/tracking'));
-server.addComponent(require('./components/logging'));
-server.addComponent(require('./components/authorize'));
-server.addComponent(require('./components/notifications'));
-server.addComponent(require('./components/media'));
+Server.addComponent(require('./components/sessions'));
+Server.addComponent(require('./components/permissions'));
+Server.addComponent(require('./components/accounts'));
+Server.addComponent(require('./components/tracking'));
+Server.addComponent(require('./components/logging'));
+Server.addComponent(require('./components/authorize'));
+Server.addComponent(require('./components/notifications'));
+Server.addComponent(require('./components/media'));
 
 
 Message.request.addInterceptor(function requestInterceptorLogConsole(){
@@ -34,4 +33,5 @@ Message.response.addInterceptor(function responseInterceptorAddServerNameHeader(
 });
 
 
-server.start(config);
+module.exports = Server;
+//server.start(config);
