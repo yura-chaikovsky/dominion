@@ -1,6 +1,10 @@
 "use strict";
 global.use = function (path) {
-    return require('./' + path);
+    if(path === 'config'){
+        return require.main.require('./' + path);
+    }else{
+        return require('./' + path);
+    }
 };
 
 const Dominion                  = use('core/server');
