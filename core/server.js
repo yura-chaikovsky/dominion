@@ -3,9 +3,10 @@ const Controllers               = require('./controllers');
 const Factories                 = require('./factories');
 const Messages                  = require('./messages');
 const Router                    = require('./router');
+const Errors                    = require('./errors');
 
 let Server = function () {
-    if (!new.target) throw new Error('Server can not be called without creating instance.');
+    if (!new.target) throw new Errors.Fatal('Server can not be called without creating instance.');
 
     this.componentsModules = {
         requestInterceptors: new Set(),
@@ -19,7 +20,6 @@ let Server = function () {
     this.controllers = Controllers;
     this.addComponent = addComponent;
     this.start = startServer;
-    this.clear = clear;
     this.stop = stopServer;
 };
 
@@ -34,14 +34,7 @@ const startServer = function (config) {
     });
 };
 
-const clear = function () {
-    Router.clear();
-    Factories.clear();
-    Controllers.clear();
-};
-
 const stopServer = function () {
-    clear();
     this.server.close();
 };
 
