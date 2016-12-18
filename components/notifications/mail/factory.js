@@ -1,5 +1,7 @@
-const Property = require('core/property');
+const Property                  = use('core/property');
+
 const NotificationEmailRepository = require('./repository');
+
 
 const NotificationEmailDefinition = {
 

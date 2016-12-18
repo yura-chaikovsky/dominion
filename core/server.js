@@ -15,7 +15,7 @@ let Server = function () {
     };
 
     this.router = Router;
-    this.models = Factories;
+    this.factories = Factories;
     this.controllers = Controllers;
     this.addComponent = addComponent;
     this.start = startServer;
@@ -53,8 +53,8 @@ const addComponent = function (componentInfo) {
 };
 
 const componentsRegistration = function () {
-    this.componentsModules.models.forEach(model=> {
-        this.models.define(require(model));
+    this.componentsModules.factories.forEach(model=> {
+        this.factories.define(require(model));
     });
 
     this.componentsModules.requestInterceptors.forEach(interceptor => {
