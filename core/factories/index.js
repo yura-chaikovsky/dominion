@@ -3,53 +3,49 @@ const ModelFactoryPrototype     = require('./factoriesPrototype');
 const ModelPrototype            = require('./modelsPrototype');
 
 
-const modelsCollection = new Map();
+const factoryCollection = new Map();
 
-const Models = function(modelName){
-    modelName = modelName.toLowerCase();
-    if(modelsCollection.has(modelName)){
-        return modelsCollection.get(modelName);
+const Factories = function(factoryName){
+    factoryName = factoryName.toLowerCase();
+    if(factoryCollection.has(factoryName)){
+        return factoryCollection.get(factoryName);
     }else{
-        throw new Errors.Fatal(`Model '${modelName}' is not defined`);
+        throw new Errors.Fatal(`Model '${factoryName}' is not defined`);
     }
 };
 
-Models.clear = function () {
-    modelsCollection.clear();
-};
-
-Models.define = function(modelDescription){
-    let modelName = modelDescription.name.toLowerCase();
-    if(modelsCollection.has(modelName)){
-        throw new Errors.Fatal(`Model with name '${modelName}' already defined`);
+Factories.define = function(factoryDescription){
+    let factoryName = factoryDescription.name.toLowerCase();
+    if(factoryCollection.has(factoryName)){
+        throw new Errors.Fatal(`Model with name '${factoryName}' already defined`);
     }else{
-        modelsCollection.set(modelName, defineModel(modelDescription));
+        factoryCollection.set(factoryName, factoryModel(factoryDescription));
     }
-    return modelsCollection.get(modelName);
+    return factoryCollection.get(factoryName);
 };
 
-let defineModel = function (modelDescription) {
+let factoryModel = function (factoryDescription) {
 
-    let ModelFactory = (new Function(`return function ${modelDescription.name + 'Factory'} (){}`))();
-    ModelFactory.prototype = ModelFactoryPrototype;
-    let modelFactoryInstance = new ModelFactory();
+    let FactoryModel = (new Function(`return function ${factoryDescription.name + 'Factory'} (){}`))();
+    FactoryModel.prototype = ModelFactoryPrototype;
+    let FactoryModelInstance = new FactoryModel();
 
-    Object.assign(modelFactoryInstance, modelDescription.factory);
-    modelFactoryInstance.repo = modelDescription.repository;
+    Object.assign(FactoryModelInstance, factoryDescription.factory);
+    FactoryModelInstance.repo = factoryDescription.repository;
 
-    let Model = (new Function(`return function ${modelDescription.name}(props){this.__properties__ = {}; this.__name__ = "${modelDescription.name}"; props && this.populate(props)}`))();
+    let Model = (new Function(`return function ${factoryDescription.name}(props){this.__properties__ = {}; this.__name__ = "${factoryDescription.name}"; props && this.populate(props)}`))();
     Model.prototype = Object.create(ModelPrototype);
-    Model.prototype.repo = modelDescription.repository;
-    Model.prototype.scheme = modelDescription.properties;
-    Object.assign(Model.prototype, modelDescription.instance);
+    Model.prototype.repo = factoryDescription.repository;
+    Model.prototype.scheme = factoryDescription.properties;
+    Object.assign(Model.prototype, factoryDescription.instance);
 
-    Object.defineProperties(Model.prototype, Object.keys(modelDescription.properties).reduce((propertyDefinition, propertyName) => {
+    Object.defineProperties(Model.prototype, Object.keys(factoryDescription.properties).reduce((propertyDefinition, propertyName) => {
         if (Model.prototype.hasOwnProperty(propertyName)){
             throw new Errors.Fatal('Incorrect model definition. Note, model should not contain repo and scheme fields.');
         }
         propertyDefinition[propertyName] = {
             set (value) {
-                this.scheme[propertyName].validate(value, propertyName, modelDescription.name);
+                this.scheme[propertyName].validate(value, propertyName, factoryDescription.name);
                 this.__properties__[propertyName] = value;
             },
             get () {
@@ -59,9 +55,9 @@ let defineModel = function (modelDescription) {
         return propertyDefinition;
     }, {}));
 
-    modelFactoryInstance.__model__ = Model;
+    FactoryModelInstance.__model__ = Model;
 
-    return modelFactoryInstance;
+    return FactoryModelInstance;
 };
 
-module.exports = Models;
+module.exports = Factories;
