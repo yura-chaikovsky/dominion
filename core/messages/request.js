@@ -7,8 +7,20 @@ const requestPrototype = {
         return this.__request__.method;
     },
 
+    get protocol () {
+        return this.__request__.connection.encrypted? 'https' : 'http';
+    },
+
+    get host () {
+        return this.__request__.headers.host;
+    },
+
     get path () {
         return this.__request__.url.replace(/^\/|\/$/g, '');
+    },
+
+    get url () {
+        return `${this.protocol}://${this.host}/${this.path}`;
     },
 
     get headers () {
