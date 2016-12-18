@@ -7,19 +7,8 @@ global.use = function (path) {
     }
 };
 
-const Dominion                  = use('core/server');
+const Server                    = use('core/server');
 const Message                   = use('core/messages');
-
-const Server = new Dominion();
-
-Server.addComponent(require('./components/sessions'));
-Server.addComponent(require('./components/permissions'));
-Server.addComponent(require('./components/accounts'));
-Server.addComponent(require('./components/tracking'));
-Server.addComponent(require('./components/logging'));
-Server.addComponent(require('./components/authorize'));
-Server.addComponent(require('./components/notifications'));
-Server.addComponent(require('./components/media'));
 
 
 Message.request.addInterceptor(function requestInterceptorLogConsole(){
@@ -38,4 +27,3 @@ Message.response.addInterceptor(function responseInterceptorAddServerNameHeader(
 
 
 module.exports = Server;
-//server.start(config);
