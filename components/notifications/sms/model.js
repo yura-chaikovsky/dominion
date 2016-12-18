@@ -1,4 +1,5 @@
-const Property                      = require('core/property');
+const Property                      = use('core/property');
+
 const NotificationSmsRepository     = require('./repository');
 const NotificationSmsStatuses       = require('./smsStatuses');
 

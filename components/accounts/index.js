@@ -1,11 +1,11 @@
 module.exports = {
     models: [
-        'components/accounts/model'
+        __dirname + '/model'
     ],
     controllers: [
-        'components/accounts/controller',
-        'components/accounts/passwordRecoveryController',
-        'components/accounts/passwordResetController'
+        __dirname + '/controller',
+        __dirname + '/passwordRecoveryController',
+        __dirname + '/passwordResetController'
     ],
     requestInterceptors: [],
     responseInterceptors: []

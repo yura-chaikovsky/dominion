@@ -1,9 +1,9 @@
-const Errors = require('core/errors');
+const Errors                    = use('core/errors');
 
-const ValidationNumber = require('./numberProperty');
-const ValidationString = require('./stringProperty');
-const ValidationObject = require('./objectProperty');
-const PropertyPrototype = require('./propertyPrototype');
+const ValidationNumber          = require('./numberProperty');
+const ValidationString          = require('./stringProperty');
+const ValidationObject          = require('./objectProperty');
+const PropertyPrototype         = require('./propertyPrototype');
 
 
 class Property {
@@ -26,7 +26,7 @@ class Property {
     }
     
     static model(modelName) {
-        const Factories = require('core/factories');
+        const Factories = use('core/factories');
         let property = new ValidationNumber().integer();
         
         property._addMethod(

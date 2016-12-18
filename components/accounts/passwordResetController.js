@@ -1,8 +1,8 @@
-const Factories                 = require('core/factories');
-const Errors                    = require('core/errors');
+const Factories                 = use('core/factories');
+const Errors                    = use('core/errors');
 
 
-const AccountsFactory = Factories('Accounts');
+const AccountsFactory           = Factories('Accounts');
 
 const passwordResetController = {
 

@@ -1,4 +1,4 @@
-const Repositories = require('core/repositories');
+const Repositories              = use('core/repositories');
 
 
 const PermissionsRepository = Repositories.create('permissions', {

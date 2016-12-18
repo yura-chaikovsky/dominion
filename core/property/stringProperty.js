@@ -1,5 +1,7 @@
-let Errors = require('core/errors');
-let ValidationPrototype = require('./propertyPrototype');
+const Errors                    = use('core/errors');
+
+const ValidationPrototype       = require('./propertyPrototype');
+
 
 class ValidationString extends ValidationPrototype {
     constructor() {

@@ -1,8 +1,10 @@
-const mysql                     = require('mysql2/promise');
-const configs                   = require('config');
-const Errors                    = require('core/errors');
+const Configs                   = use('config');
+const Errors                    = use('core/errors');
 
-const pool = mysql.createPool(configs.database);
+const mysql                     = require('mysql2/promise');
+
+
+const pool = mysql.createPool(Configs.database);
 
 module.exports = {
     /** Used for the prepared statement protocol queries.

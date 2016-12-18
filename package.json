@@ -19,9 +19,7 @@
     "joi": "^9.0.4",
     "mocha": "^2.5.3"
   },
-  "scripts": {
-    "postinstall": "node -e \"var fs=require('fs'); var paths = [{path: '../components',link: 'node_modules/components'},{path: '../core',link: 'node_modules/core'},{path: '../config', link: 'node_modules/config' }]; paths.forEach(item=>{ fs.exists(item.link,function(e){e||fs.symlinkSync(item.path,item.link,'dir')}); });\""
-  },
+  "scripts": {},
   "author": "Yura Chaikovsky",
   "license": "MIT"
 }

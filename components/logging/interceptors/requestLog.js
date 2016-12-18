@@ -1,5 +1,4 @@
-const Crypto                    = require('crypto');
-const Factories                 = require('core/factories');
+const Factories                 = use('core/factories');
 
 
 function requestInterceptorLogging() {
@@ -8,7 +7,7 @@ function requestInterceptorLogging() {
 
     return new Promise((resolve, reject) => {
         LogsFactory.new({
-                tracking_id: this.request.tracking.id,
+                tracking_id: this.request.tracking.id || null,
                 header: JSON.stringify(this.request.headers),
                 body: JSON.stringify(this.request.body)
             }, false)

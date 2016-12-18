@@ -1,21 +1,23 @@
 "use strict";
+global.use = function (path) {
+    return require('./' + path);
+};
 
-let Dominion                    = require('core/server');
-let config                      = require('config');
+const Dominion                  = use('core/server');
+const config                    = use('config');
+const Message                   = use('core/messages');
 
-var server = new Dominion();
+const server = new Dominion();
 
+server.addComponent(require('./components/sessions'));
+server.addComponent(require('./components/permissions'));
+server.addComponent(require('./components/accounts'));
+server.addComponent(require('./components/tracking'));
+server.addComponent(require('./components/logging'));
+server.addComponent(require('./components/authorize'));
+server.addComponent(require('./components/notifications'));
+server.addComponent(require('./components/media'));
 
-server.addComponent(require('components/sessions'));
-server.addComponent(require('components/permissions'));
-server.addComponent(require('components/accounts'));
-server.addComponent(require('components/tracking'));
-server.addComponent(require('components/authorize'));
-server.addComponent(require('components/notifications'));
-server.addComponent(require('components/media'));
-
-
-const Message = require('core/messages');
 
 Message.request.addInterceptor(function requestInterceptorLogConsole(){
     console.log('-> Request interceptor to: ' + this.request.path);

@@ -1,10 +1,10 @@
 module.exports = {
     models: [
-        'components/sessions/model'
+        __dirname + '/model'
     ],
     controllers: [],
     requestInterceptors: [
-        'components/sessions/interceptors/requestAuth'
+        __dirname + '/interceptors/requestAuth'
     ],
     responseInterceptors: []
 };

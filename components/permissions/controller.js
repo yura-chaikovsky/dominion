@@ -1,4 +1,4 @@
-const Factories                 = require('core/factories');
+const Factories                 = use('core/factories');
 
 
 const PermissionsFactory        = Factories('Permissions');

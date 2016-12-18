@@ -1,4 +1,4 @@
-const Message                       = require('core/messages');
+const Message                       = use('core/messages');
 
 
 Message.request.addInterceptor(requestInterceptorAddCookies);

@@ -1,12 +1,12 @@
 module.exports = {
     models: [
-        'components/permissions/model'
+        __dirname + '/model'
     ],
     controllers: [
-        'components/permissions/controller'
+        __dirname + '/controller'
     ],
     requestInterceptors: [
-        'components/permissions/interceptors/requestCheckPermission'
+        __dirname + '/interceptors/requestCheckPermission'
     ],
     responseInterceptors: []
 };

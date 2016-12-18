@@ -1,5 +1,5 @@
-const Property                          = require('core/property');
-const Errors                            = require('core/errors');
+const Property                          = use('core/property');
+const Errors                            = use('core/errors');
 
 module.exports = new (function Model() {
 

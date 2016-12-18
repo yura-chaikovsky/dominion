@@ -1,4 +1,4 @@
-const Message               = require('core/messages');
+const Message               = use('core/messages');
 
 
 Message.response.addInterceptor(responseInterceptorAddCORSHeader);

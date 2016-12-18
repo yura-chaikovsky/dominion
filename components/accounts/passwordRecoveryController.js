@@ -1,6 +1,7 @@
-const Factories                 = require('core/factories');
-const Errors                    = require('core/errors');
-const Sms                       = require('components/notifications/sms/index');
+const Factories                 = use('core/factories');
+const Errors                    = use('core/errors');
+
+const Sms                       = require('../notifications/sms/index');
 
 
 const passwordRecoveryFactory = Factories('Accounts');

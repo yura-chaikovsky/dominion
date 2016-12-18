@@ -1,6 +1,6 @@
 module.exports = {
     models: [
-        'components/notifications/sms/model'
+        __dirname + '/sms/model'
     ],
     controllers: [],
     requestInterceptors: [],

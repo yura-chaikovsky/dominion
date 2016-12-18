@@ -1,4 +1,4 @@
-const Errors                    = require('core/errors');
+const Errors                    = use('core/errors');
 const ModelFactoryPrototype     = require('./factoriesPrototype');
 const ModelPrototype            = require('./modelsPrototype');
 

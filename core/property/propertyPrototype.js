@@ -1,4 +1,5 @@
-let Errors = require("core/errors");
+const Errors                      = use("core/errors");
+
 
 class ValidationPrototype {
     constructor() {

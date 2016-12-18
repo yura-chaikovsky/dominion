@@ -1,5 +1,5 @@
-const config                    = require('config');
-const Factories                 = require('core/factories');
+const Factories                 = use('core/factories');
+const Config                    = use('config');
 
 
 const NotificationSmsFactory = Factories('NotificationSms');
@@ -7,7 +7,7 @@ const NotificationSmsFactory = Factories('NotificationSms');
 class NotificationSms {
 
     constructor() {
-        this.provider = require(`./providers/${config.smsGate.providers[config.smsGate.active].name}`);
+        this.provider = require(`./providers/${Config.smsGate.providers[Config.smsGate.active].name}`);
     }
 
     send({

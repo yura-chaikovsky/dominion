@@ -1,8 +1,8 @@
 const Http                      = require('http');
-const Router                    = require('core/router');
-const Factories                 = require('core/factories');
-const Controllers               = require('core/controllers');
-const Messages                  = require('core/messages');
+const Controllers               = require('./controllers');
+const Factories                 = require('./factories');
+const Messages                  = require('./messages');
+const Router                    = require('./router');
 
 let Server = function () {
     if (!new.target) throw new Error('Server can not be called without creating instance.');
@@ -69,32 +69,6 @@ const componentsRegistration = function () {
         this.controllers.define(require(controller));
     });
 
-    return checkPermissionsInDb.call(this);
 };
-
-function checkPermissionsInDb() {
-    let permissions = require('components/permissions/permissions');
-    return permissions.checkRequiredPermissions(collectPermissions(this));
-}
-
-function addPermissionsInDb(){
-    let PermissionFactory = Factories('Permissions');
-    collectPermissions(this).forEach(permission=>{
-        PermissionFactory.new({title: permission})
-            .then(permission => permission.save());
-    });
-}
-
-function collectPermissions(server){
-    let permissionList = [];
-    let controllersList = Array.from(server.controllers.getControllersCollection().entries()).map(([key, value]) => value);
-    controllersList.forEach(controller => controller.forEach(handler =>
-    {
-        if (handler.permission){
-            permissionList.push(handler.permission);
-        }
-    }));
-    return permissionList;
-}
 
 module.exports = Server;

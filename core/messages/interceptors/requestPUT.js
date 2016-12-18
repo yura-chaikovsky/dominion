@@ -1,5 +1,5 @@
-const Message               = require('core/messages');
-const Errors                = require('core/errors');
+const Message               = use('core/messages');
+const Errors                = use('core/errors');
 
 
 Message.request.addInterceptor(requestPUTAnalyzer);

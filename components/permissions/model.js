@@ -1,5 +1,6 @@
-const Property = require('core/property');
-const PermissionsRepository = require('./repository');
+const Property                  = use('core/property');
+
+const PermissionsRepository     = require('./repository');
 
 
 const ResourcesDefinition = {

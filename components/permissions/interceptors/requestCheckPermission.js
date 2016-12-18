@@ -1,4 +1,4 @@
-const Errors                    = require('core/errors');
+const Errors                    = use('core/errors');
 
 
 function requestInterceptorCheckPermissions() {

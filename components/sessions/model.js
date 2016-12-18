@@ -1,7 +1,8 @@
-const Property                  = require('core/property');
+const Property                  = use('core/property');
+const Config                    = use('config');
+
 const SessionsRepository        = require('./repository');
 const Tools                     = require('./tools');
-const config                    = require('config');
 
 
 const statuses = {
@@ -46,11 +47,11 @@ const SessionsDefinition = {
             session.creation_time = new Date();
 
             if (options.rememberMe) {
-                session.expiration_time = new Date(+session.creation_time + config.session.persistentTtl);
+                session.expiration_time = new Date(+session.creation_time + Config.session.persistentTtl);
                 session.status = this.statuses.LONG_ACTIVE;
             }
             else {
-                session.expiration_time = new Date(+session.creation_time + config.session.regularTtl);
+                session.expiration_time = new Date(+session.creation_time + Config.session.regularTtl);
                 session.status = this.statuses.ACTIVE;
             }
 
@@ -86,10 +87,10 @@ const SessionsDefinition = {
         refresh: function (options) {
             switch (this.status) {
                 case statuses.LONG_ACTIVE:
-                    this.expiration_time = new Date(+new Date() + config.session.persistentTtl);
+                    this.expiration_time = new Date(+new Date() + Config.session.persistentTtl);
                     break;
                 case statuses.ACTIVE:
-                    this.expiration_time = new Date(+new Date() + config.session.regularTtl);
+                    this.expiration_time = new Date(+new Date() + Config.session.regularTtl);
                     break;
             }
 

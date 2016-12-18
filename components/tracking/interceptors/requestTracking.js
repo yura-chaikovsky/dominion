@@ -1,10 +1,9 @@
+const Factories                 = use('core/factories');
+
 const Crypto                    = require('crypto');
-const Factories                 = require('core/factories');
 
 
 function requestInterceptorTracking() {
-
-    const LogsFactory = Factories('Logs');
     const TrackingFactory = Factories('Tracking');
 
     return new Promise((resolve, reject) => {

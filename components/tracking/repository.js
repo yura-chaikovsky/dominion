@@ -1,4 +1,4 @@
-const Repositories = require('core/repositories');
+const Repositories              = use('core/repositories');
 
 
 const TrackingRepository = Repositories.create('tracking', {});

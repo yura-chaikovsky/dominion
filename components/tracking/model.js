@@ -1,5 +1,7 @@
-const Property                       = require('core/property');
+const Property                       = use('core/property');
+
 const TrackingRepository             = require('./repository');
+
 
 const TrackingDefinition = {
 
@@ -9,7 +11,7 @@ const TrackingDefinition = {
 
     properties: {
         id: Property.id(),
-        method: Property.enum('GET', 'POST', 'PUT', 'DELETE'),
+        method: Property.enum('GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'),
         url: Property.string(),
         referrer: Property.string(),
         tracking_token: Property.string(),

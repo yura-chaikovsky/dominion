@@ -1,7 +1,7 @@
 module.exports = {
     models: [],
     controllers: [
-        'components/authorize/controller'
+        __dirname + '/controller'
     ],
     requestInterceptors: [],
     responseInterceptors: []

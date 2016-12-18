@@ -1,5 +1,7 @@
-const Property                  = require('core/property');
-const LogsRepository             = require('./repository');
+const Property                  = use('core/property');
+
+const LogsRepository            = require('./repository');
+
 
 const LogsDefinition = {
 
