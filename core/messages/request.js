@@ -4,7 +4,7 @@ function Request(req){
 
 const requestPrototype = {
     get method () {
-        return this.__request__.method;
+        return this.__request__.method.toUpperCase();
     },
 
     get protocol () {
@@ -12,11 +12,11 @@ const requestPrototype = {
     },
 
     get host () {
-        return this.__request__.headers.host;
+        return this.__request__.headers.host.toLowerCase();
     },
 
     get path () {
-        return this.__request__.url.replace(/^\/|\/$/g, '');
+        return this.__request__.url.replace(/^\/|\/$/g, '').toLowerCase();
     },
 
     get url () {
