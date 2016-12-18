@@ -9,7 +9,7 @@ function requestInterceptorTracking() {
     return new Promise((resolve, reject) => {
 
         TrackingFactory.new({
-            url: this.request.url,
+            url: this.request.path,
             method: this.request.method,
             referrer: this.request.headers['referrer'],
             accounts_id: this.request.session ? this.request.session.account.id : null,

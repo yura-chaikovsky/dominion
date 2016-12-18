@@ -15,10 +15,6 @@ const requestPrototype = {
         return this.__request__.headers;
     },
 
-    get url () {
-        return this.__request__.url;
-    },
-
     get ip (){
         return this.__request__.headers['x-forwarded-for']
             || this.__request__.connection.remoteAddress
