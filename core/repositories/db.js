@@ -1,10 +1,10 @@
-const Configs                   = use('config');
+const Config                    = use('config');
 const Errors                    = use('core/errors');
 
 const mysql                     = require('mysql2/promise');
 
 
-const pool = mysql.createPool(Configs.database);
+const pool = mysql.createPool(Config.database);
 
 module.exports = {
     /** Used for the prepared statement protocol queries.
