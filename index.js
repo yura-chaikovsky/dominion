@@ -26,4 +26,4 @@ Message.response.addInterceptor(function responseInterceptorAddServerNameHeader(
 });
 
 
-module.exports = Server;
+module.exports = new Server();
