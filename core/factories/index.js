@@ -10,14 +10,14 @@ const Factories = function(factoryName){
     if(factoryCollection.has(factoryName)){
         return factoryCollection.get(factoryName);
     }else{
-        throw new Errors.Fatal(`Model '${factoryName}' is not defined`);
+        throw new Errors.Fatal(`Factory '${factoryName}' is not defined`);
     }
 };
 
 Factories.define = function(factoryDescription){
     let factoryName = factoryDescription.name.toLowerCase();
     if(factoryCollection.has(factoryName)){
-        throw new Errors.Fatal(`Model with name '${factoryName}' already defined`);
+        throw new Errors.Fatal(`Factory with name '${factoryName}' already defined`);
     }else{
         factoryCollection.set(factoryName, factoryModel(factoryDescription));
     }
@@ -41,7 +41,7 @@ let factoryModel = function (factoryDescription) {
 
     Object.defineProperties(Model.prototype, Object.keys(factoryDescription.properties).reduce((propertyDefinition, propertyName) => {
         if (Model.prototype.hasOwnProperty(propertyName)){
-            throw new Errors.Fatal('Incorrect model definition. Note, model should not contain repo and scheme fields.');
+            throw new Errors.Fatal('Incorrect factory definition. Note, factory should not contain repo and scheme fields.');
         }
         propertyDefinition[propertyName] = {
             set (value) {
