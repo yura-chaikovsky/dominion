@@ -1,5 +1,6 @@
-const Errors                    = require('./../errors');
-const Router                    = require('./../router');
+const Errors                    = use('core/errors');
+const Router                    = use('core/router');
+
 const getHandlersDefinitions    = require('./handlersDefinitions');
 
 const controllersCollection = new Map();
