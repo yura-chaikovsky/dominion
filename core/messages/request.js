@@ -1,3 +1,6 @@
+const url                       = require('url');
+
+
 function Request(req){
     this.__request__ = req;
 }
@@ -16,7 +19,8 @@ const requestPrototype = {
     },
 
     get path () {
-        return this.__request__.url.replace(/^\/|\/$/g, '').toLowerCase();
+        const requestUrl = url.parse(this.__request__.url);
+        return (requestUrl.pathname.replace(/^\/|\/$/g, '') + requestUrl.search).toLowerCase();
     },
 
     get url () {
