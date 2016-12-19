@@ -20,7 +20,7 @@ const requestPrototype = {
 
     get path () {
         const requestUrl = url.parse(this.__request__.url);
-        return (requestUrl.pathname.replace(/^\/|\/$/g, '') + requestUrl.search).toLowerCase();
+        return (requestUrl.pathname.replace(/^\/|\/$/g, '') + (requestUrl.search || '')).toLowerCase();
     },
 
     get url () {
