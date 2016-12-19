@@ -1,6 +1,7 @@
+const Errors                    = use('core/errors');
+
 const RepositoryPrototype       = require('./repositoryPrototype');
 const DB                        = require('./db');
-const Errors                    = require('./../errors');
 
 
 const Repositories = () => {};
