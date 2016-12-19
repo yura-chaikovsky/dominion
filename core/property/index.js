@@ -55,7 +55,7 @@ class Property {
         return property;
     }
     
-    static enum(...valueList) {
+    static enum(valueList) {
         let property = new PropertyPrototype();
         
         property._addMethod(
@@ -66,6 +66,22 @@ class Property {
             }
         );
         
+        return property;
+    }
+
+    static set(valueList) {
+        let property = new PropertyPrototype();
+
+        property._addMethod(
+            function () {
+                property._propertyValue.forEach((val) => {
+                    if (!valueList.includes(val)) {
+                        throw new Errors.Validation(`property ${property._propertyName} should have one of enum value: ${valueList.join(', ')}, given '${property._propertyValue}'`)
+                    }
+                });
+            }
+        );
+
         return property;
     }
     
