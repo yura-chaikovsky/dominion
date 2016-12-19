@@ -74,6 +74,9 @@ class Property {
 
         property._addMethod(
             function () {
+                if(!Array.isArray(property._propertyValue)){
+                    throw new Errors.Validation(`property ${property._propertyName} should be an array, given [${typeof property._propertyValue}] '${property._propertyValue}'`)
+                }
                 property._propertyValue.forEach((val) => {
                     if (!valueList.includes(val)) {
                         throw new Errors.Validation(`property ${property._propertyName} should have one of enum value: ${valueList.join(', ')}, given '${property._propertyValue}'`)
