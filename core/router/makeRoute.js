@@ -21,7 +21,7 @@ const makeRoute = function(method, handler, rootPath = '', permission = null){
         annotations: parsedFunction.annotations,
         permission: parsedFunction.annotations.permission ? parsedFunction.annotations.permission : permission,
         pattern: parsedFunction.annotations.path?
-            getPatternForArgs([], parsedFunction.annotations.path)
+            getPatternForArgs({required: [],optional: parsedFunction.arguments.optional}, parsedFunction.annotations.path)
             : getPatternForArgs(parsedFunction.arguments, rootPath)
     }
 };
@@ -51,7 +51,7 @@ const reflection = function(fn){
 
 const getPatternForArgs = function (args, rootPath) {
     let urlPrefix = (Config.router && Config.router.urlPrefix) || '';
-    let stringRegexp = args.length === 0? rootPath : getStringRegexp(args, rootPath);
+    let stringRegexp = getStringRegexp(args, rootPath);
 
     return new RegExp(`^${urlPrefix + stringRegexp}$`);
 };
