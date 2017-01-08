@@ -9,8 +9,8 @@ const pool = mysql.createPool(Config.database);
 module.exports = {
     /** Used for the prepared statement protocol queries.
      *  It should be used for ALL queries except of DB manipulation. */
-    execute () {
-        return pool.execute.apply(pool, arguments)
+    execute (query, args = []) {
+        return pool.execute(query, args)
             .catch((error) => {
                 let errorDatabase = new Errors.Database(error.message);
                 errorDatabase.originalError = {
