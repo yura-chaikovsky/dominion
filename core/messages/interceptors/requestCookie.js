@@ -13,7 +13,7 @@ function requestInterceptorAddCookies() {
 }
 
 function cookieParser(cookieString){
-    return cookieString.split(';').reduce((result, nameValuePair) => {
+    return cookieString.split(/\s*;\s*/).reduce((result, nameValuePair) => {
         [name, value] = nameValuePair.split('=');
         result[name] = value;
         return result;
