@@ -25,7 +25,7 @@ class HttpRequest {
             }
 
             let options = {
-                host    : urlInformation.hostname,
+                hostname: urlInformation.hostname,
                 port    : urlInformation.port,
                 path    : urlInformation.path,
                 method  : method,
