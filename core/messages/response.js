@@ -33,7 +33,7 @@ const responsePrototype = {
         this._serverResponse.statusCode = this._response.status.code;
         this._serverResponse.statusMessage = this._response.status.message;
 
-        this._serverResponse.end(this._response.status.emptyBody? '' : JSON.stringify(this._response.body));
+        this._serverResponse.end((this._response.status.emptyBody || this._response.body === '') ? '' : JSON.stringify(this._response.body));
     },
 
     statuses: Statuses
