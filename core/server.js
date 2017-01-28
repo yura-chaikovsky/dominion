@@ -12,7 +12,8 @@ let Server = function () {
         requestInterceptors: new Set(),
         responseInterceptors: new Set(),
         controllers: new Set(),
-        factories: new Set()
+        factories: new Set(),
+        bootstrap: new Set()
     };
 
     this.router = Router;
@@ -30,6 +31,7 @@ const startServer = function (config) {
     this.server = Http.createServer(this.router.handle);
 
     this.server.listen(config.server.port, config.server.host, () => {
+        componentsBootstraping.call(this);
         console.log(`Server running at http://${config.server.host}:${config.server.port}/`);
     });
 };
@@ -62,6 +64,13 @@ const componentsRegistration = function () {
         this.controllers.define(require(controller));
     });
 
+};
+
+const componentsBootstraping = function () {
+    this.componentsModules.bootstrap.forEach(controller => {
+        const bootstrapFn = require(controller);
+        (typeof bootstrapFn === 'function') && bootstrapFn(this);
+    });
 };
 
 module.exports = Server;
