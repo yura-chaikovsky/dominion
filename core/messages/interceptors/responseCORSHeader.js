@@ -1,13 +1,14 @@
 const Message               = use('core/messages');
+const Config                = use('config');
 
 
 Message.response.addInterceptor(responseInterceptorAddCORSHeader);
 
 function responseInterceptorAddCORSHeader(body) {
     return Promise.resolve().then(() => {
-        this.response.headers['Access-Control-Allow-Origin'] = '*';
-        this.response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
-        this.response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Set-Cookies, access-token';
+        Object.keys(Config.CorsAllowHeaders).forEach((key)=>{
+            this.response.headers[key] = Config.CorsAllowHeaders[key];
+        });
         if(this.request.method == 'OPTIONS'){
             this.response.status = this.response.statuses._200_OK;
         }
