@@ -4,12 +4,6 @@ module.exports = {
         port: 3000
     },
 
-    CorsAllowHeaders: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Set-Cookies'
-    },
-
     router: {
         // e.g. api/v2/
         urlPrefix: ''
@@ -30,6 +24,12 @@ module.exports = {
             'image/png',
             'image/gif'
         ]
+    },
+
+    corsAllowHeaders: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Set-Cookies'
     },
 
     smsGate: {
