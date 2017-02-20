@@ -1,10 +1,10 @@
 module.exports = {
     factories: [],
-    controllers: [],
+    controllers: [
+        __dirname + '/controller'
+    ],
     requestInterceptors: [
         __dirname + '/interceptors/requestAddCORSHeader'
     ],
-    responseInterceptors: [
-        __dirname + '/interceptors/responseAdd200Status'
-    ]
+    responseInterceptors: []
 };

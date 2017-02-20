@@ -22,8 +22,7 @@ module.exports = {
         methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE'],
         headers: ['Content-Type', 'Set-Cookies', 'Access-Token'],
         credentials: false,
-        maxAge: 5 /* seconds */,
-        exposeHeaders: null
+        maxAge: 5 /* seconds */
     },
 
     media: {
