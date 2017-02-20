@@ -4,6 +4,10 @@ const Errors                    = use('core/errors');
 function requestInterceptorAddCORSHeader() {
     let allowedOrigins;
 
+    if(this.request.headers.origin === undefined){
+        return;
+    }
+
     if(Config.cors.origin === '*'){
         this.response.headers['Access-Control-Allow-Origin'] = '*';
     }else{
