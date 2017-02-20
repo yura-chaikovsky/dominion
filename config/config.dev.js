@@ -15,7 +15,17 @@ module.exports = {
         password: 'root',
         database: 'dominion'
     },
-    
+
+    cors: {
+        // e.g. * | ['example.com'] | () => {} (synchronous callback function with Message context returning array of allowed origins)
+        origin: '*',
+        methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE'],
+        headers: ['Content-Type', 'Set-Cookies', 'Access-Token'],
+        credentials: false,
+        maxAge: 5 /* seconds */,
+        exposeHeaders: null
+    },
+
     media: {
         urlPath: '/media',
         saveDir: '../../media',
@@ -24,12 +34,6 @@ module.exports = {
             'image/png',
             'image/gif'
         ]
-    },
-
-    corsAllowHeaders: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Set-Cookies'
     },
 
     smsGate: {

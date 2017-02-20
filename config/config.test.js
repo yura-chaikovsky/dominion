@@ -5,6 +5,7 @@ module.exports = {
     },
 
     router: {
+        // e.g. api/v2/
         urlPrefix: ''
     },
 
@@ -15,7 +16,17 @@ module.exports = {
         testDatabaseName: 'dominion_test',
         connectionLimit: 1,
     },
-    
+
+    cors: {
+        // e.g. * | ['example.com'] | () => {} (callback function)
+        origin: '*',
+        methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE'],
+        headers: ['Content-Type', 'Set-Cookies', 'Access-Token'],
+        credentials: false,
+        maxAge: 5 /* seconds */,
+        exposeHeaders: null
+    },
+
     media: {
         urlPath: '/mediaTest',
         saveDir: '../../mediaTest',
@@ -24,12 +35,6 @@ module.exports = {
             'image/png',
             'image/gif'
         ]
-    },
-
-    corsAllowHeaders: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Set-Cookies'
     },
 
     smsGate: {
