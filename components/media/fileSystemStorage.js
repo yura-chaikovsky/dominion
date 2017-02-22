@@ -4,8 +4,6 @@ const Errors                    = use('core/errors');
 const fs                        = require('fs');
 const path                      = require('path');
 const crypto                    = require('crypto');
-
-
 const getFileInfo               = require('file-type');
 
 
@@ -28,8 +26,8 @@ class FileSystemStorage {
             fs.mkdirSync(dirPath);
         }
 
-        let currentTime = crypto.createHash('md5').update(file).digest("hex");
-        result.fileName = `${currentTime}.${fileInfo.ext}`;
+        let fileHash = crypto.createHash('md5').update(file).digest("hex");
+        result.fileName = `${fileHash}.${fileInfo.ext}`;
         fs.writeFileSync(path.join(dirPath, result.fileName), file);
 
         return result;
