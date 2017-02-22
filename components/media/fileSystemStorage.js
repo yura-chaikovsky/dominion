@@ -3,6 +3,9 @@ const Errors                    = use('core/errors');
 
 const fs                        = require('fs');
 const path                      = require('path');
+const crypto                    = require('crypto');
+
+
 const getFileInfo               = require('file-type');
 
 
@@ -16,7 +19,7 @@ class FileSystemStorage {
         let fileInfo = getFileInfo(file);
 
         if(Config.media.supportsTypes.indexOf(fileInfo.mime)==-1) {
-            throw new Errors.BadRequest(`mime type "${fileInfo.mime}" is not supported`);
+            throw new Errors.BadRequest(`Mime type '${fileInfo.mime}' is not supported`);
         }
 
         let dirPath = path.resolve(Config.media.saveDir);
@@ -25,9 +28,8 @@ class FileSystemStorage {
             fs.mkdirSync(dirPath);
         }
 
-        let currentTime = new Date().getTime().toString();
+        let currentTime = crypto.createHash('md5').update(file).digest("hex");
         result.fileName = `${currentTime}.${fileInfo.ext}`;
-        result.filePath = path.join(Config.media.saveDir, result.fileName);
         fs.writeFileSync(path.join(dirPath, result.fileName), file);
 
         return result;
