@@ -22,8 +22,8 @@ const passwordRecoveryController = {
                         let sms = new Sms();
                         return sms.send({
                             body: `Code : ${account.recovery_token}`,
-                            recipient_phone: account.phone_number,
-                            accounts_recipient_id: account.id
+                            recipientPhone: account.phone_number,
+                            accountsRecipientId: account.id
                         }).then(response=>{
                             account.save();
                             this.response.status = this.response.statuses._201_Created;
