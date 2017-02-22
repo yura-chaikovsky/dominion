@@ -11,21 +11,21 @@ class NotificationSms {
     }
 
     send({
-        accounts_senders_id = null,
-        sender_title = 'automatic message',
+        accountsSendersId = null,
+        senderTitle = 'automatic message',
         body,
-        recipient_phone,
-        accounts_recipient_id = null,
+        recipientPhone,
+        accountsRecipientId = null,
         type = 'automatic'
     })
     {
         let saveData = {
-            accounts_senders_id     : accounts_senders_id,
+            accounts_senders_id     : accountsSendersId,
             body                    : body,
-            recipient_phone         : recipient_phone,
-            accounts_recipient_id   : accounts_recipient_id,
+            recipient_phone         : recipientPhone,
+            accounts_recipient_id   : accountsRecipientId,
             type                    : type,
-            sender_title            : sender_title
+            sender_title            : senderTitle
         };
 
         return NotificationSmsFactory.new(saveData)
@@ -33,7 +33,7 @@ class NotificationSms {
                 return notificationSms.save();
             })
             .then((notificationSms)=>{
-                return this.provider.sendSms(recipient_phone, body)
+                return this.provider.sendSms(recipientPhone, body)
                     .then(response => {
                         notificationSms.status          = response.status;
                         notificationSms.provider_sms_id = response.providerSmsId;
