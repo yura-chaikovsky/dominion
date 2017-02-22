@@ -3,41 +3,32 @@ const Errors                    = use('core/errors');
 
 const fs                        = require('fs');
 const path                      = require('path');
+const crypto                    = require('crypto');
+const getFileInfo               = require('file-type');
 
 
 class FileSystemStorage {
 
-    static _fileName(fileName) {
-        let fileNameSplit = fileName.split('.');
-        let fileExtension = fileNameSplit.splice(-1, 1);
+    static fileSave (uploadfile) {
 
-        return new Date().getTime().toString()+'.'+fileExtension;
-    }
+        let result = {};
 
-    static fileSave (fileInfo) {
-        let result = {
-            response: {},
-            success: false
-        };
+        let file = new Buffer(uploadfile.file, 'base64');
+        let fileInfo = getFileInfo(file);
 
-        if(Config.media.supportsTypes.indexOf(fileInfo.fileType)!==-1) {
-            let dirPath = path.join(__dirname, Config.media.saveDir);
-
-            if (!fs.existsSync(dirPath)){
-                fs.mkdirSync(dirPath);
-            }
-            let file = new Buffer(fileInfo.file, 'base64');
-            result.response.fileName = this._fileName(fileInfo.fileName);
-            result.response.filePath = path.join(Config.media.urlPath, result.response.fileName);
-
-            fs.writeFileSync(path.join(dirPath, result.response.fileName), file);
-
-            result.response.status = "ok";
-            result.success = true;
-        } else {
-            result.success = false;
-            result.response.status = `mime type "${fileInfo.fileType}" is not supported`;
+        if(Config.media.supportsTypes.indexOf(fileInfo.mime)==-1) {
+            throw new Errors.BadRequest(`Mime type '${fileInfo.mime}' is not supported`);
         }
+
+        let dirPath = path.resolve(Config.media.saveDir);
+
+        if (!fs.existsSync(dirPath)){
+            fs.mkdirSync(dirPath);
+        }
+
+        let fileHash = crypto.createHash('md5').update(file).digest("hex");
+        result.fileName = `${fileHash}.${fileInfo.ext}`;
+        fs.writeFileSync(path.join(dirPath, result.fileName), file);
 
         return result;
     }
