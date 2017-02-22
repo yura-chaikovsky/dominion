@@ -35,7 +35,7 @@ class NotificationSms {
             .then((notificationSms)=>{
                 return this.provider.sendSms(recipientPhone, body)
                     .then(response => {
-                        notificationSms.status          = response.status;
+                        notificationSms.status = response.status;
                         notificationSms.provider_sms_id = response.providerSmsId;
                         return notificationSms.save();
                     });
