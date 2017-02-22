@@ -19,7 +19,6 @@ const MediaController = {
          Content-Type: application/json
 
          {
-             "fileType":"image/gif",
              "fileName":"pixel.gif",
              "file":"R0lGODlhCgAKAIABALG1ucPHyywAAAAACgAKAAACEYSPEMtr3R50agY5MdSx5pQUADs="
          }
@@ -27,14 +26,7 @@ const MediaController = {
         */
 
         function () {
-            let result = MediaTools.fileSave(this.request.body);
-
-            if(result.success){
-                return result.response;
-            }else{
-                this.response.status = this.response.statuses._400_BadRequest;
-                return result.response;
-            }
+            return MediaTools.fileSave(this.request.body);
         }
     ]
 
