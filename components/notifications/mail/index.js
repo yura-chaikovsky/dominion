@@ -9,17 +9,36 @@ class NotificationEmails {
         this.provider = require(`./providers/${config.mailGate.providers[config.mailGate.active].name}`);
     }
 
-    send(options, additionalOptions) {
+    send({
+        from='',
+        to='',
+        cc=[],
+        bcc=[],
+        subject='',
+        body='',
+        sendersId=null,
+        accountRecipientsId=null,
+        type='AUTOMATIC'
+    }) {
 
         let saveData = {
-            accounts_senders_id: additionalOptions.sendersId,
-            subject: options.subject,
-            body: options.html,
-            recipient_email_to: options.to,
-            recipient_email_cc: options.cc.join(','),
-            recipient_email_bcc: options.bcc.join(','),
-            accounts_recipients_id: additionalOptions.accountRecipientsId,
-            type: additionalOptions.type
+            accounts_senders_id: sendersId,
+            subject: subject,
+            body: body,
+            recipient_email_to: to,
+            recipient_email_cc: cc.join(','),
+            recipient_email_bcc: bcc.join(','),
+            accounts_recipients_id: accountRecipientsId,
+            type: type
+        };
+
+        let emailInfo = {
+            from: from,
+            to:to,
+            cc:cc,
+            bcc:bcc,
+            subject:subject,
+            body:body
         };
 
         return NotificationEmailsFactory.new(saveData)
@@ -27,7 +46,7 @@ class NotificationEmails {
                 return notificationEmail.save();
             })
             .then((notificationEmail)=> {
-                return this.provider.send(options)
+                return this.provider.send(emailInfo)
                     .then(response => {
                         notificationEmail.message_id = response.messageId;
                         notificationEmail.status = response.status;
