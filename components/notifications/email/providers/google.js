@@ -1,6 +1,6 @@
 const nodemailer                = require('nodemailer');
 const config                    = use('config');
-const mailStatuses              = require('./../mailStatuses');
+const EMAIL_STATUS              = require('./../mailStatuses');
 
 
 class Google {
@@ -29,9 +29,9 @@ class Google {
             });
         }).then(response => {
             if (response.rejected.length) {
-                response.status = mailStatuses['REJECTED'];
+                response.status = EMAIL_STATUS.REJECTED;
             } else {
-                response.status = mailStatuses['ACCEPTED'];
+                response.status = EMAIL_STATUS.ACCEPTED;
             }
             return response;
         })
