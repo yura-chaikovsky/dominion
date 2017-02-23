@@ -1,7 +1,8 @@
 const config                    = use('config');
 const Factories                 = use('core/factories');
-const NotificationEmailsFactory = Factories('NotificationEmails');
 
+
+const NotificationEmailsFactory = Factories('NotificationEmails');
 
 class NotificationEmails {
 
