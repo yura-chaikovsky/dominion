@@ -2,6 +2,13 @@ const Property                  = use('core/property');
 
 const NotificationEmailRepository = require('./repository');
 
+const EMAIL_STATUS = require('./mailStatuses');
+
+const EMAIL_TYPE = {
+    AUTOMATIC:'AUTOMATIC',
+    MANUAL:'MANUAL'
+};
+
 
 const NotificationEmailDefinition = {
 
@@ -21,11 +28,17 @@ const NotificationEmailDefinition = {
         recipient_email_bcc: Property.string().max(255),
         recipient_id: Property.number(),
         account_recipients_id: Property.number(),
-        status: Property.enum('QUEUED', 'SENT', 'REJECTED', 'ACCEPTED'),
-        type: Property.enum('AUTOMATIC', 'MANUAL')
+        status: Property.enum(Object.keys(EMAIL_STATUS)),
+        type: Property.enum(Object.keys(EMAIL_TYPE))
     },
 
-    factory: {},
+    factory: {
+
+        EMAIL_STATUS,
+
+        EMAIL_TYPE
+
+    },
 
     instance: {}
 };

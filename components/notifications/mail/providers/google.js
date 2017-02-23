@@ -1,6 +1,6 @@
 const nodemailer                = require('nodemailer');
 const config                    = use('config');
-const mailStatuses              = use('components/notifications/mail/mailStatuses');
+const mailStatuses              = require('./../mailStatuses');
 
 
 class Google {

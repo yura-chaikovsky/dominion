@@ -19,7 +19,7 @@ class NotificationEmails {
         body='',
         accountSendersId=null,
         accountRecipientsId=null,
-        type='AUTOMATIC'
+        type= NotificationEmailsFactory.AUTOMATIC
     }) {
 
         let saveData = {
