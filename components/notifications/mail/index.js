@@ -1,6 +1,7 @@
-const config = require('config');
-const Factories = require('core/factories');
+const config                    = use('config');
+const Factories                 = use('core/factories');
 const NotificationEmailsFactory = Factories('NotificationEmails');
+
 
 class NotificationEmails {
 
@@ -15,8 +16,8 @@ class NotificationEmails {
             subject: options.subject,
             body: options.html,
             recipient_email_to: options.to,
-            recipient_email_cc: options.cc.toString(),
-            recipient_email_bcc: options.bcc.toString(),
+            recipient_email_cc: options.cc.join(','),
+            recipient_email_bcc: options.bcc.join(','),
             accounts_recipients_id: additionalOptions.accountRecipientsId,
             type: additionalOptions.type
         };
@@ -28,7 +29,7 @@ class NotificationEmails {
             .then((notificationEmail)=> {
                 return this.provider.send(options)
                     .then(response => {
-                        notificationEmail.message_id = response.resolve.messageId;
+                        notificationEmail.message_id = response.messageId;
                         notificationEmail.status = response.status;
                         return notificationEmail.save();
                     });
