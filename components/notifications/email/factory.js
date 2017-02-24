@@ -1,13 +1,8 @@
 const Property                      = use('core/property');
 
 const NotificationEmailRepository   = require('./repository');
-
 const EMAIL_STATUS                  = require('./enums/statuses');
-
-const EMAIL_TYPE = {
-    AUTOMATIC:'AUTOMATIC',
-    MANUAL:'MANUAL'
-};
+const EMAIL_TYPE                    = require('./enums/types');
 
 
 const NotificationEmailDefinition = {

@@ -1,7 +1,8 @@
 const Property                      = use('core/property');
 
 const NotificationSmsRepository     = require('./repository');
-const NotificationSmsStatuses       = require('./enums/statuses');
+const SMS_STATUS                    = require('./enums/statuses');
+const SMS_TYPE                      = require('./enums/types');
 
 
 const NotificationSmsDefinition = {
@@ -21,13 +22,17 @@ const NotificationSmsDefinition = {
         time_sent               : Property.number(),
         time_received           : Property.number(),
         time_failed             : Property.number(),
-        status                  : Property.enum(...Object.keys(NotificationSmsStatuses)),
-        type                    : Property.enum('automatic','manual'),
+        status                  : Property.enum(Object.keys(SMS_STATUS)),
+        type                    : Property.enum(Object.keys(SMS_TYPE)),
         price_internal          : Property.number().price(),
         price_external          : Property.number().price()
     },
 
-    factory: {},
+    factory: {
+        SMS_STATUS,
+        SMS_TYPE
+
+    },
 
     instance: {}
 };
