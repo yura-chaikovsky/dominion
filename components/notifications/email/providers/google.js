@@ -1,14 +1,7 @@
-var nodemailer = require('nodemailer');
-const config = require('config');
-const Errors = require('core/errors');
-const mailStatuses = require('./../mailStatuses');
+const nodemailer                = require('nodemailer');
+const config                    = use('config');
+const EMAIL_STATUS              = require('./../mailStatuses');
 
-const googleStatuses = {
-    "QUEUED": mailStatuses.QUEUED,
-    "SEND": mailStatuses.SEND,
-    "REGECTED": mailStatuses.REGECTED,
-    "ACCEPTED": mailStatuses.ACCEPTED
-};
 
 class Google {
 
@@ -34,19 +27,13 @@ class Google {
                     resolve(info);
                 }
             });
-        }).then(resolve => {
-
-            if (resolve.rejected.length - 1 > null) {
-
-                return {status: mailStatuses['REJECTED'], resolve};
-
-
+        }).then(response => {
+            if (response.rejected.length) {
+                response.status = EMAIL_STATUS.REJECTED;
             } else {
-
-                return {status: mailStatuses['ACCEPTED'], resolve};
-
+                response.status = EMAIL_STATUS.ACCEPTED;
             }
-
+            return response;
         })
 
     }
