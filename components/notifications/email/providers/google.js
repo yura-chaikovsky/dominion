@@ -1,12 +1,12 @@
-const nodemailer                = require('nodemailer');
 const config                    = use('config');
+const nodemailer                = require('nodemailer');
+
 const EMAIL_STATUS              = require('./../mailStatuses');
 
 
 class Google {
 
     static send(options) {
-
         let transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
@@ -14,13 +14,12 @@ class Google {
                 pass: config.mailGate.providers[config.mailGate.active].password
             },
         }, {
-
             from: options.from,
             headers: {}
         });
 
-        return new Promise((resolve, reject)=> {
-            transporter.sendMail(options, (error, info)=> {
+        return new Promise((resolve, reject) => {
+            transporter.sendMail(options, (error, info) => {
                 if (error) {
                     reject(error);
                 } else {
@@ -28,14 +27,9 @@ class Google {
                 }
             });
         }).then(response => {
-            if (response.rejected.length) {
-                response.status = EMAIL_STATUS.REJECTED;
-            } else {
-                response.status = EMAIL_STATUS.ACCEPTED;
-            }
+            response.status = response.rejected.length? EMAIL_STATUS.REJECTED : EMAIL_STATUS.ACCEPTED;
             return response;
-        })
-
+        });
     }
 
 }

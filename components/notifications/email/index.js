@@ -46,7 +46,7 @@ class NotificationEmails {
                     });
             });
     }
-
 }
+
 
 module.exports = NotificationEmails;

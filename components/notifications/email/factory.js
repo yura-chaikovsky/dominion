@@ -17,7 +17,6 @@ const NotificationEmailDefinition = {
     repository: NotificationEmailRepository,
 
     properties: {
-
         id: Property.id(),
         message_id: Property.string().max(255),
         accounts_senders_id: Property.number(),
@@ -33,9 +32,7 @@ const NotificationEmailDefinition = {
     },
 
     factory: {
-
         EMAIL_STATUS,
-
         EMAIL_TYPE
 
     },
