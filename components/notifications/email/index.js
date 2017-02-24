@@ -11,15 +11,15 @@ class NotificationEmails {
     }
 
     send({
-        from='',
-        to=[],
-        cc=[],
-        bcc=[],
-        subject='',
-        body='',
-        accountSendersId=null,
-        accountRecipientsId=null,
-        type= NotificationEmailsFactory.EMAIL_TYPE.AUTOMATIC
+        from = '',
+        to = [],
+        cc = [],
+        bcc = [],
+        subject = '',
+        body = '',
+        accountSendersId = null,
+        accountRecipientsId = null,
+        type = NotificationEmailsFactory.EMAIL_TYPE.AUTOMATIC
     }) {
 
         let saveData = {
@@ -34,10 +34,10 @@ class NotificationEmails {
         };
 
         return NotificationEmailsFactory.new(saveData)
-            .then((notificationEmail)=> {
+            .then((notificationEmail) => {
                 return notificationEmail.save();
             })
-            .then((notificationEmail)=> {
+            .then((notificationEmail) => {
                 return this.provider.send({ from, to, cc, bcc, subject, body })
                     .then(response => {
                         notificationEmail.message_id = response.messageId;
