@@ -1,7 +1,7 @@
 const config                    = use('config');
 const nodemailer                = require('nodemailer');
 
-const EMAIL_STATUS              = require('./../mailStatuses');
+const EMAIL_STATUS              = require('./../enums/statuses');
 
 
 class Google {

@@ -1,7 +1,7 @@
 const querystring                 = require('querystring');
 const config                      = require('config');
 const HttpRequest                 = require('components/transports');
-const smsStatuses                 = require('./../smsStatuses');
+const smsStatuses                 = require('./../enums/statuses');
 const Errors                      = require('core/errors');
 
 

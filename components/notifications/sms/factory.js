@@ -1,7 +1,7 @@
 const Property                      = use('core/property');
 
 const NotificationSmsRepository     = require('./repository');
-const NotificationSmsStatuses       = require('./smsStatuses');
+const NotificationSmsStatuses       = require('./enums/statuses');
 
 
 const NotificationSmsDefinition = {

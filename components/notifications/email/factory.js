@@ -2,7 +2,7 @@ const Property                      = use('core/property');
 
 const NotificationEmailRepository   = require('./repository');
 
-const EMAIL_STATUS                  = require('./mailStatuses');
+const EMAIL_STATUS                  = require('./enums/statuses');
 
 const EMAIL_TYPE = {
     AUTOMATIC:'AUTOMATIC',
