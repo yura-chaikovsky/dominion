@@ -27,8 +27,9 @@ class FileSystemStorage {
         }
 
         let fileHash = crypto.createHash('md5').update(file).digest("hex");
-        result.fileName = `${fileHash}.${fileInfo.ext}`;
-        fs.writeFileSync(path.join(dirPath, result.fileName), file);
+        let fileName = `${fileHash}.${fileInfo.ext}`;
+        result.fileUrl = `${Config.media.urlPath}/${fileName}`;
+        fs.writeFileSync(path.join(dirPath, fileName), file);
 
         return result;
     }
