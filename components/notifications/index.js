@@ -1,6 +1,6 @@
 module.exports = {
     factories: [
-        __dirname + '/mail/factory',
+        __dirname + '/email/factory',
         __dirname + '/sms/factory'
     ],
     controllers: [],

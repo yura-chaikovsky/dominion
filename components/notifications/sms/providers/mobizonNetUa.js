@@ -1,20 +1,22 @@
+const config                      = use('config');
+const Errors                      = use('core/errors');
+const HttpRequest                 = use('components/transports');
+
 const querystring                 = require('querystring');
-const config                      = require('config');
-const HttpRequest                 = require('components/transports');
-const smsStatuses                 = require('./../enums/statuses');
-const Errors                      = require('core/errors');
+
+const SMS_STATUSES                = require('./../enums/statuses');
 
 
-const mobizoneStatuses = {
-    "NEW" : smsStatuses.NEW,
-    "ENQUEUD" : smsStatuses.ENQUEUED,
-    "ACCEPTD" : smsStatuses.ACCEPTED,
-    "UNDELIV" : smsStatuses.UNDELIVERED,
-    "REJECTD" : smsStatuses.REJECTED,
-    "PDLIVRD" : smsStatuses.PARTLY_DELIVERED,
-    "DELIVRD" : smsStatuses.DELIVERED,
-    "EXPIRED" : smsStatuses.EXPIRED,
-    "DELETED" : smsStatuses.DELETED
+const MOBIZONE_STATUSES = {
+    "NEW" : SMS_STATUSES.NEW,
+    "ENQUEUD" : SMS_STATUSES.ENQUEUED,
+    "ACCEPTD" : SMS_STATUSES.ACCEPTED,
+    "UNDELIV" : SMS_STATUSES.UNDELIVERED,
+    "REJECTD" : SMS_STATUSES.REJECTED,
+    "PDLIVRD" : SMS_STATUSES.PARTLY_DELIVERED,
+    "DELIVRD" : SMS_STATUSES.DELIVERED,
+    "EXPIRED" : SMS_STATUSES.EXPIRED,
+    "DELETED" : SMS_STATUSES.DELETED
 };
 
 class MobizonNetUa {
@@ -46,7 +48,7 @@ class MobizonNetUa {
                     if(response.code===0) {
                         return {
                             providerSmsId   : response.data.messageId,
-                            status          : smsStatuses['NEW']
+                            status          : SMS_STATUSES['NEW']
                         };
                     } else {
                         throw new Errors.Fatal(`SMS: ${response.message}`);
@@ -83,7 +85,7 @@ class MobizonNetUa {
                         resultJson.data.forEach(item => {
                             response.push({
                                 providerSmsId   : item.id,
-                                status          : mobizoneStatuses[item.status]
+                                status          : MOBIZONE_STATUSES[item.status]
                             });
                         });
                         return response;
