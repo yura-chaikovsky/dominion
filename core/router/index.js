@@ -69,7 +69,7 @@ class Router {
             }.bind(message))
             .catch(function (error) {
                 this.response.status = this.response.statuses._500_InternalServerError;
-                return process.env.NODE_ENV === 'prod'? '' : error;
+                return process.env.NODE_ENV === 'prod'? (console.error(error), '') : error;
             }.bind(message))
             .then(function (body) {
                 this.response.body = body;
