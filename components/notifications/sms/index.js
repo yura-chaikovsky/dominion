@@ -16,7 +16,7 @@ class NotificationSms {
         body,
         recipientPhone,
         accountsRecipientId = null,
-        type = 'automatic'
+        type = 'AUTOMATIC'
     })
     {
         let saveData = {
@@ -33,7 +33,7 @@ class NotificationSms {
                 return notificationSms.save();
             })
             .then((notificationSms)=>{
-                return this.provider.sendSms(recipientPhone, body)
+                return this.provider.sendSms(notificationSms.recipient_phone, body)
                     .then(response => {
                         notificationSms.status = response.status;
                         notificationSms.provider_sms_id = response.providerSmsId;

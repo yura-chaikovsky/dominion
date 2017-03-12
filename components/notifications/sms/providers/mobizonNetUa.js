@@ -1,10 +1,8 @@
+const querystring                 = require('querystring');
 const config                      = use('config');
 const Errors                      = use('core/errors');
 const HttpRequest                 = use('components/transports');
-
-const querystring                 = require('querystring');
-
-const SMS_STATUSES                = require('./../enums/statuses');
+const SMS_STATUSES                 = require('./../enums/statuses');
 
 
 const MOBIZONE_STATUSES = {
