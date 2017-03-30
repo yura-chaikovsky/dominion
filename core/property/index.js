@@ -31,7 +31,7 @@ class Property {
         property._addMethod(
             function () {
                 let value = property._propertyValue;
-                if (typeof value == 'string') {
+                if (typeof value == 'string' || typeof value == 'number') {
                     value = new Date(value);
                 }
 
@@ -44,7 +44,7 @@ class Property {
         );
 
         property.setter = function(value){
-            if(typeof value == 'string'){
+            if(typeof value == 'string' || typeof value == 'number'){
                 value = new Date(value);
             }
 
