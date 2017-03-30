@@ -46,7 +46,7 @@ let factoryModel = function (factoryDescription) {
         propertyDefinition[propertyName] = {
             set (value) {
                 this.scheme[propertyName].validate(value, propertyName, factoryDescription.name);
-                this.__properties__[propertyName] = value;
+                this.__properties__[propertyName] = this.scheme[propertyName].setter(value);
             },
             get () {
                 return this.__properties__[propertyName];

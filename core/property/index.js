@@ -24,7 +24,33 @@ class Property {
     static object() {
         return new ValidationObject();
     }
-    
+
+    static date(){
+        let property = new PropertyPrototype();
+
+        property._addMethod(
+            function () {
+                let value = property._propertyValue;
+                if (typeof value != 'object') {
+                    value = new Date(value);
+                }
+
+                if (typeof value != 'undefined') {
+                    if (typeof value != 'object' || !(value instanceof Date) ||  isNaN(value.getTime()) ) {
+                        throw new Errors.Validation(`property ${property._propertyName} should be a Date.`);
+                    }
+                }
+            }
+        );
+
+        property.setter = function(value){
+            return typeof value == "object" ? value : new Date(value);
+        };
+
+        return property;
+    }
+
+
     static model(modelName) {
         const Factories = use('core/factories');
         let property = new ValidationNumber().integer();

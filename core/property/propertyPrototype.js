@@ -22,6 +22,10 @@ class ValidationPrototype {
         return this;
     }
 
+    setter(value){
+        return value;
+    }
+
     validate(value, propertyName, modelName) {
         this._propertyName = propertyName;
         this._propertyValue = value;
