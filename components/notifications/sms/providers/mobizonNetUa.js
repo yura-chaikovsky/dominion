@@ -60,14 +60,14 @@ class MobizonNetUa {
             });
     }
 
-    static getSmsStatus(ids){
+    static getSmsStatus(id){
 
         let options = {
             url: config.smsGate.providers[config.smsGate.active].getStatusUrl,
             method: 'POST',
             postBody: querystring.stringify({
                 apiKey: config.smsGate.providers[config.smsGate.active].token,
-                ids: ids,
+                ids: id,
             }),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -79,14 +79,11 @@ class MobizonNetUa {
                 try {
                     let resultJson = JSON.parse(result);
                     if(resultJson.code===0) {
-                        let response = [];
-                        resultJson.data.forEach(item => {
-                            response.push({
-                                providerSmsId   : item.id,
-                                status          : MOBIZONE_STATUSES[item.status]
-                            });
-                        });
-                        return response;
+                         return {
+                            providerSmsId   : resultJson.data[0].id,
+                            status          : MOBIZONE_STATUSES[item.status]
+                        };
+                        
                     } else {
                         throw new Errors.BadRequest(`SMS: ${resultJson.message}`);
                     }

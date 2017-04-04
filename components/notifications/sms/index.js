@@ -46,7 +46,7 @@ class NotificationSms {
         return this.provider.getSmsStatus(id)
             .then(response => NotificationSmsFactory.get({provider_sms_id: id}))
             .then((notificationSms) => {
-                notificationSms.status = response[0].status;
+                notificationSms.status = response.status;
                 return notificationSms.save();
             });
     }
