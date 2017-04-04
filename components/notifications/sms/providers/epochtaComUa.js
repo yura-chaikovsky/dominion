@@ -24,13 +24,12 @@ class EpochtaComUa {
 
     //DOCUMENTATION: https://www.epochta.com.ua/products/sms/v3.php
 
-    static sendSms(phoneNumber, messageText, providerConfig = null) {
-        let gateConfig = providerConfig ? providerConfig:config.smsGate.providers[config.smsGate.active];
+    static sendSms(phoneNumber, messageText, providerConfig) {
 
-        let args = {
+         let args = {
             version: '3.0',
             action: 'sendSMS',
-            key: gateConfig.publicKey,
+            key: providerConfig.publicKey,
             sender: 'Info',
             text: messageText,
             phone: phoneNumber,
@@ -38,109 +37,109 @@ class EpochtaComUa {
             sms_lifetime: 0,
         };
 
-        args.sum = this._generateSig(args, gateConfig.privateKey);
+        args.sum = this._generateSig(args, providerConfig.privateKey);
 
         let options = {
-            url: [
-                gateConfig.apiUrl + args.action,
-                querystring.stringify(args)
-            ].join('?')
+            url:  `${providerConfig.apiUrl + args.action}?${querystring.stringify(args)}`
         };
 
         return HttpRequest.request(options)
             .then(result => {
-                try {
-                    let response = JSON.parse(result);
-                    if(response.result) {
-                        return {
-                            providerSmsId   : response.result.id,
-                            status          : SMS_STATUSES['NEW']
-                        };
-                    } else {
-                        throw new Errors.Fatal(`SMS: ${response.error}`);
-                    }
+
+                let response = JSON.parse(result);
+                if (!response.result) {
+                    throw new Errors.Fatal(`SMS: ${response.error}`);
                 }
-                catch (error){
-                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${result})`);
+
+                return {
+                    providerSmsId: response.result.id,
+                    status: SMS_STATUSES['NEW']
+                };
+
+            })
+            .catch((error) => {
+                if (error instanceof SyntaxError) {
+                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${error})`);
+                } else {
+                    throw new Errors.BadRequest(error);
                 }
             });
 
     }
 
-    static getSmsStatus(id, providerConfig = null) {
-        let gateConfig = providerConfig ? providerConfig:config.smsGate.providers[config.smsGate.active];
+    static getSmsStatus(id, providerConfig) {
 
         let args = {
             version: '3.0',
             action: 'getCampaignInfo',
-            key: gateConfig.publicKey,
+            key: providerConfig.publicKey,
             id: id
         };
 
-        args.sum = this._generateSig(args, gateConfig.privateKey);
+        args.sum = this._generateSig(args, providerConfig.privateKey);
 
         let options = {
-            url: [
-                gateConfig.apiUrl + args.action,
-                querystring.stringify(args)
-            ].join('?')
+            url:  `${providerConfig.apiUrl + args.action}?${querystring.stringify(args)}`
         };
 
         return HttpRequest.request(options)
             .then(result => {
-                try {
-                    let response = JSON.parse(result);
-                    if(response.result) {
 
-                        return [{
-                            providerSmsId : id,
-                            status: PROVIDER_STATUSES[response.result.status]
-                        }];
-
-                    } else {
-                        throw new Errors.Fatal(`SMS: ${response.error}`);
-                    }
+                let response = JSON.parse(result);
+                if(!response.result) {
+                    throw new Errors.Fatal(`SMS: ${response.error}`);
                 }
-                catch (error){
-                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${result})`);
+
+                return {
+                    providerSmsId: id,
+                    status: PROVIDER_STATUSES[response.result.status]
+                };
+
+            })
+            .catch((error) => {
+                if(error instanceof SyntaxError) {
+                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${error})`);
+                } else {
+                    throw new Errors.BadRequest(error);
                 }
             });
     }
 
-    static getSmsBalance(providerConfig = null) {
-        let gateConfig = providerConfig ? providerConfig:config.smsGate.providers[config.smsGate.active];
+    static getSmsBalance(providerConfig) {
 
         let args = {
             version: '3.0',
             action: 'getUserBalance',
-            key: gateConfig.publicKey,
+            key: providerConfig.publicKey,
             cy: 'UAH'
         };
 
-        args.sum = this._generateSig(args, gateConfig.privateKey);
+        args.sum = this._generateSig(args, providerConfig.privateKey);
 
         let options = {
-            url: [
-                gateConfig.apiUrl + args.action,
-                querystring.stringify(args)
-            ].join('?')
+            url:  `${providerConfig.apiUrl + args.action}?${querystring.stringify(args)}`
         };
 
         return HttpRequest.request(options)
             .then(result => {
-                try {
-                    let response = JSON.parse(result);
-                    if(response.result) {
-                        return {
-                            balance : response.result.balance_currency,
-                            currency: response.result.currency
-                        };
-                    } else {
-                        throw new Errors.Fatal(`SMS: ${response.error}`);
-                    }
+
+                let response = JSON.parse(result);
+
+                if (!response.result) {
+                    throw new Errors.BadRequest(`SMS: ${response.error}`);
                 }
-                catch (error){
-                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${result})`);
+
+                return {
+                    balance: response.result.balance_currency,
+                    currency: response.result.currency
+                };
+
+            })
+            .catch((error) => {
+                if(error instanceof SyntaxError) {
+                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${error})`);
+                } else {
+                    throw new Errors.BadRequest(error);
                 }
             });
 
@@ -148,11 +147,13 @@ class EpochtaComUa {
 
     static _generateSig(args, privateKey) {
         let concat  = '';
+
         Object.keys(args)
             .sort()
             .forEach((key)=>{
                 concat  += args[key];
             });
+
         concat += privateKey;
         return crypto.createHash('md5').update(concat).digest("hex");
     }
