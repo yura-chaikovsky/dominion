@@ -22,16 +22,16 @@ class MobizonNetUa {
     //https://mobizon.net.ua
     //http://docs.mobizon.com/api/
 
-    static sendSms(phoneNumber, messageText){
+    static sendSms(phoneNumber, messageText, providerConfig){
 
         let options = {
-            url: config.smsGate.providers[config.smsGate.active].sendSmsUrl,
+            url: providerConfig.sendSmsUrl,
             method: 'POST',
             postBody: querystring.stringify({
-                apiKey      : config.smsGate.providers[config.smsGate.active].token,
+                apiKey      : providerConfig.token,
                 recipient   : phoneNumber,
                 text        : messageText,
-                from        : config.smsGate.providers[config.smsGate.active].senderName,
+                from        : providerConfig.senderName,
             }),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -40,33 +40,33 @@ class MobizonNetUa {
 
         return HttpRequest.request(options)
             .then(result => {
-
-                try {
-                    let response = JSON.parse(result);
-                    if(response.code===0) {
-                        return {
-                            providerSmsId   : response.data.messageId,
-                            status          : SMS_STATUSES['NEW']
-                        };
-                    } else {
-                        throw new Errors.Fatal(`SMS: ${response.message}`);
-                    }
-
-                }
-                catch (error){
-                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${result})`);
+                let response = JSON.parse(result);
+                if (response.code === 0) {
+                    return {
+                        providerSmsId: response.data.messageId,
+                        status: SMS_STATUSES['NEW']
+                    };
+                } else {
+                    throw new Errors.Fatal(`SMS: ${response.message}`);
                 }
 
+            })
+            .catch((error) => {
+                if (error instanceof SyntaxError) {
+                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${error})`);
+                } else {
+                    throw new Errors.BadRequest(error);
+                }
             });
     }
 
-    static getSmsStatus(id){
+    static getSmsStatus(id, providerConfig){
 
         let options = {
-            url: config.smsGate.providers[config.smsGate.active].getStatusUrl,
+            url: providerConfig.getStatusUrl,
             method: 'POST',
             postBody: querystring.stringify({
-                apiKey: config.smsGate.providers[config.smsGate.active].token,
+                apiKey: providerConfig.token,
                 ids: id,
             }),
             headers: {
@@ -76,33 +76,36 @@ class MobizonNetUa {
 
         return HttpRequest.request(options)
             .then(result => {
-                try {
-                    let resultJson = JSON.parse(result);
-                    if(resultJson.code===0) {
-                         return {
-                            providerSmsId   : resultJson.data[0].id,
-                            status          : MOBIZONE_STATUSES[item.status]
-                        };
-                        
-                    } else {
-                        throw new Errors.BadRequest(`SMS: ${resultJson.message}`);
-                    }
 
+                let resultJson = JSON.parse(result);
+                if (resultJson.code === 0) {
+                    return {
+                        providerSmsId: resultJson.data[0].id,
+                        status: MOBIZONE_STATUSES[item.status]
+                    };
+
+                } else {
+                    throw new Errors.BadRequest(`SMS: ${resultJson.message}`);
                 }
-                catch (error){
-                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${result})`);
+
+            })
+            .catch((error) => {
+                if (error instanceof SyntaxError) {
+                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${error})`);
+                } else {
+                    throw new Errors.BadRequest(error);
                 }
             });
 
     }
 
-    static getSmsBalance(){
+    static getSmsBalance(providerConfig){
 
         let options = {
-            url: config.smsGate.providers[config.smsGate.active].getBalanceUrl,
+            url: providerConfig.getBalanceUrl,
             method: 'POST',
             postBody: querystring.stringify({
-                apiKey: config.smsGate.providers[config.smsGate.active].token
+                apiKey: providerConfig.token
             }),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -111,19 +114,21 @@ class MobizonNetUa {
 
         return HttpRequest.request(options)
             .then(result => {
-                try {
-                    let response = JSON.parse(result);
-                    if(response.code===0) {
-                        return {
-                            balance : response.balance,
-                            currency: response.currency
-                        };
-                    } else {
-                        throw new Errors.Fatal(`SMS: ${response.message}`);
-                    }
+                let response = JSON.parse(result);
+                if (response.code === 0) {
+                    return {
+                        balance: response.balance,
+                        currency: response.currency
+                    };
+                } else {
+                    throw new Errors.Fatal(`SMS: ${response.message}`);
                 }
-                catch (error){
-                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${result})`);
+            })
+            .catch((error) => {
+                if (error instanceof SyntaxError) {
+                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${error})`);
+                } else {
+                    throw new Errors.BadRequest(error);
                 }
             });
     }
