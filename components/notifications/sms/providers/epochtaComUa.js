@@ -1,6 +1,5 @@
 const querystring               = require('querystring');
 const crypto                    = require('crypto');
-const config                    = use('config');
 const Errors                    = use('core/errors');
 const HttpRequest               = use('components/transports');
 const SMS_STATUSES              = require('./../enums/statuses');
