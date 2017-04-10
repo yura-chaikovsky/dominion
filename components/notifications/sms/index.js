@@ -6,8 +6,8 @@ const NotificationSmsFactory = Factories('NotificationSms');
 
 class NotificationSms {
 
-    constructor() {
-        this.provider = require(`./providers/${Config.smsGate.providers[Config.smsGate.active].name}`);
+    constructor(providerConfig) {
+        NotificationSmsFactory.setProviderConfig(providerConfig);
     }
 
     send({
@@ -33,26 +33,22 @@ class NotificationSms {
                 return notificationSms.save();
             })
             .then((notificationSms)=>{
-                return this.provider.sendSms(notificationSms.recipient_phone, body)
-                    .then(response => {
-                        notificationSms.status = response.status;
-                        notificationSms.provider_sms_id = response.providerSmsId;
-                        return notificationSms.save();
-                    });
+                return notificationSms.send(notificationSms.recipient_phone, body);
+            })
+            .then((notificationSms)=>{
+                return notificationSms.save();                
             });
     }
 
     getStatus(id) {
-        return this.provider.getSmsStatus(id)
-            .then(response => NotificationSmsFactory.get({provider_sms_id: id}))
+        return NotificationSmsFactory.getStatus(id)
             .then((notificationSms) => {
-                notificationSms.status = response.status;
                 return notificationSms.save();
             });
     }
 
     getSmsBalance() {
-        return this.provider.getSmsBalance();
+        return NotificationSmsFactory.getSmsBalance();
     }
 }
 

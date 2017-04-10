@@ -1,8 +1,7 @@
 const querystring                 = require('querystring');
-const config                      = use('config');
 const Errors                      = use('core/errors');
 const HttpRequest                 = use('components/transports');
-const SMS_STATUSES                 = require('./../enums/statuses');
+const SMS_STATUSES                = require('./../enums/statuses');
 
 
 const MOBIZONE_STATUSES = {
@@ -22,16 +21,24 @@ class MobizonNetUa {
     //https://mobizon.net.ua
     //http://docs.mobizon.com/api/
 
-    static sendSms(phoneNumber, messageText, providerConfig){
+    static get config(){
+        return this._config;
+    }
+
+    static set config(config){
+        this._config = config;
+    }
+
+    static sendSms(phoneNumber, messageText){
 
         let options = {
-            url: providerConfig.sendSmsUrl,
+            url: this.config.sendSmsUrl,
             method: 'POST',
             postBody: querystring.stringify({
-                apiKey      : providerConfig.token,
+                apiKey      : this.config.token,
                 recipient   : phoneNumber,
                 text        : messageText,
-                from        : providerConfig.senderName,
+                from        : this.config.senderName,
             }),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -60,13 +67,13 @@ class MobizonNetUa {
             });
     }
 
-    static getSmsStatus(id, providerConfig){
+    static getSmsStatus(id){
 
         let options = {
-            url: providerConfig.getStatusUrl,
+            url: this.config.getStatusUrl,
             method: 'POST',
             postBody: querystring.stringify({
-                apiKey: providerConfig.token,
+                apiKey: this.config.token,
                 ids: id,
             }),
             headers: {
@@ -99,13 +106,13 @@ class MobizonNetUa {
 
     }
 
-    static getSmsBalance(providerConfig){
+    static getSmsBalance(){
 
         let options = {
-            url: providerConfig.getBalanceUrl,
+            url: this.config.getBalanceUrl,
             method: 'POST',
             postBody: querystring.stringify({
-                apiKey: providerConfig.token
+                apiKey: this.config.token
             }),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

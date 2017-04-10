@@ -34,7 +34,44 @@ const NotificationSmsDefinition = {
 
     },
 
-    instance: {}
+    instance: {
+
+        setProviderConfig(providerConfig){
+            this.providerConfig = providerConfig;
+        },
+
+        send: function ({ body, recipientPhone }) {
+
+            let provider = require(`./providers/${this.providerConfig.name}`);
+            provider.config(this.providerConfig);
+
+            return provider.sendSms(recipientPhone, body)
+                .then(response => {
+                    this.status = response.status;
+                    this.provider_sms_id = response.providerSmsId;
+                    return this;
+                });
+        },
+
+        getStatus: function(id){
+            let provider = require(`./providers/${this.providerConfig.name}`);
+            provider.config(this.providerConfig);
+
+            return provider.getSmsStatus(id)
+                .then((response) => {
+                    this.status = response.status;
+                    return this;
+                });
+        },
+
+        getSmsBalance: function () {
+            let provider = require(`./providers/${this.providerConfig.name}`);
+            provider.config(this.providerConfig);
+            
+            return provider.getSmsBalance();
+        }
+
+    }
 };
 
 
