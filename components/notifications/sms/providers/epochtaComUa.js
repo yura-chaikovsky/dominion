@@ -24,12 +24,32 @@ class EpochtaComUa {
 
     //DOCUMENTATION: https://www.epochta.com.ua/products/sms/v3.php
 
-    static sendSms(phoneNumber, messageText, providerConfig) {
+/*
+    ---CONFIG TEMPLATE---
+     {
+        name            : 'EpochtaComUa'
+        senderName      : 'Info',
+        publicKey       : 'public key',
+        privateKey      : 'private key',
+        apiUrl          : 'http://api.myatompark.com/sms/3.0/'
+     }
+*/
+
+
+    static get config(){
+        return this._config;
+    }
+
+    static set config(config){
+        this._config = config;
+    }
+
+    static sendSms(phoneNumber, messageText) {
 
          let args = {
             version: '3.0',
             action: 'sendSMS',
-            key: providerConfig.publicKey,
+            key: this.config.publicKey,
             sender: 'Info',
             text: messageText,
             phone: phoneNumber,
@@ -37,10 +57,10 @@ class EpochtaComUa {
             sms_lifetime: 0,
         };
 
-        args.sum = this._generateSig(args, providerConfig.privateKey);
+        args.sum = this._generateSig(args, this.config.privateKey);
 
         let options = {
-            url:  `${providerConfig.apiUrl + args.action}?${querystring.stringify(args)}`
+            url:  `${this.config.apiUrl + args.action}?${querystring.stringify(args)}`
         };
 
         return HttpRequest.request(options)
@@ -67,19 +87,19 @@ class EpochtaComUa {
 
     }
 
-    static getSmsStatus(id, providerConfig) {
+    static getSmsStatus(id) {
 
         let args = {
             version: '3.0',
             action: 'getCampaignInfo',
-            key: providerConfig.publicKey,
+            key: this.config.publicKey,
             id: id
         };
 
-        args.sum = this._generateSig(args, providerConfig.privateKey);
+        args.sum = this._generateSig(args, this.config.privateKey);
 
         let options = {
-            url:  `${providerConfig.apiUrl + args.action}?${querystring.stringify(args)}`
+            url:  `${this.config.apiUrl + args.action}?${querystring.stringify(args)}`
         };
 
         return HttpRequest.request(options)
@@ -105,19 +125,19 @@ class EpochtaComUa {
             });
     }
 
-    static getSmsBalance(providerConfig) {
+    static getSmsBalance() {
 
         let args = {
             version: '3.0',
             action: 'getUserBalance',
-            key: providerConfig.publicKey,
+            key: this.config.publicKey,
             cy: 'UAH'
         };
 
-        args.sum = this._generateSig(args, providerConfig.privateKey);
+        args.sum = this._generateSig(args, this.config.privateKey);
 
         let options = {
-            url:  `${providerConfig.apiUrl + args.action}?${querystring.stringify(args)}`
+            url:  `${this.config.apiUrl + args.action}?${querystring.stringify(args)}`
         };
 
         return HttpRequest.request(options)
