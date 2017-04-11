@@ -31,21 +31,21 @@ const NotificationSmsDefinition = {
     factory: {
         SMS_STATUS,
         SMS_TYPE
-
     },
 
     instance: {
 
-        setProviderConfig(providerConfig){
+        setProviderConfig: function (providerConfig){
             this.providerConfig = providerConfig;
         },
 
+        setProvider: function (){
+            this.provider = require(`./providers/${this.providerConfig.name}`);
+            this.provider.config(this.providerConfig);
+        },
+
         send: function ({ body, recipientPhone }) {
-
-            let provider = require(`./providers/${this.providerConfig.name}`);
-            provider.config(this.providerConfig);
-
-            return provider.sendSms(recipientPhone, body)
+            return this.provider.sendSms(recipientPhone, body)
                 .then(response => {
                     this.status = response.status;
                     this.provider_sms_id = response.providerSmsId;
@@ -53,22 +53,12 @@ const NotificationSmsDefinition = {
                 });
         },
 
-        getStatus: function(id){
-            let provider = require(`./providers/${this.providerConfig.name}`);
-            provider.config(this.providerConfig);
-
-            return provider.getSmsStatus(id)
+        getStatus: function(){
+            return this.provider.getSmsStatus(this.id)
                 .then((response) => {
                     this.status = response.status;
                     return this;
                 });
-        },
-
-        getSmsBalance: function () {
-            let provider = require(`./providers/${this.providerConfig.name}`);
-            provider.config(this.providerConfig);
-            
-            return provider.getSmsBalance();
         }
 
     }

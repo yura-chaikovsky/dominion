@@ -8,6 +8,7 @@ class NotificationSms {
 
     constructor(providerConfig) {
         NotificationSmsFactory.setProviderConfig(providerConfig);
+        NotificationSmsFactory.setProvider(providerConfig);
     }
 
     send({
@@ -40,16 +41,13 @@ class NotificationSms {
             });
     }
 
-    getStatus(id) {
-        return NotificationSmsFactory.getStatus(id)
+    getStatus() {
+        return NotificationSmsFactory.getStatus()
             .then((notificationSms) => {
                 return notificationSms.save();
             });
     }
-
-    getSmsBalance() {
-        return NotificationSmsFactory.getSmsBalance();
-    }
+    
 }
 
 module.exports = NotificationSms;
