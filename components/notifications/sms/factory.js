@@ -30,34 +30,36 @@ const NotificationSmsDefinition = {
 
     factory: {
         SMS_STATUS,
-        SMS_TYPE
+        SMS_TYPE,
+
+        new: function (properties = {}, providerConfig = Config.smsGate.providers[Config.smsGate.active]) {
+            const newModel = new this.__model__(properties);
+            newModel.providerConfig = providerConfig;
+            newModel.provider = require(`./providers/${this.providerConfig.name}`);
+            newModel.provider.config(newModel.providerConfig);
+
+            return Promise.resolve(Object.freeze(newModel));
+        }
+
     },
 
     instance: {
 
-        setProviderConfig: function (providerConfig){
-            this.providerConfig = providerConfig;
-        },
-
-        setProvider: function (){
-            this.provider = require(`./providers/${this.providerConfig.name}`);
-            this.provider.config(this.providerConfig);
-        },
-
-        send: function ({ body, recipientPhone }) {
-            return this.provider.sendSms(recipientPhone, body)
+        send: function () {
+            return this.save()
+                .then(() => this.provider.sendSms(this.recipient_phone, this.body))
                 .then(response => {
                     this.status = response.status;
                     this.provider_sms_id = response.providerSmsId;
-                    return this;
+                    return this.save();
                 });
         },
 
-        getStatus: function(){
+        getStatus: function() {
             return this.provider.getSmsStatus(this.id)
                 .then((response) => {
                     this.status = response.status;
-                    return this;
+                    return this.save();
                 });
         }
 
