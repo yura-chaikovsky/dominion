@@ -53,7 +53,7 @@ const NotificationSmsDefinition = {
                 .then(() => this.provider.sendSms(this.recipient_phone, this.body))
                 .then(response => {
                     this.status = response.status;
-                    this.message_id = response.providerSmsId;
+                    this.message_id = String(response.providerSmsId);
                     return this.save();
                 });
         },
