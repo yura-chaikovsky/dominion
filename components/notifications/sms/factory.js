@@ -8,7 +8,7 @@ const SMS_TYPE                      = require('./enums/types');
 
 const NotificationSmsDefinition = {
 
-    name: 'NotificationSms',
+    name: 'NotificationsSms',
 
     repository: NotificationSmsRepository,
 
