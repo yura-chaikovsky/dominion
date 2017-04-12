@@ -26,13 +26,15 @@ CREATE TABLE `logs` (
 
 CREATE TABLE `notification_emails` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `message_id` VARCHAR(255) ,
+    `message_id` VARCHAR(255) NULL DEFAULT NULL,
+    `provider_name` VARCHAR(255) NULL DEFAULT NULL,
     `accounts_senders_id` BIGINT,
+    `sender_email` VARCHAR(255) NULL DEFAULT NULL,
     `subject` VARCHAR(255),
     `body` TEXT,
-    `recipient_email_to` VARCHAR(100),
-    `recipient_email_cc` VARCHAR(255),
-    `recipient_email_bcc` VARCHAR(255),
+    `recipient_email_to` JSON NULL DEFAULT NULL,
+    `recipient_email_cc` JSON NULL DEFAULT NULL,
+    `recipient_email_bcc` JSON NULL DEFAULT NULL,
     `accounts_recipients_id` BIGINT,
     `time_sent` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `status` ENUM('QUEUED','SENT','REJECTED', 'ACCEPTED') DEFAULT 'QUEUED',
@@ -42,8 +44,9 @@ CREATE TABLE `notification_emails` (
 
 CREATE TABLE `notification_sms` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `message_id` VARCHAR(255) NULL DEFAULT NULL,
+    `provider_name` VARCHAR(255) NULL DEFAULT NULL,
     `accounts_senders_id` BIGINT,
-    `provider_sms_id` VARCHAR(255) NULL DEFAULT NULL,
     `sender_title` VARCHAR(30),
     `body` VARCHAR(255),
     `recipient_phone` BIGINT UNSIGNED NULL DEFAULT NULL,

@@ -1,4 +1,3 @@
-const config                    = use('config');
 const nodemailer                = require('nodemailer');
 
 const EMAIL_STATUS              = require('./../enums/statuses');
@@ -6,12 +5,23 @@ const EMAIL_STATUS              = require('./../enums/statuses');
 
 class Google {
 
-    static send(options) {
-        let transporter = nodemailer.createTransport({
+    static get config() {
+        return this._config;
+    }
+
+    static set config(config) {
+        this._config = config;
+    }
+
+    static send(from, to, cc, bcc, subject, html) {
+
+        const options = {from, to, cc, bcc, subject, html};
+
+        const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: config.mailGate.providers[config.mailGate.active].user,
-                pass: config.mailGate.providers[config.mailGate.active].password
+                user: this._config.user,
+                pass: this._config.password
             },
         }, {
             from: options.from,
