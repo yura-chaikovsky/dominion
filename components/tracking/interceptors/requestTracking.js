@@ -30,7 +30,7 @@ function requestInterceptorTracking() {
 
 function generateAndSetInCookiesTrackingToken(message) {
     let trackingToken = generateTrackingToken(message.request.headers['user-agent']);
-    message.response.headers['Set-Cookies'] = `tracking_token=${trackingToken}`;
+    message.response.headers['Set-Cookie'] = `tracking_token=${trackingToken}; Expires=Fri, 01 Jan 2049 00:00:00 GMT;`;
     return trackingToken;
 }
 
