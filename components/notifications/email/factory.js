@@ -24,7 +24,6 @@ const NotificationEmailDefinition = {
         recipient_email_cc      : Property.object(),
         recipient_email_bcc     : Property.object(),
         accounts_recipients_id  : Property.id(),
-        account_recipients_id   : Property.id(),
         status                  : Property.enum(Object.keys(EMAIL_STATUS)),
         type                    : Property.enum(Object.keys(EMAIL_TYPE))
     },
