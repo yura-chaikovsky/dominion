@@ -37,7 +37,7 @@ const NotificationEmailDefinition = {
             newModel.providerConfig = providerConfig;
             newModel.provider_name = newModel.providerConfig.name;
             newModel.provider = require(`./providers/${newModel.provider_name}`);
-            newModel.provider.config(newModel.providerConfig);
+            newModel.provider.config = newModel.providerConfig;
 
             return Promise.resolve(Object.freeze(newModel));
         }
