@@ -58,7 +58,7 @@ module.exports = {
         
     },
     
-    mailGate: {
+    emailGate: {
         active: 0,
         providers: [
             {
