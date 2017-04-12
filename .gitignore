@@ -3,3 +3,4 @@ syntax: glob
 .lock
 node_modules
 /media
+/config/config.prod.js
