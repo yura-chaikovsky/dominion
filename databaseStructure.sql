@@ -19,7 +19,7 @@ CREATE TABLE `accounts_permissions` (
 CREATE TABLE `logs` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `header` text,
-    COLUMN `body` `body` MEDIUMTEXT NULL DEFAULT NULL,
+    `body` MEDIUMTEXT NULL DEFAULT NULL,
     `tracking_id` bigint(20) UNSIGNED,
     PRIMARY KEY (`id`)
 );
