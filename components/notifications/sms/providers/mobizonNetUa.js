@@ -1,8 +1,7 @@
 const querystring                 = require('querystring');
-const config                      = use('config');
 const Errors                      = use('core/errors');
 const HttpRequest                 = use('components/transports');
-const SMS_STATUSES                 = require('./../enums/statuses');
+const SMS_STATUSES                = require('./../enums/statuses');
 
 
 const MOBIZONE_STATUSES = {
@@ -22,16 +21,24 @@ class MobizonNetUa {
     //https://mobizon.net.ua
     //http://docs.mobizon.com/api/
 
+    static get config(){
+        return this._config;
+    }
+
+    static set config(config){
+        this._config = config;
+    }
+
     static sendSms(phoneNumber, messageText){
 
         let options = {
-            url: config.smsGate.providers[config.smsGate.active].sendSmsUrl,
+            url: this.config.sendSmsUrl,
             method: 'POST',
             postBody: querystring.stringify({
-                apiKey      : config.smsGate.providers[config.smsGate.active].token,
+                apiKey      : this.config.token,
                 recipient   : phoneNumber,
                 text        : messageText,
-                from        : config.smsGate.providers[config.smsGate.active].senderName,
+                from        : this.config.senderName,
             }),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -40,34 +47,34 @@ class MobizonNetUa {
 
         return HttpRequest.request(options)
             .then(result => {
-
-                try {
-                    let response = JSON.parse(result);
-                    if(response.code===0) {
-                        return {
-                            providerSmsId   : response.data.messageId,
-                            status          : SMS_STATUSES['NEW']
-                        };
-                    } else {
-                        throw new Errors.Fatal(`SMS: ${response.message}`);
-                    }
-
-                }
-                catch (error){
-                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${result})`);
+                let response = JSON.parse(result);
+                if (response.code === 0) {
+                    return {
+                        providerSmsId: response.data.messageId,
+                        status: SMS_STATUSES['NEW']
+                    };
+                } else {
+                    throw new Errors.Fatal(`SMS: ${response.message}`);
                 }
 
+            })
+            .catch((error) => {
+                if (error instanceof SyntaxError) {
+                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${error})`);
+                } else {
+                    throw new Errors.BadRequest(error);
+                }
             });
     }
 
-    static getSmsStatus(ids){
+    static getSmsStatus(id){
 
         let options = {
-            url: config.smsGate.providers[config.smsGate.active].getStatusUrl,
+            url: this.config.getStatusUrl,
             method: 'POST',
             postBody: querystring.stringify({
-                apiKey: config.smsGate.providers[config.smsGate.active].token,
-                ids: ids,
+                apiKey: this.config.token,
+                ids: id,
             }),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -76,24 +83,24 @@ class MobizonNetUa {
 
         return HttpRequest.request(options)
             .then(result => {
-                try {
-                    let resultJson = JSON.parse(result);
-                    if(resultJson.code===0) {
-                        let response = [];
-                        resultJson.data.forEach(item => {
-                            response.push({
-                                providerSmsId   : item.id,
-                                status          : MOBIZONE_STATUSES[item.status]
-                            });
-                        });
-                        return response;
-                    } else {
-                        throw new Errors.BadRequest(`SMS: ${resultJson.message}`);
-                    }
 
+                let resultJson = JSON.parse(result);
+                if (resultJson.code === 0) {
+                    return {
+                        providerSmsId: resultJson.data[0].id,
+                        status: MOBIZONE_STATUSES[item.status]
+                    };
+
+                } else {
+                    throw new Errors.BadRequest(`SMS: ${resultJson.message}`);
                 }
-                catch (error){
-                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${result})`);
+
+            })
+            .catch((error) => {
+                if (error instanceof SyntaxError) {
+                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${error})`);
+                } else {
+                    throw new Errors.BadRequest(error);
                 }
             });
 
@@ -102,10 +109,10 @@ class MobizonNetUa {
     static getSmsBalance(){
 
         let options = {
-            url: config.smsGate.providers[config.smsGate.active].getBalanceUrl,
+            url: this.config.getBalanceUrl,
             method: 'POST',
             postBody: querystring.stringify({
-                apiKey: config.smsGate.providers[config.smsGate.active].token
+                apiKey: this.config.token
             }),
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -114,19 +121,21 @@ class MobizonNetUa {
 
         return HttpRequest.request(options)
             .then(result => {
-                try {
-                    let response = JSON.parse(result);
-                    if(response.code===0) {
-                        return {
-                            balance : response.balance,
-                            currency: response.currency
-                        };
-                    } else {
-                        throw new Errors.Fatal(`SMS: ${response.message}`);
-                    }
+                let response = JSON.parse(result);
+                if (response.code === 0) {
+                    return {
+                        balance: response.balance,
+                        currency: response.currency
+                    };
+                } else {
+                    throw new Errors.Fatal(`SMS: ${response.message}`);
                 }
-                catch (error){
-                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${result})`);
+            })
+            .catch((error) => {
+                if (error instanceof SyntaxError) {
+                    throw new Errors.BadRequest(`The remote server respond invalid JSON. Data: (${error})`);
+                } else {
+                    throw new Errors.BadRequest(error);
                 }
             });
     }

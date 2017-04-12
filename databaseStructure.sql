@@ -36,7 +36,7 @@ CREATE TABLE `notification_emails` (
     `accounts_recipients_id` BIGINT,
     `time_sent` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `status` ENUM('QUEUED','SENT','REJECTED', 'ACCEPTED') DEFAULT 'QUEUED',
-    `type` ENUM('AUTOMATIC','MANUAL'),
+    `type` ENUM('AUTOMATIC', 'MANUAL') NULL DEFAULT 'AUTOMATIC',
     PRIMARY KEY (`id`)
 );
 
@@ -53,7 +53,7 @@ CREATE TABLE `notification_sms` (
     `time_received` TIMESTAMP NULL DEFAULT NULL,
     `time_failed` TIMESTAMP NULL DEFAULT NULL,
     `status` ENUM('NEW','ENQUEUED','ACCEPTED','UNDELIVERED','REJECTED','PARTLY_DELIVERED','DELIVERED','EXPIRED','DELETED') DEFAULT 'NEW',
-    `type` ENUM('AUTOMATIC','MANUAL'),
+    `type` ENUM('AUTOMATIC', 'MANUAL') NULL DEFAULT 'AUTOMATIC',
     `price_internal` INT UNSIGNED,
     `price_external` INT UNSIGNED,
     PRIMARY KEY (`id`)
