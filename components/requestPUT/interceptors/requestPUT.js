@@ -1,8 +1,4 @@
-const Message               = use('core/messages');
 const Errors                = use('core/errors');
-
-
-Message.request.addInterceptor(requestPUTAnalyzer);
 
 function requestPUTAnalyzer() {
     return Promise.resolve().then((body) => {
@@ -12,3 +8,5 @@ function requestPUTAnalyzer() {
         return body;
     });
 }
+
+module.exports = requestPUTAnalyzer;
