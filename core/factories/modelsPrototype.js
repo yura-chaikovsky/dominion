@@ -23,6 +23,8 @@ module.exports = new (function Model() {
                 throw new Errors.Validation(`The object populating model ${this.__name__} does not match its structure, property ${propName} is redundant`)
             }
         });
+
+        return this;
     };
 
     this.validate = function(){
