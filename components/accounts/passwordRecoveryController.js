@@ -3,7 +3,7 @@ const Errors                    = use('core/errors');
 
 
 const passwordRecoveryFactory   = Factories('Accounts');
-const notificationSMSFactory    = Factories('NotificationSms');
+const notificationSMSFactory    = Factories('NotificationsSms');
 
 
 const passwordRecoveryController = {
