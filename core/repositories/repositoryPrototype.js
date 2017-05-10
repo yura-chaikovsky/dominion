@@ -4,7 +4,7 @@ module.exports = new (function Repository() {
         let fields = Object.keys(criteria);
         let condition = 'WHERE ' + fields.join(' = ? AND ') +  ' = ?';
         let parameters = fields.map(field => typeof criteria[field] == 'object' ? JSON.stringify(criteria[field]) : criteria[field]);
-        let query = `SELECT * FROM ${this.__table__} ${fields.length? condition: ''} LIMIT ${offset}, ${limit}`;
+        let query = `SELECT * FROM ${this.__table__} ${fields.length? condition: ''} ${limit && offset ? `LIMIT ${offset}, ${limit}` : ''}`;
 
         return this.db.execute(query, parameters)
             .then(([rows, columns]) => rows );
