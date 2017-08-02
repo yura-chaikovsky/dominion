@@ -4,7 +4,17 @@ module.exports = new (function Repository() {
         let fields = Object.keys(criteria);
         let condition = 'WHERE ' + fields.join(' = ? AND ') +  ' = ?';
         let parameters = fields.map(field => typeof criteria[field] == 'object' ? JSON.stringify(criteria[field]) : criteria[field]);
-        let query = `SELECT * FROM ${this.__table__} ${fields.length? condition: ''} LIMIT ${offset}, ${limit}`;
+        let limitQuery;
+
+        if (limit === undefined && offset === undefined){
+            limitQuery = '';
+        } else if( !isNaN(limit) && !isNaN(offset)){
+            limitQuery = `LIMIT ${offset}, ${limit}`;
+        } else {
+            throw new Error(`Both parameters the limit and offset are expected, or none. Given only ${isNaN(limit)? 'offset': 'limit'}`);
+        }
+
+        let query = `SELECT * FROM ${this.__table__} ${fields.length? condition: ''} ${limitQuery}`;
 
         return this.db.execute(query, parameters)
             .then(([rows, columns]) => rows );

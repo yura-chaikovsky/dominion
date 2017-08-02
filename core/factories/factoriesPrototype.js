@@ -21,7 +21,7 @@ module.exports = new (function ModelFactory() {
         });
     };
 
-    this.find = function (criteria = {}, limit = 100, offset = 0) {
+    this.find = function (criteria = {}, limit, offset) {
         return this.repo.find(criteria, limit, offset)
             .then(rows => Promise.all(rows.map(row => this.new(row, false))) );
     };
