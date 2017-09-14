@@ -7,9 +7,9 @@
     "test": "specs"
   },
   "dependencies": {
-    "mysql2": "^1.1.1",
-    "nodemailer": "^2.5.0",
-    "file-type": "^4.0.0"
+    "file-type": "^4.4.0",
+    "mysql2": "^1.4.2",
+    "nodemailer": "^2.7.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
