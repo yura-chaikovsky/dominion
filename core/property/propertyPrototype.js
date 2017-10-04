@@ -7,6 +7,9 @@ class ValidationPrototype {
         this._propertyValue = undefined;
         this._validatorsSet = new Set();
         this._outputSettings = new Set();
+        this._setterFunction = function(value) {
+            return value;
+        };
     }
 
     _addOutputSetting(outputSetter) {
@@ -23,7 +26,7 @@ class ValidationPrototype {
     }
 
     setter(value){
-        return value;
+        return this._setterFunction(value);
     }
 
     validate(value, propertyName, modelName) {
@@ -60,6 +63,11 @@ class ValidationPrototype {
                 delete managedObject[property];
                 return managedObject;
             });
+        return this;
+    }
+
+    setterFunction (setterFunction){
+        this._setterFunction = setterFunction;
         return this;
     }
 }
