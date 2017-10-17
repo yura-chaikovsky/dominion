@@ -5,7 +5,8 @@ const errors = {
     Validation: "Validation Error",
     BadRequest: "Bad request",
     Unauthorized: "Unauthorized",
-    Forbidden: "Forbidden"
+    Forbidden: "Forbidden",
+    Conflict: "Conflict"
 };
 
 Object.keys(errors).forEach((errorType) => {
