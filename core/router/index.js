@@ -60,7 +60,10 @@ class Router {
                     this.response.status = this.response.statuses._401_Unauthorized;
                 } else if (error instanceof Errors.Forbidden) {
                     this.response.status = this.response.statuses._403_Forbidden;
-                } else if (error instanceof Errors.Database && error.originalError.errno == 1451 /* ER_ROW_IS_REFERENCED_2 */){
+                } else if (error instanceof Errors.Database && (
+                        error.originalError.errno === 1062 /* ER_DUP_ENTRY */
+                        || error.originalError.errno === 1451 /* ER_ROW_IS_REFERENCED_2 */ )
+                    ){
                     this.response.status = this.response.statuses._409_Conflict;
                 } else {
                     throw error;
