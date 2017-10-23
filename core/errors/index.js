@@ -1,12 +1,13 @@
 const errors = {
     NotFound: "Entity not found",
     Database: "Database error",
-    Fatal: "Dominion Fatal Error",
-    Validation: "Validation Error",
+    Fatal: "Fatal error",
+    Validation: "Validation error",
     BadRequest: "Bad request",
     Unauthorized: "Unauthorized",
     Forbidden: "Forbidden",
-    Conflict: "Conflict"
+    Conflict: "Conflict",
+    NoConnection: "Connection error"
 };
 
 Object.keys(errors).forEach((errorType) => {
