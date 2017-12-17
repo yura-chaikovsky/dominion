@@ -1,4 +1,8 @@
+const DB = require('./db');
+
 module.exports = new (function Repository() {
+
+    this.db = DB;
 
     this.find = function(criteria, limit, offset){
         let fields = Object.keys(criteria);
@@ -17,15 +21,15 @@ module.exports = new (function Repository() {
         let query = `SELECT * FROM ${this.__table__} ${fields.length? condition: ''} ${limitQuery}`;
 
         return this.db.execute(query, parameters)
-            .then(([rows, columns]) => rows );
+            .then(([rows]) => rows );
     };
 
     this.save = function(model){
         model.validate();
         let query;
-        let fields = Object.keys(model.__properties__).filter(field => field != "id");
+        let fields = Object.keys(model.__properties__).filter(field => field !== "id");
         let parameters = fields.reduce((params, field) => {
-            let [key, value] = parametersFormat(model.__properties__[field]);
+            let [key, value] = this._parametersFormat(model.__properties__[field]);
             params.placeholders.push(`${field} = ${key}`);
             params.values.push(value);
             return params;
@@ -65,26 +69,25 @@ module.exports = new (function Repository() {
 
         return this.db.execute(query, parameters)
             .then(([result]) => result);
-    }
+    };
 
-});
+    this._parametersFormat = function(propertyValue) {
+        let result = ['?', propertyValue];
 
-function parametersFormat(propertyValue) {
-    let result = ['?', propertyValue];
-
-    switch (typeof propertyValue) {
-        case "object":
-            if(propertyValue instanceof Date){
-                result = ["FROM_UNIXTIME(?)", Math.round(propertyValue.getTime()/1000)];
-            }else if(propertyValue){
-                result[1] = JSON.stringify(propertyValue);
-            }else{
+        switch (typeof propertyValue) {
+            case "object":
+                if(propertyValue instanceof Date){
+                    result = ["FROM_UNIXTIME(?)", Math.round(propertyValue.getTime()/1000)];
+                }else if(propertyValue){
+                    result[1] = JSON.stringify(propertyValue);
+                }else{
+                    result[1] = null;
+                }
+                break;
+            case "undefined":
                 result[1] = null;
-            }
-            break;
-        case "undefined":
-            result[1] = null;
-            break;
+                break;
+        }
+        return result;
     }
-    return result;
-}
+});
