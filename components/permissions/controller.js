@@ -1,51 +1,56 @@
 const Factories                 = use('core/factories');
+const Errors                    = use('core/errors');
 
+const PermissionsFactory            = Factories('Permissions');
+const MembersFactory                = Factories('Members');
 
-const PermissionsFactory        = Factories('Permissions');
-const AccountsFactory           = Factories('Accounts');
 
 const PermissionsController = {
 
     path: PermissionsFactory.__model__.name,
 
     permissions: {
-        POST: 'Permissions.Create',
-        GET: 'Permissions.Read',
-        PUT: 'Permissions.Update',
-        DELETE: 'Permissions.Delete'
+        PUT: 'Permissions.Grant'
     },
 
-    GET: [
-        // accounts/1/permissions/1
-        function(accountId, permissionId){
+    GET : [
+
+    ],
+
+    POST : [
+
+    ],
+
+    PUT : [
+        //members/12/permissions/32
+        function (membersId, permissionsId) {
             return Promise.all([
-                AccountsFactory.get({id: accountId}),
-                PermissionsFactory.get({id: permissionId})
-            ]).then(([account, permission]) =>{
-                return permission.grantForAccount(account);
-            }).then(result =>{
-                if(result.affectedRows){
-                    this.response.status = this.response.statuses._201_Created;
-                }
-            });
+                    PermissionsFactory.getByRole(permissionsId),
+                    MembersFactory.get({id: membersId})
+                ])
+                .then(([rolePermissions, member]) => {
+                    if(rolePermissions.length){
+                        return Promise.all([rolePermissions, member, PermissionsFactory.getByMember(member)]);
+                    }else{
+                        throw new Errors.NotFound(`Permissions for role '${permissionsId}' not found`);
+                    }
+                })
+                .then(([rolePermissions, member, memberPermissions]) => {
+                    return Promise.all([
+                        rolePermissions,
+                        member
+                    ].concat(memberPermissions.map(permission => permission.revokeForMember(member))));
+                })
+                .then(([rolePermissions, member]) => {
+                    rolePermissions.forEach(permission => permission.grantForMember(member))
+                });
         }
     ],
 
-    DELETE: [
-        // accounts/1/permissions/1
-        function(accountId, permissionId){
-            return Promise.all([
-                AccountsFactory.get({id: accountId}),
-                PermissionsFactory.get({id: permissionId})
-            ]).then(([account, permission]) =>{
-                return permission.refuseFromAccount(account);
-            }).then(result =>{
-                if(result.affectedRows){
-                    this.response.status = this.response.statuses._201_Created;
-                }
-            })
-        }
+    DELETE : [
+
     ]
 };
+
 
 module.exports = PermissionsController;

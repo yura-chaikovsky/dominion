@@ -1,9 +1,9 @@
 const Property                  = use('core/property');
-
 const PermissionsRepository     = require('./repository');
 
 
-const ResourcesDefinition = {
+
+const PermissionsDefinition = {
 
     name: 'Permissions',
 
@@ -15,37 +15,35 @@ const ResourcesDefinition = {
     },
 
     factory: {
-        checkAvailability: function(permissionTitle){
-            return this.get({title: permissionTitle})
-                .then(permission => true)
-                .catch(error => false)
+
+        getByMember: function(member){
+            return this.repo.getByMember(member.id)
+                .then(permissions => {
+                    return Promise.all(permissions.map(permissions => this.new(permissions, false)));
+                });
         },
 
-        getAccountsPermissions: function(account){
-            return PermissionsRepository.getAccountsPermissions(account.id)
-            .then(permissions => {
-                return Promise.all(permissions.map(permissions => this.new(permissions, false)));
-            });
-        },
-
-        getByRole: function(title){
-            return PermissionsRepository.getByRole(title)
-            .then(permissions => {
-                return Promise.all(permissions.map(permissions => this.new(permissions, false)));
-            });
+        getByRole: function(roleId){
+            return this.repo.getByRole(roleId)
+                .then(permissions => {
+                    return Promise.all(permissions.map(permissions => this.new(permissions, false)));
+                });
         }
+
     },
 
     instance: {
-        grantForAccount: function (account) {
-            return this.repo.linkAccount(account.id, this.id);
+
+        grantForMember: function (member) {
+            return this.repo.grantForMember(member.id, this.id);
         },
 
-        refuseFromAccount: function (account) {
-            return this.repo.unlinkAccount(account.id, this.id);
+        revokeForMember: function (member) {
+            return this.repo.revokeForMember(member.id, this.id);
         }
+
     }
 };
 
 
-module.exports = ResourcesDefinition;
+module.exports = PermissionsDefinition;

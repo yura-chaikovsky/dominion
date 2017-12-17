@@ -1,5 +1,5 @@
 CREATE TABLE `accounts` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `id` INT(10) unsigned NOT NULL AUTO_INCREMENT,
     `phone_number` BIGINT UNSIGNED,
     `email` VARCHAR(100),
     `password_hash` VARCHAR(255),
@@ -10,11 +10,39 @@ CREATE TABLE `accounts` (
     UNIQUE KEY `phone_number` (`phone_number`)
 );
 
+CREATE TABLE `roles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `roles_permissions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `roles_id` int(10) unsigned NOT NULL,
+  `permissions_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `permissions_roles_idx` (`roles_id`),
+  KEY `permissions_permissions_idx` (`permissions_id`),
+  CONSTRAINT `permissions_permissions` FOREIGN KEY (`permissions_id`) REFERENCES `permissions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `permissions_roles` FOREIGN KEY (`roles_id`) REFERENCES `roles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `accounts_permissions` (
-    `accounts_id` BIGINT,
-    `permissions_id` BIGINT,
-    UNIQUE KEY `accounts_permissions` (`accounts_id`, `permissions_id`)
-);
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `accounts_id` int(10) unsigned NOT NULL,
+  `permissions_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `member_permission_unique` (`members_id`,`permissions_id`),
+  KEY `permission_permission_idx` (`permissions_id`),
+  CONSTRAINT `permission_member` FOREIGN KEY (`members_id`) REFERENCES `accounts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `permission_permission` FOREIGN KEY (`permissions_id`) REFERENCES `permissions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `logs` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -62,22 +90,7 @@ CREATE TABLE `notification_sms` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `permissions` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `title` VARCHAR(255),
-    PRIMARY KEY (`id`)
-);
 
-CREATE TABLE `roles` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `title` VARCHAR(255),
-    PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `roles_permissions` (
-    `roles_id` BIGINT,
-    `permissions_id` BIGINT
-);
 
 CREATE TABLE `sessions` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -107,18 +120,6 @@ CREATE TABLE `tracking` (
     PRIMARY KEY (id)
 );
 
-ALTER TABLE accounts_permissions
-ADD CONSTRAINT fk_accounts_permissions_accounts
-FOREIGN KEY (accounts_id)
-REFERENCES accounts(id);
-
-
-ALTER TABLE accounts_permissions
-ADD CONSTRAINT fk_accounts_permissions_permissions
-FOREIGN KEY (permissions_id)
-REFERENCES permissions(id);
-
-
 ALTER TABLE notification_emails
 ADD CONSTRAINT fk_notification_emails_accounts_senders
 FOREIGN KEY (accounts_senders_id)
@@ -139,18 +140,6 @@ ALTER TABLE notification_sms
 ADD CONSTRAINT fk_notification_sms_accounts_recipient
 FOREIGN KEY (accounts_recipient_id)
 REFERENCES accounts(id);
-
-
-
-ALTER TABLE roles_permissions
-ADD CONSTRAINT fk_roles_permissions_roles
-FOREIGN KEY (roles_id)
-REFERENCES roles(id);
-
-ALTER TABLE roles_permissions
-ADD CONSTRAINT fk_roles_permissions_permissions
-FOREIGN KEY (permissions_id)
-REFERENCES permissions(id);
 
 
 ALTER TABLE sessions
