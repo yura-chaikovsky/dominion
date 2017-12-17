@@ -9,12 +9,7 @@ module.exports = {
         urlPrefix: ''
     },
     
-    database: {
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        database: 'dominion'
-    },
+    database: "mysql://root:root@localhost/dominion",
 
     cors: {
         // e.g. * | ['example.com'] | () => {} (synchronous callback function with Message context returning array of allowed origins)

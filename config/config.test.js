@@ -9,16 +9,10 @@ module.exports = {
         urlPrefix: ''
     },
 
-    database: {
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        testDatabaseName: 'dominion_test',
-        connectionLimit: 1,
-    },
+    database: "mysql://root:root@localhost/dominion",
 
     cors: {
-        // e.g. * | ['example.com'] | () => {} (callback function)
+        // e.g. * | ['example.com'] | () => {} (synchronous callback function with Message context returning array of allowed origins)
         origin: '*',
         methods: ['OPTIONS', 'GET', 'POST', 'PUT', 'DELETE'],
         headers: ['Content-Type', 'Set-Cookies', 'Access-Token'],
