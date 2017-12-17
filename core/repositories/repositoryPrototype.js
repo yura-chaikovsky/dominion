@@ -1,8 +1,8 @@
-const DB = require('./db');
+const DBConnectionPool          = require('./db');
 
 module.exports = new (function Repository() {
 
-    this.db = DB;
+    this.db = new DBConnectionPool();
 
     this.find = function(criteria, limit, offset){
         let fields = Object.keys(criteria);
