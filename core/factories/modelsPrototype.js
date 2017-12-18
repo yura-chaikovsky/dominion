@@ -1,4 +1,4 @@
-const Property                          = use('core/property');
+const PropertyCollection                = use('core/property/collection');
 const Errors                            = use('core/errors');
 
 module.exports = new (function Model() {
@@ -12,7 +12,7 @@ module.exports = new (function Model() {
     };
 
     this.toJSON = function(){
-        return Property.outputJSON(this.__properties__, this.scheme);
+        return PropertyCollection.output(this.__properties__, this.scheme);
     };
 
     this.populate = function(props){
@@ -28,7 +28,7 @@ module.exports = new (function Model() {
     };
 
     this.validate = function(){
-        Property.validate(this.__properties__, this.scheme, this.__name__);
+        PropertyCollection.validate(this.__properties__, this.scheme, this.__name__);
     }
 
 });
