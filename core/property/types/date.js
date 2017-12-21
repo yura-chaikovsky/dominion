@@ -20,7 +20,7 @@ class DateProperty extends DefaultProperty {
         });
 
         this._inputModification = (value) => {
-            return (typeof value === "object" && value instanceof Date) ? value : new Date(value);
+            return (typeof value === "object" && value instanceof Date) ? value : new Date(value + (value.length > 10 ? ' Z' : '') );
         };
     }
 
