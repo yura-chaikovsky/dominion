@@ -17,7 +17,7 @@ class StringProperty extends DefaultProperty {
 
     min(minValue) {
         this._addValidator((value, propertyName) => {
-            if (value.length < minValue) {
+            if (value && value.length < minValue) {
                 throw new Errors.Validation(`property ${propertyName} should have more than ${minValue} characters, given '${value}' (${value.length})`);
             }
         });
@@ -26,7 +26,7 @@ class StringProperty extends DefaultProperty {
 
     max(maxValue) {
         this._addValidator((value, propertyName) => {
-            if (value.length > maxValue) {
+            if (value && value.length > maxValue) {
                 throw new Errors.Validation(`property ${propertyName} should have less than ${maxValue} characters, given '${value}' (${value.length})`);
             }
         });
@@ -35,7 +35,7 @@ class StringProperty extends DefaultProperty {
 
     pattern(regexp) {
         this._addValidator((value, propertyName) => {
-            if (!regexp.test(value)) {
+            if (value && !regexp.test(value)) {
                 throw new Errors.Validation(`property ${propertyName} should match pattern ${regexp}, given '${value}'`);
             }
         });
