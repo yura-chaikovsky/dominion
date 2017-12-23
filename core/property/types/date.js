@@ -10,7 +10,8 @@ class DateProperty extends DefaultProperty {
 
         this._addValidator((value, propertyName) => {
             const originalValue = value;
-            if (typeof value !== 'object') {
+
+            if(typeof value == 'string'){
                 value = new Date(value);
             }
 
