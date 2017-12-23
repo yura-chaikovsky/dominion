@@ -9,7 +9,7 @@ class NumberProperty extends DefaultProperty {
         super();
 
         this._addValidator((value, propertyName) => {
-            if (value !== undefined && isNaN(value)) {
+            if (value != null && isNaN(value)) {
                 throw new Errors.Validation(`property ${propertyName} should be a number, given '${value}'`);
             }
         });
@@ -17,7 +17,7 @@ class NumberProperty extends DefaultProperty {
 
     min(minValue) {
         this._addValidator((value, propertyName) => {
-            if (value !== null && value < minValue) {
+            if (value != null && value < minValue) {
                 throw new Errors.Validation(`property ${propertyName} should be bigger than ${minValue}, given '${value}'`);
             }
         });
@@ -26,7 +26,7 @@ class NumberProperty extends DefaultProperty {
 
     max(maxValue) {
         this._addValidator((value, propertyName) => {
-            if (value !== null && value > maxValue) {
+            if (value != null && value > maxValue) {
                 throw new Errors.Validation(`property ${propertyName} should be less than ${maxValue}, given '${value}'`);
             }
         });
@@ -35,7 +35,7 @@ class NumberProperty extends DefaultProperty {
 
     integer() {
         this._addValidator((value, propertyName) => {
-            if (value !== null && !Number.isInteger(value)) {
+            if (value != null && !Number.isInteger(value)) {
                 throw new Errors.Validation(`property ${propertyName} should be an integer, given '${value}'`);
             }
         });
