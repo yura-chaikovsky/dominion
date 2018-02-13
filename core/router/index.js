@@ -90,7 +90,7 @@ const findRoute = function (method, path) {
 
         while (regexpPattern = handlersIterator.next().value) {
             if (args = regexpPattern.exec(path)) {
-                args = args.map(decodeURIComponent);
+                args = args.map(arg => typeof arg == "undefined"? arg : decodeURIComponent(arg));
                 return [args.slice(1), handlersMap.get(regexpPattern)];
             }
         }
