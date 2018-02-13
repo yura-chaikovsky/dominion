@@ -11,10 +11,6 @@ class DateProperty extends DefaultProperty {
         this._addValidator((value, propertyName) => {
             const originalValue = value;
 
-            if(typeof value == 'string'){
-                value = new Date(value);
-            }
-
             if (value && (!(value instanceof Date) ||  isNaN(value.getTime()))) {
                 throw new Errors.Validation(`property ${propertyName} should be a valid DateTime, given '${originalValue}'`);
             }
