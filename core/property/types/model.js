@@ -1,7 +1,8 @@
+const Config                    = use('config');
 const Errors                    = use('core/errors');
 
 const DefaultProperty           = require('./default');
-
+const PrimaryKeyPattern         = new RegExp('^'+Config.router.primaryKeyPattern + '$');
 
 class ModelProperty extends DefaultProperty {
 
@@ -13,8 +14,8 @@ class ModelProperty extends DefaultProperty {
 
         this._addValidator((value, propertyName) => {
             if (value !== null && (
-                       (typeof value === "object" && (!Number.isInteger(value.id) || value.id < 1))
-                    || (typeof value !== "object" && (!Number.isInteger(value) || value < 1))
+                       (typeof value === "object" && (!PrimaryKeyPattern.test(value.id)))
+                    || (typeof value !== "object" && (!PrimaryKeyPattern.test(value)))
                 )
             ) {
                 throw new Errors.Validation(`property ${propertyName} should be positive integer or model instance, given '${value}'`);
@@ -42,7 +43,7 @@ class ModelProperty extends DefaultProperty {
         });
 
         this._inputModification = (value) => {
-            return (value !== null && typeof value === "object" && Number.isInteger(value.id)) ? value.id : value;
+            return (value !== null && typeof value === "object" && PrimaryKeyPattern.test(value.id)) ? value.id : value;
         };
     }
 

@@ -4,27 +4,27 @@ module.exports = new (function Repository() {
 
     this.db = new DBConnectionPool();
 
-    this.find = function(criteria, limit, offset){
+    this.find = function (criteria, limit, offset) {
         let fields = Object.keys(criteria);
-        let condition = 'WHERE ' + fields.join(' = ? AND ') +  ' = ?';
+        let condition = 'WHERE ' + fields.join(' = ? AND ') + ' = ?';
         let parameters = fields.map(field => typeof criteria[field] == 'object' ? JSON.stringify(criteria[field]) : criteria[field]);
         let limitQuery;
 
-        if (limit === undefined && offset === undefined){
+        if (limit === undefined && offset === undefined) {
             limitQuery = '';
-        } else if( !isNaN(limit) && !isNaN(offset)){
+        } else if (!isNaN(limit) && !isNaN(offset)) {
             limitQuery = `LIMIT ${offset}, ${limit}`;
         } else {
-            throw new Error(`Both parameters the limit and offset are expected, or none. Given only ${isNaN(limit)? 'offset': 'limit'}`);
+            throw new Error(`Both parameters the limit and offset are expected, or none. Given only ${isNaN(limit) ? 'offset' : 'limit'}`);
         }
 
-        let query = `SELECT * FROM ${this.__table__} ${fields.length? condition: ''} ${limitQuery}`;
+        let query = `SELECT * FROM ${this.__table__} ${fields.length ? condition : ''} ${limitQuery}`;
 
         return this.db.execute(query, parameters)
-            .then(([rows]) => rows );
+            .then(([rows]) => rows);
     };
 
-    this.save = function(model){
+    this.save = function (model) {
         model.validate();
         let query;
         let fields = Object.keys(model.__properties__).filter(field => field !== "id");
@@ -33,36 +33,37 @@ module.exports = new (function Repository() {
             params.placeholders.push(`${field} = ${key}`);
             params.values.push(value);
             return params;
-        }, {placeholders:[], values:[]});
+        }, {placeholders: [], values: []});
 
 
-        if (model.id){
+        if (model.__unsaved__) {
+            query = `INSERT ${this.__table__} SET ${parameters.placeholders.join(',')}`;
+        } else {
             query = `UPDATE ${this.__table__} SET ${parameters.placeholders.join(',')} WHERE ${this.__table__}.id = ?`;
             parameters.values.push(model.id);
-        } else {
-            query = `INSERT ${this.__table__} SET ${parameters.placeholders.join(',')}`;
         }
 
         return this.db.execute(query, parameters.values)
             .then(([result]) => {
-                if(result.insertId && model.__proto__.hasOwnProperty('id')){
+                if (result.insertId && model.__proto__.hasOwnProperty('id')) {
                     model.id = result.insertId;
                 }
+                model.__unsaved__ = false;
                 return model;
             });
     };
 
-    this.remove = function(model){
+    this.remove = function (model) {
         let condition = 'WHERE ';
         let parameters;
         let fields;
 
-        if(model.__properties__.hasOwnProperty('id')){
+        if (model.__properties__.hasOwnProperty('id')) {
             condition += ' `id` = ?';
             parameters = [model.id];
-        }else{
+        } else {
             fields = Object.keys(model.__properties__);
-            condition += fields.join(' = ? AND ') +  ' = ?';
+            condition += fields.join(' = ? AND ') + ' = ?';
             parameters = fields.map(field => model.__properties__[field]);
         }
         let query = `DELETE FROM ${this.__table__} ${condition}`;
@@ -71,16 +72,16 @@ module.exports = new (function Repository() {
             .then(([result]) => result);
     };
 
-    this._parametersFormat = function(propertyValue) {
+    this._parametersFormat = function (propertyValue) {
         let result = ['?', propertyValue];
 
         switch (typeof propertyValue) {
             case "object":
-                if(propertyValue instanceof Date){
-                    result = ["FROM_UNIXTIME(?)", Math.round(propertyValue.getTime()/1000)];
-                }else if(propertyValue){
+                if (propertyValue instanceof Date) {
+                    result = ["FROM_UNIXTIME(?)", Math.round(propertyValue.getTime() / 1000)];
+                } else if (propertyValue) {
                     result[1] = JSON.stringify(propertyValue);
-                }else{
+                } else {
                     result[1] = null;
                 }
                 break;

@@ -2,12 +2,9 @@ const Errors                    = require('./../errors');
 
 module.exports = new (function ModelFactory() {
 
-    this.new = function (properties = {}, ignoreId = true) {
-        //toDo - This should be resolved on framework level
-        if (ignoreId){
-            delete properties.id; // we need it to forbid updating models via POST
-        }
+    this.new = function (properties = {}, unsaved = true) {
         let newModel = new this.__model__(properties);
+        newModel.__unsaved__ = unsaved;
         return Promise.resolve(Object.freeze(newModel));
     };
 
