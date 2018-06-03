@@ -13,7 +13,7 @@ class ModelProperty extends DefaultProperty {
 
 
         this._addValidator((value, propertyName) => {
-            if (value !== null && (
+            if (value != null && (
                        (typeof value === "object" && (!PrimaryKeyPattern.test(value.id)))
                     || (typeof value !== "object" && (!PrimaryKeyPattern.test(value)))
                 )
@@ -36,10 +36,12 @@ class ModelProperty extends DefaultProperty {
         });
 
         this._addOutputModification((outputObject, propertyName) => {
-            outputObject[propertyName] = {
-                id: outputObject[propertyName],
-                link: modelName.toLowerCase() + "/" + outputObject[propertyName]
-            };
+            if(outputObject[propertyName] !== null) {
+                outputObject[propertyName] = {
+                    id: outputObject[propertyName],
+                    link: modelName.toLowerCase() + "/" + outputObject[propertyName]
+                };
+            }
         });
 
         this._inputModification = (value) => {
