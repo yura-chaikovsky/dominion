@@ -6,7 +6,7 @@ module.exports = new (function Repository() {
 
     this.find = function (criteria, limit, offset) {
         let fields = Object.keys(criteria);
-        let condition = 'WHERE ' + fields.join(' = ? AND ') + ' = ?';
+        let condition = 'WHERE `' + fields.join('` = ? AND `') + '` = ?';
         let parameters = fields.map(field => typeof criteria[field] == 'object' ? JSON.stringify(criteria[field]) : criteria[field]);
         let limitQuery;
 
@@ -30,7 +30,7 @@ module.exports = new (function Repository() {
         let fields = Object.keys(model.__properties__).filter(field => field !== "id");
         let parameters = fields.reduce((params, field) => {
             let [key, value] = this._parametersFormat(model.__properties__[field]);
-            params.placeholders.push(`${field} = ${key}`);
+            params.placeholders.push(`\`${field}\` = ${key}`);
             params.values.push(value);
             return params;
         }, {placeholders: [], values: []});
