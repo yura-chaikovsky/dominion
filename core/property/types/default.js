@@ -26,7 +26,7 @@ class PropertyPrototype {
         }
         catch (error) {
             if (error instanceof Errors.Validation) {
-                throw new Errors.Validation(`In model ${modelName} ` + error.message);
+                throw new Errors.Validation(`In ${modelName} model ` + error.message);
             } else {
                 throw error;
             }
