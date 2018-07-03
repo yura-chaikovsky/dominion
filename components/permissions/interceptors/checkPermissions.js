@@ -16,12 +16,16 @@ function checkPermissions(body) {
     }
 
     return PermissionsFactory.getByMember(this.request.session.member)
-        .then( permissions => {
+        .then(permissions => {
             this.request.session.permissions = permissions.map(permission => permission.title.toLowerCase());
 
-            if(!this.request.session.permissions.includes(this.request.handler.permission.toLowerCase())){
+            if (!this.request.session.permissions.includes(this.request.handler.permission.toLowerCase())) {
                 this.response.status = this.response.statuses._403_Forbidden;
                 throw new Errors.Forbidden("You don't have permission to perform this action");
+            }
+
+            if (this.request.session.permissions.includes(this.request.handler.annotations["rootownerpermissions"])) {
+                this.request.session.rootOwner = true;
             }
 
             return body;

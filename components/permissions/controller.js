@@ -14,7 +14,18 @@ const PermissionsController = {
     },
 
     GET : [
+        //members/12/permissions
+        function (membersId) {
+            if(this.request.session.member.id != membersId) {
+                this.response.status = this.response.statuses._403_Forbidden;
+                throw new Errors.Forbidden("You don't have permission to perform this action");
+            }
 
+            return MembersFactory.get({id: membersId})
+                .then(member => {
+                    return PermissionsFactory.getByMember(member);
+                });
+        }
     ],
 
     POST : [

@@ -6,7 +6,7 @@ module.exports = {
         __dirname + '/controller'
     ],
     requestInterceptors: [
-        __dirname + '/interceptors/checkMembersPermissions'
+        __dirname + '/interceptors/checkPermissions'
     ],
     responseInterceptors: [],
     bootstrap: []
