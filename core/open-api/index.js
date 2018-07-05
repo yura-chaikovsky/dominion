@@ -195,7 +195,7 @@ const OpenApi = {
                     "consumes": ["application/json"],
                     "produces": ["application/json"],
                     "summary": route.annotations.summary? toCapitalCase(route.annotations.summary) :
-                        ({"GET": "Get", "POST": "Create", "PUT": "Update", "DELETE": "Remove", "OPTIONS": "Ping"}[route.method] + ` ${modelName} instance`),
+                        ({"GET": "Get", "POST": "Create", "PUT": "Update", "DELETE": "Remove", "OPTIONS": "Ping"}[route.method] + ` ${modelName} ${collection? "collection" : "instance"}`),
                     "operationId": route.method + uri + route.arguments.optional.map(arg => toCapitalCase(arg.name)).join(""),
                     "parameters": [],
                     "responses": {}
