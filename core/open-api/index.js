@@ -15,10 +15,10 @@ const OpenApi = {
         _version:    (meta) => {return {"swagger": "2.0"}},
 
         _info:       (meta) => {return {"info": {
-                                            "title": meta.title,
-                                            "description": meta.description,
-                                            "version": meta.version,
-                                        }
+                "title": meta.title,
+                "description": meta.description,
+                "version": meta.version,
+            }
         }},
         _host:       (meta) => {return {"host": Config.server.url.replace(/https?:\/\//,"")}},
         _basePath:   (meta) => {return {"basePath": "/" + Config.router.urlPrefix.slice(0, -1)}},
@@ -27,22 +27,22 @@ const OpenApi = {
         _definitions:(meta) => {return {"definitions": OpenApi._definitions()}},
         _paths:      (meta) => {return {"paths": OpenApi._paths()}},
         _securityDef:(meta) => {return {"securityDefinitions": {
-                                                "Permission": {
-                                                    "description": "Provides access to private API's",
-                                                    "type": "oauth2",
-                                                    "authorizationUrl": "https://dev.friskyradio.com/auth",
-                                                    "flow": "implicit",
-                                                    "scopes": OpenApi._permissionScopes
-                                                },
-                                                "Root permission": {
-                                                    "description": "Provides root access to private API's",
-                                                    "type": "oauth2",
-                                                    "authorizationUrl": "https://dev.friskyradio.com/auth",
-                                                    "flow": "implicit",
-                                                    "scopes": OpenApi._permissionRootScopes
-                                                }
-                                            }
-                                        }}
+                "Permission": {
+                    "description": "Provides access to private API's",
+                    "type": "oauth2",
+                    "authorizationUrl": "https://dev.friskyradio.com/auth",
+                    "flow": "implicit",
+                    "scopes": OpenApi._permissionScopes
+                },
+                "Root permission": {
+                    "description": "Provides root access to private API's",
+                    "type": "oauth2",
+                    "authorizationUrl": "https://dev.friskyradio.com/auth",
+                    "flow": "implicit",
+                    "scopes": OpenApi._permissionRootScopes
+                }
+            }
+        }}
     },
 
     _models() {
@@ -147,7 +147,20 @@ const OpenApi = {
             apis.reduce((paths, route) => {
                 let argIndex = 0;
                 let collection = true;
-                let path;
+                let path, modelName;
+
+
+                if (this._models().map(model => model.__model__.name).includes(controllerName)) {
+                    modelName = controllerName;
+                }
+
+                if (route.annotations.model && modelName) {
+                    throw new Error(`Violation of API structure rules. Route can not return different than declared model. Route "${route.pattern}" is expected to return "${modelName}", but returns "${route.annotations.model}"`);
+                }
+
+                if (route.annotations.model) {
+                    modelName = toCapitalCase(route.annotations.model);
+                }
 
                 let uri = "/" + (route.pattern.toString().split("(?:\\?")[0].replace(Config.router.urlPrefix.replace(/\//g, "\\/"), "").match(/\w+|\(\\d\+\)/g) || ["/"]).map((section, index, map)=> {
                     if(section === "(\\d+)" && index === map.length - 1) {
@@ -167,13 +180,13 @@ const OpenApi = {
 
                 path = paths[uri][route.method.toLowerCase()] = {
                     "tags": [
-                        controllerName
+                        modelName || controllerName
                     ],
                     "deprecated": !!route.annotations.deprecated,
                     "consumes": ["application/json"],
                     "produces": ["application/json"],
                     "summary": route.annotations.summary? toCapitalCase(route.annotations.summary) :
-                        ({"GET": "Get", "POST": "Create", "PUT": "Update", "DELETE": "Remove", "OPTIONS": "Ping"}[route.method] + ` ${controllerName} instance`),
+                        ({"GET": "Get", "POST": "Create", "PUT": "Update", "DELETE": "Remove", "OPTIONS": "Ping"}[route.method] + ` ${modelName} instance`),
                     "operationId": route.method + uri + route.arguments.optional.map(arg => toCapitalCase(arg.name)).join(""),
                     "parameters": [],
                     "responses": {}
@@ -199,29 +212,29 @@ const OpenApi = {
                     "description": `Success`,
                 };
 
-                if (this._models().map(model => model.__model__.name).includes(controllerName)) {
+                if (modelName) {
 
                     if (route.method === "GET") {
                         path["responses"]["200"] = collection?
                             {
-                                "description": `Collection of ${controllerName} instances, empty array if not found`,
+                                "description": `Collection of ${modelName} instances, empty array if not found`,
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": `#/definitions/${controllerName}`
+                                        "$ref": `#/definitions/${modelName}`
                                     }
                                 }
                             }
                             :
                             {
-                                "description": `Instance of ${controllerName} model`,
+                                "description": `Instance of ${modelName} model`,
                                 "schema": {
-                                    "$ref": `#/definitions/${controllerName}`
+                                    "$ref": `#/definitions/${modelName}`
                                 }
                             };
                         if (!collection) {
                             path["responses"]["404"] = {
-                                "description": `Instance of ${controllerName} model was not found.`,
+                                "description": `Instance of ${modelName} model was not found.`,
                             };
                         }
                     }
@@ -230,17 +243,17 @@ const OpenApi = {
                         path["parameters"].push({
                             "name": "model",
                             "in": "body",
-                            "description": `Instance of ${controllerName} model`,
+                            "description": `Instance of ${modelName} model`,
                             "required": true,
                             "schema": {
-                                "$ref": `#/definitions/${controllerName}`
+                                "$ref": `#/definitions/${modelName}`
                             }
                         });
 
                         path["responses"]["201"] = {
-                            "description": `Created instance of ${controllerName} model`,
+                            "description": `Created instance of ${modelName} model`,
                             "schema": {
-                                "$ref": `#/definitions/${controllerName}`
+                                "$ref": `#/definitions/${modelName}`
                             }
                         };
                     }
@@ -249,24 +262,24 @@ const OpenApi = {
                         path["parameters"].push({
                             "name": "model",
                             "in": "body",
-                            "description": `Instance of ${controllerName} model`,
+                            "description": `Instance of ${modelName} model`,
                             "required": true,
                             "schema": {
-                                "$ref": `#/definitions/${controllerName}`
+                                "$ref": `#/definitions/${modelName}`
                             }
                         });
 
                         path["responses"]["200"] = {
-                            "description": `Updated instance of ${controllerName} model`,
+                            "description": `Updated instance of ${modelName} model`,
                             "schema": {
-                                "$ref": `#/definitions/${controllerName}`
+                                "$ref": `#/definitions/${modelName}`
                             }
                         };
                     }
 
                     if (route.method === "DELETE") {
                         path["responses"]["204"] = {
-                            "description": `Instance of ${controllerName} model successfuly removed`,
+                            "description": `Instance of ${modelName} model successfuly removed`,
                         };
                     }
 
