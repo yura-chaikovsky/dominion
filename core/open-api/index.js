@@ -213,7 +213,6 @@ const OpenApi = {
                 };
 
                 if (modelName) {
-
                     if (route.method === "GET") {
                         path["responses"]["200"] = collection?
                             {
@@ -283,6 +282,10 @@ const OpenApi = {
                         };
                     }
 
+                } else {
+                    path["responses"]["200"] = {
+                        "description": `Success`,
+                    };
                 }
 
                 if (route.permission) {
