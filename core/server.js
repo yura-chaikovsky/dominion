@@ -4,6 +4,7 @@ const Factories                 = require('./factories');
 const Messages                  = require('./messages');
 const Router                    = require('./router');
 const Errors                    = require('./errors');
+const OpenApi                   = require('./open-api');
 
 let Server = function () {
     if (!new.target) throw new Errors.Fatal('Server can not be called without creating instance.');
@@ -20,6 +21,7 @@ let Server = function () {
     this.factories = Factories;
     this.controllers = Controllers;
     this.addComponent = addComponent;
+    this.openApiJSON = openApiJSON;
     this.start = startServer;
     this.stop = stopServer;
 };
@@ -71,6 +73,10 @@ const componentsBootstraping = function () {
         const bootstrapFn = require(controller);
         (typeof bootstrapFn === 'function') && bootstrapFn(this);
     });
+};
+
+const openApiJSON = function (meta) {
+    return OpenApi.generate(meta);
 };
 
 module.exports = Server;

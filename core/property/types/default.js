@@ -1,4 +1,4 @@
-const Errors = use("core/errors");
+const Errors                    = use("core/errors");
 
 
 class PropertyPrototype {
@@ -52,6 +52,11 @@ class DefaultProperty extends PropertyPrototype {
         this._addOutputModification((outputObject, propertyName) => {
             delete outputObject[propertyName];
         });
+        return this;
+    }
+
+    example(exampleValue) {
+        this.documentationExampleValue = exampleValue;
         return this;
     }
 }

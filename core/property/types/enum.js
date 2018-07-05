@@ -8,9 +8,11 @@ class EnumProperty extends DefaultProperty {
     constructor(valuesList) {
         super();
 
+        this.valuesList = valuesList;
+
         this._addValidator((value, propertyName) => {
-            if (value && !valuesList.includes(value)) {
-                throw new Errors.Validation(`property ${propertyName} should have one of enum value: ${valuesList.join(', ')}, given '${value}'`);
+            if (value && !this.valuesList.includes(value)) {
+                throw new Errors.Validation(`property ${propertyName} should have one of enum value: ${this.valuesList.join(', ')}, given '${value}'`);
             }
         });
     }

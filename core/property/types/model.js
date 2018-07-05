@@ -11,6 +11,7 @@ class ModelProperty extends DefaultProperty {
 
         const Factories = use('core/factories');
 
+        this.modelName = modelName;
 
         this._addValidator((value, propertyName) => {
             if (value != null && (
@@ -24,7 +25,7 @@ class ModelProperty extends DefaultProperty {
 
         this._addValidator((value, propertyName) => {
             try {
-                Factories(modelName);
+                Factories(this.modelName);
             }
             catch (error) {
                 if (error instanceof Errors.Fatal) {
@@ -39,7 +40,7 @@ class ModelProperty extends DefaultProperty {
             if(outputObject[propertyName] !== null) {
                 outputObject[propertyName] = {
                     id: outputObject[propertyName],
-                    link: modelName.toLowerCase() + "/" + outputObject[propertyName]
+                    link: this.modelName.toLowerCase() + "/" + outputObject[propertyName]
                 };
             }
         });
