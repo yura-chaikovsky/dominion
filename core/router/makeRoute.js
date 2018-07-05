@@ -19,8 +19,10 @@ const makeRoute = function(method, handler, rootPath = '', permission = null){
         handler,
         arguments: parsedFunction.arguments,
         annotations: parsedFunction.annotations,
-        permission: parsedFunction.annotations.permission ? parsedFunction.annotations.permission : permission,
-        pattern: parsedFunction.annotations.path?
+        permission: parsedFunction.annotations.permission ?
+            parsedFunction.annotations.permission
+            : permission? permission.toLowerCase() : null,
+        pattern: parsedFunction.annotations.path ?
             getPatternForArgs({required: [],optional: parsedFunction.arguments.optional}, parsedFunction.annotations.path)
             : getPatternForArgs(parsedFunction.arguments, rootPath)
     }
