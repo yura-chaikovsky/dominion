@@ -1,3 +1,4 @@
+const Config                    = use("config");
 const Messages                  = use('core/messages');
 const Errors                    = use('core/errors');
 
@@ -72,7 +73,7 @@ class Router {
             }.bind(message))
             .catch(function (error) {
                 this.response.status = this.response.statuses._500_InternalServerError;
-                return process.env.NODE_ENV === 'prod'? (console.error(error), '') : error;
+                return Config.env.production? (console.error(error), '') : error;
             }.bind(message))
             .then(function (body) {
                 this.response.body = body;
