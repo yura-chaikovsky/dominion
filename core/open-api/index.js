@@ -208,10 +208,6 @@ const OpenApi = {
                     });
                 });
 
-                path["responses"]["200"] = {
-                    "description": `Success`,
-                };
-
                 if (modelName) {
                     if (route.method === "GET") {
                         path["responses"]["200"] = collection?
