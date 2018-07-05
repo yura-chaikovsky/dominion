@@ -302,8 +302,6 @@ const OpenApi = {
                 return paths;
             }, paths);
         });
-
-        console.log(paths);
         return paths;
     },
 
