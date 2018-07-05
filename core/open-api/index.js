@@ -67,6 +67,19 @@ const OpenApi = {
                 "properties": {}
             };
 
+            definition[`${model.__model__.name} Reference`] = {
+                "type": "object",
+                "xml": {
+                    "name": `${model.__model__.name} Reference`
+                },
+                "required": [],
+                "properties": {
+                    "id": {"type": "number", "example": 42},
+                    "model": {"type": "string", "example": model.__model__.name},
+                    "link": {"type": "string", "example": `${model.__model__.name.toLowerCase()}/42`}
+                }
+            };
+
             Object.entries(model.__model__.prototype.scheme).forEach(([propertyName, property]) => {
                 if([...property._outputModifications].some(modificatorFunction => modificatorFunction.name === "hidden")){
                     return null;
@@ -125,11 +138,7 @@ const OpenApi = {
                 "example": property.documentationExampleValue || [property.valuesList[0], property.valuesList[1]]
             }},
             "ModelProperty": (property) => { return {
-                "$ref": `#/definitions/${property.modelName}`
-                // "example": {
-                //     id: 42,
-                //     link: `${property.modelName.toLowerCase()}/42`
-                // }
+                "$ref": `#/definitions/${property.modelName} Reference`
             }}
         };
 

@@ -40,6 +40,7 @@ class ModelProperty extends DefaultProperty {
             if(outputObject[propertyName] !== null) {
                 outputObject[propertyName] = {
                     id: outputObject[propertyName],
+                    model: this.modelName,
                     link: this.modelName.toLowerCase() + "/" + outputObject[propertyName]
                 };
             }
