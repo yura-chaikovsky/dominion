@@ -172,7 +172,7 @@ const OpenApi = {
                 }
 
                 let uri = "/" + (route.pattern.toString().split("(?:\\?")[0].replace(Config.router.urlPrefix.replace(/\//g, "\\/"), "").match(/\w+|\(\\d\+\)/g) || ["/"]).map((section, index, map)=> {
-                    if(section === "(\\d+)" && index === map.length - 1) {
+                    if((section === "(\\d+)" && index === map.length - 1) || route.method === "POST") {
                         collection = false;
                     }
 
