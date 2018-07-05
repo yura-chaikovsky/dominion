@@ -11,7 +11,6 @@ function checkPermissions(body) {
     }
 
     if (!this.request.session) {
-        this.response.status = this.response.statuses._401_Unauthorized;
         throw new Errors.Unauthorized("Session is invalid");
     }
 
@@ -20,7 +19,6 @@ function checkPermissions(body) {
             this.request.session.permissions = permissions.map(permission => permission.title.toLowerCase());
 
             if (!this.request.session.permissions.includes(this.request.handler.permission.toLowerCase())) {
-                this.response.status = this.response.statuses._403_Forbidden;
                 throw new Errors.Forbidden("You don't have permission to perform this action");
             }
 
