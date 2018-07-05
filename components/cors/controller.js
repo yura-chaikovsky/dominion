@@ -11,6 +11,7 @@ const CORSController = {
 
         function () {
             // @path: .*
+            // @summary: Handle CORS OPTIONS request
 
             this.response.headers['Access-Control-Allow-Methods'] = Config.cors.methods.toString();
             this.response.headers['Access-Control-Allow-Headers'] = Config.cors.headers.toString();
