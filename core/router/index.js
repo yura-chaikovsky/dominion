@@ -58,6 +58,7 @@ class Router {
                 } else if (error instanceof Errors.Validation){
                     this.response.status = this.response.statuses._400_BadRequest;
                 } else if (error instanceof Errors.Unauthorized) {
+                    this.response.headers["WWW-Authenticate"] = "Bearer";
                     this.response.status = this.response.statuses._401_Unauthorized;
                 } else if (error instanceof Errors.Forbidden) {
                     this.response.status = this.response.statuses._403_Forbidden;
