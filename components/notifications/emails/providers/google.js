@@ -1,6 +1,6 @@
 const nodemailer                = require('nodemailer');
 
-const EMAIL_STATUS              = require('./../enums/statuses');
+const STATUSES                  = require('./../enums/statuses');
 
 
 class Google {
@@ -27,7 +27,7 @@ class Google {
                 }
             });
         }).then(response => {
-            response.status = response.rejected.length? EMAIL_STATUS.REJECTED : EMAIL_STATUS.ACCEPTED;
+            response.status = response.rejected.length? STATUSES.REJECTED : STATUSES.SENT;
             return response;
         });
     }

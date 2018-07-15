@@ -1,9 +1,10 @@
 const Config                        = use('config');
+const Errors                        = use('core/errors');
 const Property                      = use('core/property');
 
 const NotificationEmailRepository   = require('./repository');
-const EMAIL_STATUSES                = require('./enums/statuses');
-const EMAIL_TYPES                   = require('./enums/types');
+const STATUSES                      = require('./enums/statuses');
+const TYPES                         = require('./enums/types');
 
 
 const NotificationEmailDefinition = {
@@ -30,8 +31,8 @@ const NotificationEmailDefinition = {
     },
 
     factory: {
-        EMAIL_STATUSES,
-        EMAIL_TYPES,
+        STATUSES,
+        TYPES,
 
         new: function (properties = {}, providerConfig = Config.emailGate.providers[Config.emailGate.active]) {
             const newModel = new this.__model__(properties);
@@ -61,6 +62,12 @@ const NotificationEmailDefinition = {
                     this.messages_id = response.messagesId;
                     this.status = response.status;
                     return this.save();
+                })
+                .then(notificationEmail => {
+                    if (notificationEmail.status = STATUSES.FAILED) {
+                        throw new Errors.BadRequest();
+                    }
+                    return notificationEmail;
                 });
         }
 
