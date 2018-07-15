@@ -59,7 +59,7 @@ const NotificationEmailDefinition = {
                     });
                 })
                 .then(response => {
-                    this.messages_id = response.messagesId;
+                    this.messages_id = response.messageId;
                     this.status = response.status;
                     return this.save();
                 })
