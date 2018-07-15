@@ -17,7 +17,8 @@ const NotificationEmailDefinition = {
         messages_id             : Property.string().max(255),
         provider_name           : Property.string(),
         accounts_senders_id     : Property.id(),
-        sender_email            : Property.string().max(255),
+        sender_email_to         : Property.string().max(255),
+        sender_email_reply_to   : Property.string().max(255),
         subject                 : Property.string().max(255),
         body                    : Property.string().max(64500),
         recipient_email_to      : Property.object(),
@@ -47,7 +48,8 @@ const NotificationEmailDefinition = {
             return this.save()
                 .then(notificationEmail => {
                     return notificationEmail.provider.send({
-                        from: this.sender_email,
+                        from: this.sender_email_to,
+                        replyTo: this.sender_email_reply_to,
                         to: this.recipient_email_to,
                         cc: this.recipient_email_cc,
                         bcc: this.recipient_email_bcc,
