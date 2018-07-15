@@ -67,7 +67,12 @@ module.exports = {
                 user: "",
                 password: ""
             }
-        ]
-
+        ],
+        senders: {
+            content: {
+                from: "Dominion Framework <noreply@dominion.co.ua>",
+                replyTo: "noreply@dominion.co.ua",
+            }
+        }
     }
 };
