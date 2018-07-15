@@ -69,6 +69,12 @@ const NotificationEmailDefinition = {
                     }
                     return email;
                 });
+        },
+
+        fillTemplate(bodyVars, subjectVars = {}) {
+            Object.keys(subjectVars).forEach(key => this.subject = this.subject.replace(key, subjectVars[key]));
+            Object.keys(bodyVars).forEach(key => this.body = this.body.replace(key, bodyVars[key]));
+            return this;
         }
 
     }
