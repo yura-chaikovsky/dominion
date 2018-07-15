@@ -37,6 +37,7 @@ const NotificationEmailDefinition = {
         new: function (properties = {}, providerConfig = Config.emailGate.providers[Config.emailGate.active]) {
             const newModel = new this.__model__(properties);
             newModel.__unsaved__ = true;
+            newModel.provider_name = providerConfig.type;
             newModel.provider = require(`./providers/${providerConfig.type}`);
             newModel.provider.config = providerConfig;
             return Promise.resolve(Object.freeze(newModel));
