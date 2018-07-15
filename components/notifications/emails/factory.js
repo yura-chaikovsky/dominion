@@ -64,8 +64,8 @@ const NotificationEmailDefinition = {
                     return this.save();
                 })
                 .then(notificationEmail => {
-                    if (notificationEmail.status = STATUSES.FAILED) {
-                        throw new Errors.BadRequest();
+                    if (notificationEmail.status === STATUSES.FAILED) {
+                        throw new Errors.BadRequest("Email was not sent.");
                     }
                     return notificationEmail;
                 });
