@@ -8,7 +8,7 @@ const EMAIL_TYPES                   = require('./enums/types');
 
 const NotificationEmailDefinition = {
 
-    name: 'NotificationsEmail',
+    name: 'NotificationsEmails',
 
     repository: NotificationEmailRepository,
 
