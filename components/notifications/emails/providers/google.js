@@ -5,23 +5,13 @@ const EMAIL_STATUS              = require('./../enums/statuses');
 
 class Google {
 
-    static get config() {
-        return this._config;
-    }
-
-    static set config(config) {
-        this._config = config;
-    }
-
-    static send(from, to, cc, bcc, subject, html) {
-
-        const options = {from, to, cc, bcc, subject, html};
+    static send(options) {
 
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: this._config.user,
-                pass: this._config.password
+                user: this.config.user,
+                pass: this.config.password
             },
         }, {
             from: options.from,
