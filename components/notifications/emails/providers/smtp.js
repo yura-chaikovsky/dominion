@@ -14,7 +14,7 @@ class SMTP {
                 return response;
             })
             .catch(error => {
-                return {status: STATUSES.FAILED};
+                return {status: STATUSES.FAILED, errorMessage: error.message};
             });
     }
 
