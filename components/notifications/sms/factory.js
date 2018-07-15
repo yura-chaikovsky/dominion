@@ -53,13 +53,13 @@ const NotificationSmsDefinition = {
                 .then(() => this.provider.sendSms(this.recipient_phone, this.body))
                 .then(response => {
                     this.status = response.status;
-                    this.message_id = String(response.providerSmsId);
+                    this.messages_id = String(response.providerSmsId);
                     return this.save();
                 });
         },
 
         getStatus: function() {
-            return this.provider.getSmsStatus(this.message_id)
+            return this.provider.getSmsStatus(this.messages_id)
                 .then((response) => {
                     this.status = response.status;
                     return this.save();
