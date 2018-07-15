@@ -26,8 +26,8 @@ const NotificationEmailDefinition = {
         recipient_cc            : Property.object(),
         recipient_bcc           : Property.object(),
         accounts_recipients_id  : Property.id(),
-        status                  : Property.enum(Object.keys(EMAIL_STATUSES)),
-        type                    : Property.enum(Object.keys(EMAIL_TYPES))
+        status                  : Property.enum(Object.keys(STATUSES)),
+        type                    : Property.enum(Object.keys(TYPES))
     },
 
     factory: {
