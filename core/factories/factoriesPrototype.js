@@ -5,7 +5,7 @@ module.exports = new (function ModelFactory() {
     this.new = function (properties = {}, unsaved = true) {
         let newModel = new this.__model__(properties);
         newModel.__unsaved__ = unsaved;
-        return Promise.resolve(Object.freeze(newModel));
+        return Promise.resolve(Object.seal(newModel));
     };
 
     this.get = function(criteria){

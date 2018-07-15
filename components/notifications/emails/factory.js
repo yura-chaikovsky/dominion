@@ -16,7 +16,7 @@ const NotificationEmailDefinition = {
     properties: {
         id                      : Property.id(),
         messages_id             : Property.string().max(255),
-        provider_name           : Property.string(),
+        provider_type           : Property.string(),
         accounts_senders_id     : Property.id(),
         sender_from             : Property.string().max(255),
         sender_reply_to         : Property.string().max(255),
@@ -40,7 +40,7 @@ const NotificationEmailDefinition = {
             newModel.provider_type = providerConfig.type;
             newModel.provider = require(`./providers/${providerConfig.type}`);
             newModel.provider.config = providerConfig;
-            return Promise.resolve(Object.freeze(newModel));
+            return Promise.resolve(Object.seal(newModel));
         }
     },
 
@@ -48,8 +48,7 @@ const NotificationEmailDefinition = {
 
         send() {
             return this.save()
-                .then(notificationEmail => {
-                    return notificationEmail.provider.send({
+                .then(email => Promise.all([email, email.provider.send({
                         from: this.sender_from,
                         replyTo: this.sender_reply_to,
                         to: this.recipient_to,
@@ -57,18 +56,18 @@ const NotificationEmailDefinition = {
                         bcc: this.recipient_bcc,
                         subject: this.subject,
                         html: this.body
-                    });
+                    })])
+                )
+                .then(([email, response]) => {
+                    email.messages_id = response.messageId;
+                    email.status = response.status;
+                    return email.save();
                 })
-                .then(response => {
-                    this.messages_id = response.messageId;
-                    this.status = response.status;
-                    return this.save();
-                })
-                .then(notificationEmail => {
-                    if (notificationEmail.status === STATUSES.FAILED) {
+                .then(email => {
+                    if (email.status === STATUSES.FAILED) {
                         throw new Errors.BadRequest("Email was not sent.");
                     }
-                    return notificationEmail;
+                    return email;
                 });
         }
 
