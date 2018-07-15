@@ -55,7 +55,7 @@ CREATE TABLE `logs` (
 CREATE TABLE `notification_emails` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `messages_id` VARCHAR(255) NULL DEFAULT NULL,
-    `provider_name` VARCHAR(255) NULL DEFAULT NULL,
+    `provider_type` VARCHAR(255) NULL DEFAULT NULL,
     `accounts_senders_id` BIGINT(20) UNSIGNED NULL DEFAULT NULL,
     `sender_from` VARCHAR(255) NULL DEFAULT NULL,
     `sender_reply_to` VARCHAR(255) NULL DEFAULT NULL,
