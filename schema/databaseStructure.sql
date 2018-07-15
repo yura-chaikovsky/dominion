@@ -66,7 +66,7 @@ CREATE TABLE `notification_emails` (
     `recipient_bcc` JSON NULL DEFAULT NULL,
     `accounts_recipients_id` BIGINT(20) UNSIGNED NULL DEFAULT NULL,
     `time_sent` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `status` ENUM('QUEUED','SENT','REJECTED', 'ACCEPTED') DEFAULT 'QUEUED',
+    `status` ENUM('QUEUED', 'SENT', 'FAILED', 'REJECTED') DEFAULT 'QUEUED',
     `type` ENUM('AUTOMATIC', 'MANUAL') NULL DEFAULT 'AUTOMATIC',
     PRIMARY KEY (`id`)
 );

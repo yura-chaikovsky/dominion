@@ -1,4 +1,4 @@
 module.exports = {
-    AUTOMATIC:'AUTOMATIC',
-    MANUAL:'MANUAL'
+    AUTOMATIC:"AUTOMATIC",
+    MANUAL:"MANUAL"
 };
