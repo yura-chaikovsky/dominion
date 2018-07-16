@@ -36,6 +36,7 @@ const NotificationSmsDefinition = {
 
         new: function (properties = {}, providerConfig = Config.smsGate.providers[Config.smsGate.active]) {
             const newModel = new this.__model__(properties);
+            newModel.__unsaved__ = true;
             newModel.providerConfig = providerConfig;
             newModel.provider_name = newModel.providerConfig.name;
             newModel.provider = require(`./providers/${newModel.provider_name}`);
