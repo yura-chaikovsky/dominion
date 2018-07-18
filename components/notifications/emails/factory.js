@@ -2,16 +2,16 @@ const Config                        = use('config');
 const Errors                        = use('core/errors');
 const Property                      = use('core/property');
 
-const NotificationEmailsRepository  = require('./repository');
+const NotificationsEmailsRepository = require('./repository');
 const STATUSES                      = require('./enums/statuses');
 const TYPES                         = require('./enums/types');
 
 
-const NotificationEmailsDefinition = {
+const NotificationsEmailsDefinition = {
 
-    name: 'NotificationEmails',
+    name: 'NotificationsEmails',
 
-    repository: NotificationEmailsRepository,
+    repository: NotificationsEmailsRepository,
 
     properties: {
         id                      : Property.id(),
@@ -81,4 +81,4 @@ const NotificationEmailsDefinition = {
 };
 
 
-module.exports = NotificationEmailsDefinition;
+module.exports = NotificationsEmailsDefinition;

@@ -1,6 +1,6 @@
 const Repositories                   = use('core/repositories');
 
-const NotificationEmailsRepository    = Repositories.create('notification_emails', {});
+const NotificationsEmailsRepository    = Repositories.create('notifications_emails', {});
 
 
-module.exports = NotificationEmailsRepository;
+module.exports = NotificationsEmailsRepository;
