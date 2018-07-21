@@ -44,6 +44,7 @@ const SessionsDefinition = {
 
         create: function (account, options) {
             let session = new this.__model__({accounts_id: account.id});
+            session.__unsaved__ = true;
             session.creation_time = new Date();
 
             if (options.rememberMe) {
