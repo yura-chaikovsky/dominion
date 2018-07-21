@@ -52,7 +52,7 @@ CREATE TABLE `logs` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `notification_emails` (
+CREATE TABLE `notifications_emails` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `messages_id` VARCHAR(255) NULL DEFAULT NULL,
     `provider_type` VARCHAR(255) NULL DEFAULT NULL,
@@ -121,13 +121,13 @@ CREATE TABLE `tracking` (
     PRIMARY KEY (id)
 );
 
-ALTER TABLE notification_emails
-ADD CONSTRAINT fk_notification_emails_accounts_senders
+ALTER TABLE notifications_emails
+ADD CONSTRAINT fk_notifications_emails_accounts_senders
 FOREIGN KEY (accounts_senders_id)
 REFERENCES accounts(id);
 
-ALTER TABLE notification_emails
-ADD CONSTRAINT fk_notification_emails_accounts_recipients
+ALTER TABLE notifications_emails
+ADD CONSTRAINT fk_notifications_emails_accounts_recipients
 FOREIGN KEY (accounts_recipients_id)
 REFERENCES accounts(id);
 
