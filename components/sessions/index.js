@@ -2,7 +2,9 @@ module.exports = {
     factories: [
         __dirname + '/factory'
     ],
-    controllers: [],
+    controllers: [
+        __dirname + '/controller'
+    ],
     requestInterceptors: [
         __dirname + '/interceptors/requestAuth'
     ],

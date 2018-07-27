@@ -1,110 +1,86 @@
-const Property                  = use('core/property');
-const Config                    = use('config');
+const Config                    = use("config");
+const Property                  = use("core/property");
+const crypto                    = require("crypto");
+const generateToken             = require("./tools/generateToken");
+const SessionsRepository        = require("./repository");
 
-const SessionsRepository        = require('./repository');
-const Tools                     = require('./tools');
-
-
-const statuses = {
-    ACTIVE: "ACTIVE",
-    LONG_ACTIVE: "LONG_ACTIVE",
-    CLOSED: "CLOSED"
-};
-const closeTypes = {
-    LOG_OUT: "LOG_OUT",
-    AFTER_VALIDATION: "AFTER_VALIDATION",
-    FULL_LOG_OUT: "FULL_LOG_OUT",
-    ON_SCHEDULE: "ON_SCHEDULE"
-};
-
+const STATES                    = require("./enums/states");
+const SLIDING                   = require("./enums/sliding");
 
 const SessionsDefinition = {
 
-    name: 'Sessions',
+    name: "Sessions",
 
     repository: SessionsRepository,
 
     properties: {
-        id: Property.id(),
-        accounts_id: Property.model("Accounts"),
-        creation_time: Property.number(),
-        expiration_time: Property.number(),
-        close_time: Property.number(),
-        close_type: Property.enum(...Object.keys(closeTypes)),
-        ip: Property.string(),
-        status: Property.enum(...Object.keys(statuses)),
-        user_agent: Property.string(),
-        token: Property.string()
+        id                      : Property.id().private(),
+        token                   : Property.string(),
+        state                   : Property.enum(Object.keys(STATES)).private(),
+        members_id              : Property.model("Members"),
+        issueTime               : Property.date().private(),
+        ttl                     : Property.number().min(1000).private(),
+        sliding                 : Property.enum(['0', '1']).private(),
+        signExpirationTime      : Property.date(),
+        tokenExpirationTime     : Property.date(),
+        revokeTime              : Property.date().private(),
+        footprint               : Property.string().private(),
+        userAgent               : Property.string().private(),
+        ip                      : Property.string().max(15).private()
     },
 
     factory: {
-        statuses,
+        STATES,
+        SLIDING,
 
-        closeTypes,
-
-        create: function (account, options) {
-            let session = new this.__model__({accounts_id: account.id});
-            session.creation_time = new Date();
-
-            if (options.rememberMe) {
-                session.expiration_time = new Date(+session.creation_time + Config.session.persistentTtl);
-                session.status = this.statuses.LONG_ACTIVE;
-            }
-            else {
-                session.expiration_time = new Date(+session.creation_time + Config.session.regularTtl);
-                session.status = this.statuses.ACTIVE;
-            }
-
-            session.close_time = null;
-            session.ip = options.ip;
-            session.token = Tools.sha256(session.creation_time + session.accounts_id);
-            return Promise.resolve(Object.freeze(session));
+        createForMember(member) {
+            return this.new({
+                member_id: member.id,
+                token: generateToken(member.id),
+                activity_time: new Date()
+            });
         },
 
-        closeAll: function (session) {
-            this.find({accounts_id: session.accounts_id})
-            .then(sessions => {
-                sessions.filter(element => {
-                    if (element.token !== session.token) {
-                        return element;
-                    }
-                }).forEach(element => {
-                    element.close();
-                })
-            })
+        issue(sessionData) {
+            const NOW = new Date();
+            const ttl = sessionData.ttl || Config.session.regularTtl;
+
+            return this.new({
+                token: generateToken(sessionData.member.id),
+                state: this.STATES.ACTIVE,
+                members_id: sessionData.member.id,
+                issueTime: NOW,
+                ttl: ttl,
+                sliding: sessionData.sliding,
+                signExpirationTime: sessionData.signed ? new Date(+NOW + Math.min(Config.session.signTtl, ttl)) : null,
+                tokenExpirationTime: new Date(+NOW + ttl),
+                footprint: this._footprint(sessionData),
+                userAgent: sessionData.userAgent,
+                ip: sessionData.ip
+            }).then(session => session.save())
+        },
+
+        _footprint(sessionData) {
+            return crypto.createHash("md5").update(sessionData.userAgent).digest("hex").toString("hex");
         }
+
     },
 
     instance: {
-        close: function (closeType) {
-            this.close_time = new Date();
-            this.close_type = closeType;
-            this.status = statuses.CLOSED;
 
-            this.save();
-        },
-
-        refresh: function (options) {
-            switch (this.status) {
-                case statuses.LONG_ACTIVE:
-                    this.expiration_time = new Date(+new Date() + Config.session.persistentTtl);
-                    break;
-                case statuses.ACTIVE:
-                    this.expiration_time = new Date(+new Date() + Config.session.regularTtl);
-                    break;
+        slide() {
+            if (this.sliding === SLIDING.YES) {
+                this.tokenExpirationTime = new Date(+ new Date() + this.ttl);
+                return this.save();
             }
 
-            this.ip = options.ip;
-            this.save();
+            return Promise.resolve(this);
         },
 
-        isActive(){
-            if ((this.status === statuses.LONG_ACTIVE || this.status === statuses.ACTIVE)
-                && this.expiration_time > new Date()) {
-                return true;
-            }
-
-            return false;
+        revoke() {
+            this.revokeTime = new Date();
+            this.state = STATES.REVOKED;
+            return this.save();
         }
     }
 };

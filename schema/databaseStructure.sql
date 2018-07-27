@@ -91,21 +91,31 @@ CREATE TABLE `notification_sms` (
     PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `dmn_sessions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(64) NOT NULL,
+  `state` enum('ACTIVE','EXPIRED','REVOKED') DEFAULT 'ACTIVE',
+  `members_id` int(10) unsigned DEFAULT NULL,
+  `issueTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ttl` int(10) unsigned NOT NULL,
+  `sliding` ENUM('0', '1') NULL DEFAULT '0',
+  `signExpirationTime` timestamp NULL DEFAULT NULL,
+  `tokenExpirationTime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `revokeTime` timestamp NULL DEFAULT NULL,
+  `footprint` mediumtext,
+  `userAgent` varchar(250) DEFAULT NULL,
+  `ip` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `key_state_expire` (`state`,`tokenExpirationTime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+SET GLOBAL event_scheduler = ON;
+CREATE EVENT e_session_state
+    ON SCHEDULE
+      EVERY 15 minute
+    DO
+      UPDATE dmn_sessions SET state = "EXPIRED" WHERE state = "ACTIVE" AND tokenExpirationTime < NOW();
 
-CREATE TABLE `sessions` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `accounts_id` BIGINT NOT NULL,
-    `token` VARCHAR(100),
-    `ip` VARCHAR(15),
-    `creation_time` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `expiration_time` TIMESTAMP NULL DEFAULT NULL,
-    `close_time` TIMESTAMP NULL DEFAULT NULL,
-    `status` ENUM('ACTIVE', 'CLOSED', 'ACTIVE_LOG'),
-    `user_agent` VARCHAR(100),
-    `close_type` ENUM('LOG_OUT','AFTER_VALIDATION', 'FULL_LOGOUT', 'ON_SCHEDULE'),
-    PRIMARY KEY (`id`)
-);
 
 CREATE TABLE `tracking` (
     `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
