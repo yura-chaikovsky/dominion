@@ -53,23 +53,23 @@ CREATE TABLE `logs` (
 );
 
 CREATE TABLE `notification_emails` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `messages_id` VARCHAR(255) NULL DEFAULT NULL,
-    `provider_type` VARCHAR(255) NULL DEFAULT NULL,
-    `accounts_senders_id` BIGINT(20) UNSIGNED NULL DEFAULT NULL,
-    `sender_from` VARCHAR(255) NULL DEFAULT NULL,
-    `sender_reply_to` VARCHAR(255) NULL DEFAULT NULL,
-    `subject` VARCHAR(255),
-    `body` TEXT,
-    `recipient_to` JSON NULL DEFAULT NULL,
-    `recipient_cc` JSON NULL DEFAULT NULL,
-    `recipient_bcc` JSON NULL DEFAULT NULL,
-    `accounts_recipients_id` BIGINT(20) UNSIGNED NULL DEFAULT NULL,
-    `time_sent` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `status` ENUM('QUEUED', 'SENT', 'FAILED', 'REJECTED') DEFAULT 'QUEUED',
-    `type` ENUM('AUTOMATIC', 'MANUAL') NULL DEFAULT 'AUTOMATIC',
-    PRIMARY KEY (`id`)
-);
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `messages_id` varchar(255) DEFAULT NULL,
+  `provider_type` varchar(255) DEFAULT NULL,
+  `accounts_senders_id` bigint(20) unsigned DEFAULT NULL,
+  `sender_from` varchar(255) DEFAULT NULL,
+  `sender_reply_to` varchar(255) DEFAULT NULL,
+  `subject` varchar(255) DEFAULT NULL,
+  `body` text,
+  `recipient_to` json DEFAULT NULL,
+  `recipient_cc` json DEFAULT NULL,
+  `recipient_bcc` json DEFAULT NULL,
+  `accounts_recipients_id` bigint(20) unsigned DEFAULT NULL,
+  `time_sent` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('QUEUED','SENT','FAILED','REJECTED') DEFAULT 'QUEUED',
+  `type` enum('AUTOMATIC','MANUAL') DEFAULT 'AUTOMATIC',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `notification_sms` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
