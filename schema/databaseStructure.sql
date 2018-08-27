@@ -95,7 +95,7 @@ CREATE TABLE `dmn_sessions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `token` varchar(64) NOT NULL,
   `state` enum('ACTIVE','EXPIRED','REVOKED') DEFAULT 'ACTIVE',
-  `members_id` int(10) unsigned DEFAULT NULL,
+  `accounts_id` int(10) unsigned DEFAULT NULL,
   `issueTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ttl` int(10) unsigned NOT NULL,
   `sliding` ENUM('0', '1') NULL DEFAULT '0',

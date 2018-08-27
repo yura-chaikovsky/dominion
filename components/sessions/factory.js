@@ -46,9 +46,9 @@ const SessionsDefinition = {
             const ttl = sessionData.ttl || Config.session.regularTtl;
 
             return this.new({
-                token: generateToken(sessionData.member.id),
+                token: generateToken(sessionData.account.id),
                 state: this.STATES.ACTIVE,
-                members_id: sessionData.member.id,
+                accounts_id: sessionData.account.id,
                 issueTime: NOW,
                 ttl: ttl,
                 sliding: sessionData.sliding,

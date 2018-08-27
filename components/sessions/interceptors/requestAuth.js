@@ -9,7 +9,11 @@ function checkAuthInterceptor(body) {
         return Promise.resolve(body);
     }
 
-    return SessionFactory.get({token: this.request.headers["authorization"].split(" ")[1], state: "ACTIVE"})
+    let token = this.request.headers["authorization"].split(" ")[1];
+    if (!token) {
+        throw new Errors.BadRequest(`Authorization token is malformatted. Expected: "Authorization: Bearer [auth-token]", given: "Authorisation: ${this.request.headers["authorization"]}"`);
+    }
+    return SessionFactory.get({token, state: "ACTIVE"})
         .then(session => {
             return session.slide()
                 .then(session => MembersFactory.get({id: session.members_id}))

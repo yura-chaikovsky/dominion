@@ -1,8 +1,7 @@
 const Errors                    = use("core/errors");
 const Factories                 = use("core/factories");
 
-const MembersFactory            = Factories("Members");
-const InvitationsFactory        = Factories("Invitations");
+const AccountsFactory           = Factories("Accounts");
 const SessionsFactory           = Factories("Sessions");
 
 
@@ -17,10 +16,10 @@ const AuthController = {
             // @path: auth/token
             // @summary: Authenticate account by credentials
 
-            return MembersFactory.get({email: this.request.body.email})
-                .then(member => member.checkPassword(this.request.body.password))
-                .then(member => SessionsFactory.issue({
-                    member,
+            return AccountsFactory.get({email: this.request.body.email})
+                .then(account => account.checkPassword(this.request.body.password))
+                .then(account => SessionsFactory.issue({
+                    account: account,
                     signed: true,
                     sliding: SessionsFactory.SLIDING.YES,
                     ip: this.request.ip,
