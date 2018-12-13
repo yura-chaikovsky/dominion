@@ -38,9 +38,9 @@ CREATE TABLE `accounts_permissions` (
   `accounts_id` int(10) unsigned NOT NULL,
   `permissions_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `member_permission_unique` (`members_id`,`permissions_id`),
+  UNIQUE KEY `accounts_permission_unique` (`accounts_id`,`permissions_id`),
   KEY `permission_permission_idx` (`permissions_id`),
-  CONSTRAINT `permission_member` FOREIGN KEY (`members_id`) REFERENCES `accounts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `permission_accounts` FOREIGN KEY (`accounts_id`) REFERENCES `accounts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `permission_permission` FOREIGN KEY (`permissions_id`) REFERENCES `permissions` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
