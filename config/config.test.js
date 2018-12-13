@@ -1,7 +1,8 @@
 module.exports = {
     server: {
         host: "localhost",
-        port: 3001
+        port: 3001,
+        url: "https://localhost"
     },
 
     router: {
@@ -25,6 +26,12 @@ module.exports = {
     session: {
         regularTtl: 14 * 24 * 3600 * 1000 /* milliseconds*/,
         signTtl: 24 * 3600 * 1000 /* milliseconds*/
+    },
+
+    websockets: {
+        clientTracking: true,
+        perMessageDeflate: false,
+        maxPayload: 400 * 1024 * 1024 /* bytes*/
     },
 
     media: {

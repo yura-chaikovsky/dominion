@@ -1,7 +1,8 @@
 module.exports = {
     server: {
         host: "localhost",
-        port: 3000
+        port: 3000,
+        url: "https://localhost"
     },
 
     router: {
@@ -10,7 +11,7 @@ module.exports = {
         // e.g. "[a-f\d]{8}-[a-f\d]{4}-4[a-f\d]{3}-[89ab][a-f\d]{3}-[a-f\d]{12}"
         primaryKeyPattern: "\\d+"
     },
-    
+
     database: "mysql://root:root@localhost/dominion",
 
     cors: {
@@ -25,6 +26,12 @@ module.exports = {
     session: {
         regularTtl: 14 * 24 * 3600 * 1000 /* milliseconds*/,
         signTtl: 24 * 3600 * 1000 /* milliseconds*/
+    },
+
+    websockets: {
+        clientTracking: true,
+        perMessageDeflate: false,
+        maxPayload: 400 * 1024 * 1024 /* bytes*/
     },
 
     media: {
