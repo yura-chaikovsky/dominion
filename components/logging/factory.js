@@ -13,7 +13,7 @@ const LogsDefinition = {
         id: Property.id(),
         header: Property.string(),
         body: Property.string(),
-        tracking_id: Property.model('Tracking')
+        tracking_id: Property.id()
     },
 
     factory: {},

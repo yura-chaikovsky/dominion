@@ -91,7 +91,7 @@ CREATE TABLE `notification_sms` (
     PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `dmn_sessions` (
+CREATE TABLE `sessions` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `token` varchar(64) NOT NULL,
   `state` enum('ACTIVE','EXPIRED','REVOKED') DEFAULT 'ACTIVE',
@@ -114,7 +114,7 @@ CREATE EVENT e_session_state
     ON SCHEDULE
       EVERY 15 minute
     DO
-      UPDATE dmn_sessions SET state = "EXPIRED" WHERE state = "ACTIVE" AND tokenExpirationTime < NOW();
+      UPDATE sessions SET state = "EXPIRED" WHERE state = "ACTIVE" AND tokenExpirationTime < NOW();
 
 
 CREATE TABLE `tracking` (

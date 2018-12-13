@@ -7,7 +7,7 @@ function requestInterceptorLogging() {
 
     return new Promise((resolve, reject) => {
         LogsFactory.new({
-                tracking_id: this.request.tracking.id || null,
+                tracking_id: (this.request.tracking && this.request.tracking.id) || null,
                 header: JSON.stringify(this.request.headers),
                 body: JSON.stringify(this.request.body)
             }, false)
