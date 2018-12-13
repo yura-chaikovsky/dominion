@@ -3,9 +3,7 @@ module.exports = {
         __dirname + '/factory'
     ],
     controllers: [
-        __dirname + '/controller',
-        __dirname + '/passwordRecoveryController',
-        __dirname + '/passwordResetController'
+        __dirname + '/controller'
     ],
     requestInterceptors: [],
     responseInterceptors: []
