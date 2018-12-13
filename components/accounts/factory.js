@@ -1,4 +1,5 @@
 const Property                  = use('core/property');
+const Errors                    = use('core/errors');
 
 const AccountsRepository        = require('./repository');
 const ROLES                     = require('./enums/roles');
@@ -51,10 +52,10 @@ const AccountsDefinition = {
         },
 
         checkPassword(password) {
-            if (this.password_hash == Tools.createHash(password, this.salt)) {
+            if (this.password_hash == Tools.createHash(password, this.password_salt)) {
                 return this;
             } else {
-                throw new Errors.Unauthorized();
+                throw new Errors.Unauthorized("Incorrect credentials");
             }
         },
 

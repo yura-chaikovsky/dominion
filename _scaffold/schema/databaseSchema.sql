@@ -65,3 +65,28 @@ CREATE TABLE `tracking` (
   `ip` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `sessions` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(64) NOT NULL,
+  `state` enum('ACTIVE','EXPIRED','REVOKED') DEFAULT 'ACTIVE',
+  `accounts_id` int(10) unsigned DEFAULT NULL,
+  `issueTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ttl` int(10) unsigned NOT NULL,
+  `sliding` ENUM('0', '1') NULL DEFAULT '0',
+  `signExpirationTime` timestamp NULL DEFAULT NULL,
+  `tokenExpirationTime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `revokeTime` timestamp NULL DEFAULT NULL,
+  `footprint` mediumtext,
+  `userAgent` varchar(250) DEFAULT NULL,
+  `ip` varchar(15) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `key_state_expire` (`state`,`tokenExpirationTime`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+SET GLOBAL event_scheduler = ON;
+CREATE EVENT e_session_state
+    ON SCHEDULE
+      EVERY 15 minute
+    DO
+      UPDATE sessions SET state = "EXPIRED" WHERE state = "ACTIVE" AND tokenExpirationTime < NOW();

@@ -7,7 +7,6 @@ Server.addComponent(use("components/permissions"));
 Server.addComponent(use("components/accounts"));
 Server.addComponent(use("components/tracking"));
 Server.addComponent(use("components/logging"));
-Server.addComponent(use("components/authorize"));
 
 Server.addComponent(require("./components/accounts"));
 
