@@ -4,6 +4,6 @@ module.exports = {
     requestInterceptors: [],
     responseInterceptors: [],
     bootstrap: [
-        __dirname + '/setAccountsRoles'
+        __dirname + "/setAccountsRoles"
     ]
 };
