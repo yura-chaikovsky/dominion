@@ -30,9 +30,8 @@ const AccountsController = {
     POST : [
         // accounts
         function () {
-            const accountData = this.request.body;
-            accountData.role = 5;
-            accountData.ipAddress = this.request.ip;
+            const accountData = Object.assign({}, this.request.body);
+            delete accountData.password;
 
             return AccountsFactory.new(accountData)
                 .then(account => {
