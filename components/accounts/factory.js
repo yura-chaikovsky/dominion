@@ -47,7 +47,7 @@ const AccountsDefinition = {
         },
 
         checkPassword(password) {
-            if (this.password == createHash(password, this.salt)) {
+            if (this.password_hash == Tools.createHash(password, this.salt)) {
                 return this;
             } else {
                 throw new Errors.Unauthorized();
@@ -55,8 +55,8 @@ const AccountsDefinition = {
         },
 
         setPassword(password) {
-            let [passwordHash, salt] = encodePassword(password);
-            this.populate({password: passwordHash, salt});
+            let [password_hash, password_salt] = Tools.encodePassword(password);
+            this.populate({password_hash, password_salt});
             return this;
         }
     }
