@@ -1,6 +1,7 @@
 const Property                  = use('core/property');
 
 const AccountsRepository        = require('./repository');
+const ROLES                     = require('./enums/roles');
 const Tools                     = require('./tools');
 
 
@@ -21,6 +22,9 @@ const AccountsDefinition = {
     },
 
     factory: {
+
+        ROLES,
+
         getByToken(token) {
             if (!token.trim()) {
                 throw new Errors.Unauthorized("Access token is missing");
