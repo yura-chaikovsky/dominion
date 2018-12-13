@@ -23,5 +23,5 @@ if (Config.env.development) {
             "email": "yura.chaikovsky@gmail.com"
         }
     });
-    fs.writeFileSync("./statoksystems.openapi.json", JSON.stringify(openAPIJSON, null, 4));
+    fs.writeFileSync("./openapi.json", JSON.stringify(openAPIJSON, null, 4));
 }

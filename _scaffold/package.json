@@ -6,10 +6,12 @@
   "dependencies": {
     "dominion": "git+https://github.com/yura-chaikovsky/dominion.git"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "spectacle-docs": "git+https://github.com/yura-chaikovsky/spectacle.git"
+  },
   "scripts": {
     "start": "node %NODE_DEBUG_OPTION% index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "docs": "./node_modules/.bin/spectacle -1t ./docs/ ./openapi.json"
   },
   "author": "Yura Chaikovsky",
   "license": "ISC"
