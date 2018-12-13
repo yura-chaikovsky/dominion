@@ -14,7 +14,7 @@ function checkPermissions(body) {
         throw new Errors.Unauthorized("Session is invalid");
     }
 
-    return PermissionsFactory.getByMember(this.request.session.member)
+    return PermissionsFactory.getByAccount(this.request.session.account)
         .then(permissions => {
             this.request.session.permissions = permissions.map(permission => permission.title.toLowerCase());
 

@@ -39,12 +39,12 @@ const AuthController = {
 
         function () {
             // @path: auth/token/revoke/all
-            // @summary: Revoke all members authentication token
+            // @summary: Revoke all accounts authentication token
 
             if (!this.request.session) {
                 throw new Errors.Unauthorized("Session is invalid");
             }
-            return SessionsFactory.find({members_id: this.request.session.member.id})
+            return SessionsFactory.find({accounts_id: this.request.session.account.id})
                 .then(sessions => Promise.all(sessions.map(session => session.revoke())))
                 .then(sessions => "");
         }

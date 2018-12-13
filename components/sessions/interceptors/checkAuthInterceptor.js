@@ -2,7 +2,7 @@ const Factories                 = use('core/factories');
 const Errors                    = use('core/errors');
 
 const SessionFactory            = Factories('Sessions');
-const MembersFactory            = Factories('Members');
+const AccountsFactory            = Factories('Accounts');
 
 function checkAuthInterceptor(body) {
     if (!this.request.headers["authorization"]) {
@@ -16,9 +16,9 @@ function checkAuthInterceptor(body) {
     return SessionFactory.get({token, state: "ACTIVE"})
         .then(session => {
             return session.slide()
-                .then(session => MembersFactory.get({id: session.members_id}))
-                .then(member => {
-                    this.request.session = {model: session, member};
+                .then(session => AccountsFactory.get({id: session.accounts_id}))
+                .then(account => {
+                    this.request.session = {model: session, account};
                     return Promise.resolve(body);
                 });
         })

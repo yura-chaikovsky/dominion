@@ -16,8 +16,8 @@ const PermissionsDefinition = {
 
     factory: {
 
-        getByMember: function(member){
-            return this.repo.getByMember(member.id)
+        getByAccount: function(account){
+            return this.repo.getByAccount(account.id)
                 .then(permissions => {
                     return Promise.all(permissions.map(permissions => this.new(permissions, false)));
                 });
@@ -34,12 +34,12 @@ const PermissionsDefinition = {
 
     instance: {
 
-        grantForMember: function (member) {
-            return this.repo.grantForMember(member.id, this.id);
+        grantForAccount: function (account) {
+            return this.repo.grantForAccount(account.id, this.id);
         },
 
-        revokeForMember: function (member) {
-            return this.repo.revokeForMember(member.id, this.id);
+        revokeForAccount: function (account) {
+            return this.repo.revokeForAccount(account.id, this.id);
         }
 
     }

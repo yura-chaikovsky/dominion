@@ -2,7 +2,7 @@ const Factories                 = use('core/factories');
 const Errors                    = use('core/errors');
 
 const PermissionsFactory            = Factories('Permissions');
-const MembersFactory                = Factories('Members');
+const AccountsFactory                = Factories('Accounts');
 
 
 const PermissionsController = {
@@ -14,16 +14,16 @@ const PermissionsController = {
     },
 
     GET : [
-        //members/12/permissions
-        function (membersId) {
-            if(this.request.session.member.id != membersId) {
+        //accounts/12/permissions
+        function (accountsId) {
+            if(this.request.session.account.id != accountsId) {
                 this.response.status = this.response.statuses._403_Forbidden;
                 throw new Errors.Forbidden("You don't have permission to perform this action");
             }
 
-            return MembersFactory.get({id: membersId})
-                .then(member => {
-                    return PermissionsFactory.getByMember(member);
+            return AccountsFactory.get({id: accountsId})
+                .then(account => {
+                    return PermissionsFactory.getByAccount(account);
                 });
         }
     ],
@@ -33,27 +33,27 @@ const PermissionsController = {
     ],
 
     PUT : [
-        //members/12/permissions/32
-        function (membersId, permissionsId) {
+        //accounts/12/permissions/32
+        function (accountsId, permissionsId) {
             return Promise.all([
                     PermissionsFactory.getByRole(permissionsId),
-                    MembersFactory.get({id: membersId})
+                    AccountsFactory.get({id: accountsId})
                 ])
-                .then(([rolePermissions, member]) => {
+                .then(([rolePermissions, account]) => {
                     if(rolePermissions.length){
-                        return Promise.all([rolePermissions, member, PermissionsFactory.getByMember(member)]);
+                        return Promise.all([rolePermissions, account, PermissionsFactory.getByAccount(account)]);
                     }else{
                         throw new Errors.NotFound(`Permissions for role '${permissionsId}' not found`);
                     }
                 })
-                .then(([rolePermissions, member, memberPermissions]) => {
+                .then(([rolePermissions, account, accountPermissions]) => {
                     return Promise.all([
                         rolePermissions,
-                        member
-                    ].concat(memberPermissions.map(permission => permission.revokeForMember(member))));
+                        account
+                    ].concat(accountPermissions.map(permission => permission.revokeForAccount(account))));
                 })
-                .then(([rolePermissions, member]) => {
-                    rolePermissions.forEach(permission => permission.grantForMember(member))
+                .then(([rolePermissions, account]) => {
+                    rolePermissions.forEach(permission => permission.grantForAccount(account))
                 });
         }
     ],

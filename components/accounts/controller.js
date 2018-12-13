@@ -18,52 +18,63 @@ const AccountsController = {
         // accounts/23
         function (accountsId) {
             return AccountsFactory.get({id: accountsId});
+        },
+
+        // accounts?token=4326e113e5770a4748a6f43951d84c0b
+        function (token = null) {
+            // @summary: Get account information by auth token
+            return AccountsFactory.getByToken(token);
         }
     ],
 
     POST : [
         // accounts
         function () {
-            if(this.request.body.phone_number) {
-                return AccountsFactory.get({phone_number: this.request.body.phone_number}).then((getAccount)=> {
+            const accountData = this.request.body;
+            accountData.role = 5;
+            accountData.ipAddress = this.request.ip;
 
-                    if (getAccount.password_hash != '') {
-                        throw new Errors.BadRequest("Registration error: user already registered");
+            return AccountsFactory.new(accountData)
+                .then(account => {
+                    if (this.request.body.password) {
+                        account.setPassword(this.request.body.password);
                     }
+                    return account;
+                })
+                .then(account => account.save())
+                .then(account => Promise.all([account, PermissionsFactory.getByRole(AccountsFactory.ROLES.ACCOUNT)]))
+                .then(([account, rolePermissions]) => Promise.all([
+                    account,
+                    ...rolePermissions.map(permission => permission.grantForAccount(account))
+                ]))
+                .then(([account]) => account);
+        },
 
-                    getAccount.createPasswordHash(this.request.body.password);
-                    getAccount.populate(this.request.body);
+        function (email = null) {
+            // @path: accounts/reset-password
+            // @summary: Send reset password link
+            // @description:  Link's query string contains `email` and `token` keys. Token is a valid Authorization token expiring in 6 hours after creation.
 
-                    return getAccount.save();
-
-                }).catch((error)=> {
-
-                    if (error instanceof Errors.NotFound) {
-                        let password = this.request.body.password;
-                        delete this.request.body.password;
-                        return AccountsFactory.new(this.request.body)
-                            .then(account=> {
-                                account.createPasswordHash(password);
-                                this.response.status = this.response.statuses._201_Created;
-                                return account.save();
-                            })
-                            .then(account => {
-                                return PermissionsFactory.getByRole("default")
-                                    .then((permissions) => {
-                                        permissions.forEach(permission => {
-                                            permission.grantForAccount(account);
-                                        })
-                                    })
-                            });
-
-                    } else {
-                        throw error;
-                    }
-
-                });
-            } else {
-                throw new Errors.BadRequest("Error: phone number is a required parameter");
-            }
+            return AccountsFactory.get({email})
+                .then(account => Promise.all([account, SessionsFactory.issue({
+                    account,
+                    signed: true,
+                    ttl: 6 * 3600 * 1000,
+                    sliding: SessionsFactory.SLIDING.NO,
+                    ip: this.request.ip,
+                    userAgent: this.request.headers["user-agent"],
+                })]))
+                .then(([account, session]) => NotificationsEmails.new(Object.assign(
+                    { recipient_to: [account.email] },
+                    require("./emails/reset-password.tpl"),
+                    Config.emailGate.senders.default))
+                    .then(email => email.fillTemplate({
+                        "[server-host]"     : Config.server.url,
+                        "[accounts-id]"      : account.id,
+                        "[session-token]"   : session.token
+                    }).send())
+                )
+                .then(email => "")
         }
     ],
 
@@ -72,7 +83,8 @@ const AccountsController = {
         function (accountsId) {
             if(this.request.body.phone_number){
                 return AccountsFactory.get({id: accountsId, phone_number: this.request.body.phone_number})
-                    .then((account)=> {
+                    .then(account => account.confirmOwner(this.request.session))
+                    .then(account => {
                         account.populate(this.request.body);
                         return account.save();
                     });
@@ -86,18 +98,18 @@ const AccountsController = {
     DELETE : [
         // accounts/1
         function (accountsId) {
+            // @rootOwnerPermissions: Accounts.Root
 
             return AccountsFactory.get({id: accountsId})
-                .then((account) => {
-                    return account.remove();
-                })
-                .then((result) => {
+                .then(account => account.confirmOwner(this.request.session))
+                .then(account => account.remove())
+                .then(result => {
                     if(result.affectedRows){
                         this.response.status = this.response.statuses._204_NoContent;
                     }
                 });
         }
-     ]
+    ]
 };
 
 

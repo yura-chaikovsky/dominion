@@ -6,7 +6,7 @@ module.exports = {
         __dirname + '/controller'
     ],
     requestInterceptors: [
-        __dirname + '/interceptors/requestAuth'
+        __dirname + '/interceptors/checkAuthInterceptor'
     ],
     responseInterceptors: []
 };

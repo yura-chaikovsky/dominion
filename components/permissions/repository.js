@@ -2,22 +2,22 @@ const Repositories              = use('core/repositories');
 
 
 const PermissionsRepository = Repositories.create('permissions', {
-    grantForMember(memberId, permissionId){
-        let query = `INSERT INTO dmn_members_permissions (members_id, permissions_id) VALUES (?, ?)`;
-        return this.db.execute(query, [memberId, permissionId]);
-    },
-
-    revokeForMember(accountId, permissionId){
-        let query = `DELETE FROM dmn_members_permissions 
-                     WHERE members_id = ? AND permissions_id = ? LIMIT 1`;
+    grantForAccount(accountId, permissionId){
+        let query = `INSERT INTO dmn_accounts_permissions (accounts_id, permissions_id) VALUES (?, ?)`;
         return this.db.execute(query, [accountId, permissionId]);
     },
 
-    getByMember(memberId){
+    revokeForAccount(accountId, permissionId){
+        let query = `DELETE FROM dmn_accounts_permissions 
+                     WHERE accounts_id = ? AND permissions_id = ? LIMIT 1`;
+        return this.db.execute(query, [accountId, permissionId]);
+    },
+
+    getByAccount(accountId){
         let query = `SELECT * FROM dmn_permissions
                      WHERE id IN
-                     (SELECT permissions_id FROM dmn_members_permissions WHERE members_id = ? )`;
-        return this.db.execute(query, [memberId])
+                     (SELECT permissions_id FROM dmn_accounts_permissions WHERE accounts_id = ? )`;
+        return this.db.execute(query, [accountId])
             .then(([rows]) => rows);
     },
 

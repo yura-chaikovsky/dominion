@@ -20,23 +20,44 @@ const AccountsDefinition = {
         recovery_token: Property.string().private()
     },
 
-    factory: {},
+    factory: {
+        getByToken(token) {
+            if (!token.trim()) {
+                throw new Errors.Unauthorized("Access token is missing");
+            }
+            return this.repo.getByToken(token)
+                .then(rows => {
+                    if (rows.length) {
+                        return this.new(rows[0], false);
+                    } else {
+                        throw new Errors.Unauthorized();
+                    }
+                });
+        }
+    },
 
     instance: {
+        confirmOwner(session) {
+            if (!(session.rootOwner === true
+                || this.id === session.accounts.id)) {
+                throw new Errors.Forbidden("You don't have permission to perform this action");
+            }
 
-        checkPassword: function(password){
-            return this.password_hash == Tools.generatePassword(password, this.password_salt) ? true:false;
+            return this;
         },
 
-        createPasswordHash: function (password){
-            if(typeof password!=='undefined') {
-                this.password_salt = Tools.generateSalt();
-                this.password_hash = Tools.generatePassword(password, this.password_salt);
+        checkPassword(password) {
+            if (this.password == createHash(password, this.salt)) {
+                return this;
+            } else {
+                throw new Errors.Unauthorized();
             }
         },
 
-        generatePasswordRecoveryToken: function () {
-            this.recovery_token = Tools.generateRecoveryToken();
+        setPassword(password) {
+            let [passwordHash, salt] = encodePassword(password);
+            this.populate({password: passwordHash, salt});
+            return this;
         }
     }
 };

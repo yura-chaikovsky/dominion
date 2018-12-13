@@ -17,7 +17,7 @@ const SessionsDefinition = {
         id                      : Property.id().private(),
         token                   : Property.string(),
         state                   : Property.enum(Object.keys(STATES)).private(),
-        members_id              : Property.model("Members"),
+        accounts_id              : Property.model("Accounts"),
         issueTime               : Property.date().private(),
         ttl                     : Property.number().min(1000).private(),
         sliding                 : Property.enum(['0', '1']).private(),
@@ -33,10 +33,10 @@ const SessionsDefinition = {
         STATES,
         SLIDING,
 
-        createForMember(member) {
+        createForAccount(account) {
             return this.new({
-                member_id: member.id,
-                token: generateToken(member.id),
+                account_id: account.id,
+                token: generateToken(account.id),
                 activity_time: new Date()
             });
         },
