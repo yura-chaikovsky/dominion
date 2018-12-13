@@ -33,14 +33,6 @@ const SessionsDefinition = {
         STATES,
         SLIDING,
 
-        createForAccount(account) {
-            return this.new({
-                account_id: account.id,
-                token: generateToken(account.id),
-                activity_time: new Date()
-            });
-        },
-
         issue(sessionData) {
             const NOW = new Date();
             const ttl = sessionData.ttl || Config.session.regularTtl;

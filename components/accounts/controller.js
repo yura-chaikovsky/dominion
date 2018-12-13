@@ -1,115 +1,71 @@
-const Factories                 = use('core/factories');
+const Property                  = use('core/property');
 const Errors                    = use('core/errors');
 
+const AccountsRepository        = require('./repository');
+const ROLES                     = require('./enums/roles');
+const Tools                     = require('./tools');
 
-const AccountsFactory           = Factories('Accounts');
-const PermissionsFactory        = Factories('Permissions');
 
-const AccountsController = {
+const AccountsDefinition = {
 
-    path: AccountsFactory.__model__.name,
+    name: 'Accounts',
 
-    permissions: {
-        PUT: 'Accounts.Update',
-        DELETE: 'Accounts.Delete'
+    repository: AccountsRepository,
+
+    properties: {
+        id: Property.id(),
+        phone_number: Property.number().min(10000000000).max(999999999999),
+        email: Property.string().max(50),
+        password_hash: Property.string().max(255).private(),
+        password_salt: Property.string().max(255).private(),
+        info: Property.object(),
+        recovery_token: Property.string().private()
     },
 
-    GET : [
-        // accounts/23
-        function (accountsId) {
-            return AccountsFactory.get({id: accountsId});
-        },
+    factory: {
 
-        // accounts?token=4326e113e5770a4748a6f43951d84c0b
-        function (token = null) {
-            // @summary: Get account information by auth token
-            return AccountsFactory.getByToken(token);
-        }
-    ],
+        ROLES,
 
-    POST : [
-        // accounts
-        function () {
-            const accountData = Object.assign({}, this.request.body);
-            delete accountData.password;
-
-            return AccountsFactory.new(accountData)
-                .then(account => {
-                    if (this.request.body.password) {
-                        account.setPassword(this.request.body.password);
-                    }
-                    return account;
-                })
-                .then(account => account.save())
-                .then(account => Promise.all([account, PermissionsFactory.getByRole(AccountsFactory.ROLES.CUSTOMER)]))
-                .then(([account, rolePermissions]) => Promise.all([
-                    account,
-                    ...rolePermissions.map(permission => permission.grantForAccount(account))
-                ]))
-                .then(([account]) => account);
-        },
-
-        function (email = null) {
-            // @path: accounts/reset-password
-            // @summary: Send reset password link
-            // @description:  Link's query string contains `email` and `token` keys. Token is a valid Authorization token expiring in 6 hours after creation.
-
-            return AccountsFactory.get({email})
-                .then(account => Promise.all([account, SessionsFactory.issue({
-                    account,
-                    signed: true,
-                    ttl: 6 * 3600 * 1000,
-                    sliding: SessionsFactory.SLIDING.NO,
-                    ip: this.request.ip,
-                    userAgent: this.request.headers["user-agent"],
-                })]))
-                .then(([account, session]) => NotificationsEmails.new(Object.assign(
-                    { recipient_to: [account.email] },
-                    require("./emails/reset-password.tpl"),
-                    Config.emailGate.senders.default))
-                    .then(email => email.fillTemplate({
-                        "[server-host]"     : Config.server.url,
-                        "[accounts-id]"      : account.id,
-                        "[session-token]"   : session.token
-                    }).send())
-                )
-                .then(email => "")
-        }
-    ],
-
-    PUT : [
-        // accounts/23
-        function (accountsId) {
-            if(this.request.body.phone_number){
-                return AccountsFactory.get({id: accountsId, phone_number: this.request.body.phone_number})
-                    .then(account => account.confirmOwner(this.request.session))
-                    .then(account => {
-                        account.populate(this.request.body);
-                        return account.save();
-                    });
-
-            } else {
-                throw new Errors.BadRequest("Error: phone number is a required parameter");
+        getByToken(token) {
+            if (!token.trim()) {
+                throw new Errors.Unauthorized("Access token is missing");
             }
-        }
-    ],
-
-    DELETE : [
-        // accounts/1
-        function (accountsId) {
-            // @rootOwnerPermissions: Accounts.Root
-
-            return AccountsFactory.get({id: accountsId})
-                .then(account => account.confirmOwner(this.request.session))
-                .then(account => account.remove())
-                .then(result => {
-                    if(result.affectedRows){
-                        this.response.status = this.response.statuses._204_NoContent;
+            return this.repo.getByToken(token)
+                .then(rows => {
+                    if (rows.length) {
+                        return this.new(rows[0], false);
+                    } else {
+                        throw new Errors.Unauthorized();
                     }
                 });
         }
-    ]
+    },
+
+    instance: {
+        confirmOwner(session) {
+            if (!(session.rootOwner === true
+                || this.id === session.account.id)) {
+                throw new Errors.Forbidden("You don't have permission to perform this action");
+            }
+
+            return this;
+        },
+
+        checkPassword(password) {
+            if (this.password_hash == Tools.createHash(password, this.password_salt)) {
+                return this;
+            } else {
+                throw new Errors.Unauthorized("Incorrect credentials");
+            }
+        },
+
+        setPassword(password) {
+            let [password_hash, password_salt] = Tools.encodePassword(password);
+            this.populate({password_hash, password_salt});
+            return this;
+        }
+    }
 };
 
 
-module.exports = AccountsController;
+module.exports = AccountsDefinition;
