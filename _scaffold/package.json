@@ -1,0 +1,16 @@
+{
+  "name": "statoksystems",
+  "version": "1.0.0",
+  "description": "StatokSystems exchange module",
+  "main": "index.js",
+  "dependencies": {
+    "dominion": "git+https://github.com/yura-chaikovsky/dominion.git"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node %NODE_DEBUG_OPTION% index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yura Chaikovsky",
+  "license": "ISC"
+}
