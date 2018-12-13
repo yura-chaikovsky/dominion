@@ -41,7 +41,7 @@ const AccountsController = {
                     return account;
                 })
                 .then(account => account.save())
-                .then(account => Promise.all([account, PermissionsFactory.getByRole(AccountsFactory.ROLES.ACCOUNT)]))
+                .then(account => Promise.all([account, PermissionsFactory.getByRole(AccountsFactory.ROLES.CUSTOMER)]))
                 .then(([account, rolePermissions]) => Promise.all([
                     account,
                     ...rolePermissions.map(permission => permission.grantForAccount(account))
