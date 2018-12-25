@@ -27,7 +27,7 @@ module.exports = new (function Repository() {
     this.save = function (model) {
         model.validate();
         let query;
-        let fields = Object.keys(model.__properties__).filter(field => field !== "id");
+        let fields = Object.keys(model.__properties__);
         let parameters = fields.reduce((params, field) => {
             let [key, value] = this._parametersFormat(model.__properties__[field]);
             params.placeholders.push(`\`${field}\` = ${key}`);
