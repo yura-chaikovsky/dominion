@@ -17,8 +17,8 @@ function requestInterceptorBodyParser() {
             .on('data', chunk => {
                 body.push(chunk);
             })
-            .on('end', () => {
-                body = Buffer.concat(body).toString();
+            .on('end', data => {
+                body = data || Buffer.concat(body).toString();
 
                 if(body == ''){
                     resolve();
