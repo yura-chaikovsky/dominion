@@ -11,7 +11,7 @@ const TrackingDefinition = {
 
     properties: {
         id: Property.id(),
-        method: Property.enum(['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']),
+        method: Property.enum(['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'WS']),
         url: Property.string(),
         referrer: Property.string(),
         tracking_token: Property.string(),

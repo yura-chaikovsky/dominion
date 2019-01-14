@@ -1,7 +1,7 @@
 const Router                    = use('core/router');
 
 
-const allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
+const allowedMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'WS'];
 
 const getHandlersDefinitions = function (controller) {
 
