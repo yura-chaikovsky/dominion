@@ -41,7 +41,7 @@ class ModelProperty extends DefaultProperty {
                 outputObject[propertyName] = {
                     id: outputObject[propertyName],
                     model: this.modelName,
-                    link: this.modelName.toLowerCase() + "/" + outputObject[propertyName]
+                    link: Config.router.urlPrefix + this.modelName.toLowerCase() + "/" + outputObject[propertyName]
                 };
             }
         });
