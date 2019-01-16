@@ -22,9 +22,7 @@ class DispatchResponse {
         this.message.statusMessage = message;
     }
 
-    end(body) {
-        this.message.body = body;
-    }
+    end() { }
 }
 
 module.exports = DispatchResponse;
