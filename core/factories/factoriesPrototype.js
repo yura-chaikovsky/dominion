@@ -1,8 +1,6 @@
 const Errors                    = require('./../errors');
 
 module.exports = new (function ModelFactory() {
-    this.__cache__ = new Map();
-    this.__cacheDuration__ = 10 * 1000/*ms */;
 
     this.new = function (properties = {}, unsaved = true) {
         let newModel = new this.__model__(properties);

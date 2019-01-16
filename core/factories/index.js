@@ -26,7 +26,7 @@ Factories.define = function(factoryDescription){
 
 let factoryModel = function (factoryDescription) {
 
-    let FactoryModel = (new Function(`return function ${factoryDescription.name + 'Factory'} (){}`))();
+    let FactoryModel = (new Function(`return function ${factoryDescription.name + 'Factory'} (){ this.__cache__ = new Map(); this.__cacheDuration__ = 10 * 1000/*ms */; }`))();
     FactoryModel.prototype = ModelFactoryPrototype;
     let FactoryModelInstance = new FactoryModel();
 
