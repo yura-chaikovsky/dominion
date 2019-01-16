@@ -21,9 +21,8 @@ const fetchModels = function (collections, models) {
 
     return Promise.all(models.map(modelReference => {
         return Router.handle(new DispatchRequest(this.request.__request__, modelReference.link), new DispatchResponse())
-            .then(model => {
-                collections.set(modelReference, model);
-                return model;
+            .then(models => {
+                collections.set(modelReference, models);
             });
     }));
 };

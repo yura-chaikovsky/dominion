@@ -12,9 +12,16 @@ class Collections {
         return this.linkIndex.includes(modelReference.link);
     }
 
-    set(modelReference, model) {
-        this.linkIndex.push(modelReference.link);
-        this.modelsSet[modelReference.link] = model;
+    set(modelReference, models) {
+        const addModel = (link, model) => {
+            this.linkIndex.push(link);
+            this.modelsSet[link] = model;
+        }
+        if(Array.isArray(models)) {
+            models.forEach(model => addModel(`${modelReference.link}/${model.id}`, model));
+        } else {
+            addModel(modelReference.link, models);
+        }
     }
 
     getMissingChildModelsReferences() {
