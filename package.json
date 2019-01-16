@@ -7,9 +7,9 @@
     "test": "specs"
   },
   "dependencies": {
-    "file-type": "^7.4.0",
-    "mysql2": "^1.5.1",
-    "nodemailer": "^4.4.1"
+    "file-type": "^10.7.0",
+    "mysql2": "^1.6.4",
+    "nodemailer": "^5.1.1"
   },
   "scripts": {},
   "author": "Yura Chaikovsky",
