@@ -20,7 +20,7 @@ function requestInterceptorBodyParser() {
             .on('end', data => {
                 body = data || Buffer.concat(body).toString();
 
-                if(body == ''){
+                if(body === ''){
                     resolve();
                 }
 
