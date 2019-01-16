@@ -79,7 +79,10 @@ class Router {
             .then(function (body) {
                 this.response.body = body;
                 this.response.send();
+                return this.response.body;
             }.bind(message));
+
+        return messagePromise;
     };
 }
 
