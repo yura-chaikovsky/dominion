@@ -63,23 +63,21 @@ class Router {
                 } else if (error instanceof Errors.Forbidden) {
                     this.response.status = this.response.statuses._403_Forbidden;
                 } else if (error instanceof Errors.Database && (
-                        error.originalError.errno === 1062 /* ER_DUP_ENTRY */
-                        || error.originalError.errno === 1451 /* ER_ROW_IS_REFERENCED_2 */ )
-                    ){
+                    error.originalError.errno === 1062 /* ER_DUP_ENTRY */
+                    || error.originalError.errno === 1451 /* ER_ROW_IS_REFERENCED_2 */ )
+                ){
                     this.response.status = this.response.statuses._409_Conflict;
+                } else if (error instanceof Errors.NotImplemented) {
+                    this.response.status = this.response.statuses._501_NotImplemented;
                 } else {
-                    throw error;
+                    this.response.status = this.response.statuses._500_InternalServerError;
                 }
-                return error;
-            }.bind(message))
-            .catch(function (error) {
-                this.response.status = this.response.statuses._500_InternalServerError;
                 return Config.env.production? (console.error(error), '') : error;
             }.bind(message))
             .then(function (body) {
                 this.response.body = body;
                 this.response.send();
-                return this.response.body;
+                return this;
             }.bind(message));
 
         return messagePromise;
@@ -101,7 +99,7 @@ const findRoute = function (method, path) {
         }
     }
 
-    return [[],makeRoute(method, function(){this.response.status = this.response.statuses._501_NotImplemented})];
+    return [[],makeRoute(method, function(){throw new Errors.NotImplemented(`Route "${path}" does not exist.`)})];
 };
 
 module.exports = Router;

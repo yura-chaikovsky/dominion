@@ -7,7 +7,8 @@ const errors = {
     Unauthorized: "Unauthorized",
     Forbidden: "Forbidden",
     Conflict: "Conflict",
-    NoConnection: "Connection error"
+    NoConnection: "Connection error",
+    NotImplemented: "Not implemented"
 };
 
 Object.keys(errors).forEach((errorType) => {
