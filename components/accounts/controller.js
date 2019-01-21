@@ -1,9 +1,12 @@
+const Config                    = use("config");
 const Factories                 = use('core/factories');
 const Errors                    = use('core/errors');
 
 
 const AccountsFactory           = Factories('Accounts');
 const PermissionsFactory        = Factories('Permissions');
+const SessionsFactory           = Factories('Sessions');
+const NotificationsEmails       = Factories("NotificationsEmails");
 
 const AccountsController = {
 
@@ -81,11 +84,15 @@ const AccountsController = {
 
             if(this.request.body.phone_number){
                 return AccountsFactory.get({id: accountsId, phone_number: this.request.body.phone_number})
+                    .then(account => account.populate(this.request.body))
                     .then(account => account.confirmOwner(this.request.session))
                     .then(account => {
-                        account.populate(this.request.body);
-                        return account.save();
-                    });
+                        if(this.request.body.password_hash) {
+                            account.setPassword(this.request.body.password_hash);
+                        }
+                        return account;
+                    })
+                    .then(account => account.save());
 
             } else {
                 throw new Errors.BadRequest("Error: phone number is a required parameter");
