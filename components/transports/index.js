@@ -1,23 +1,23 @@
-const http                    = require('http');
-const https                   = require('https');
-const uri                     = require('url');
+const http                      = require("http");
+const https                     = require("https");
+const uri                       = require("url");
 
 
 class HttpRequest {
 
-   static request({ url = '', method = 'GET', postBody = '', headers = {} } = {}){
+    static request({method = "GET", url = "", postBody = "", headers = {}} = {}) {
 
-        if(postBody) {
-            headers['Content-Length'] = Buffer.byteLength(postBody);
+        if (postBody) {
+            headers["Content-Length"] = Buffer.byteLength(postBody);
         }
 
         return new Promise((resolve, reject) => {
-            let response = '';
+            let response = "";
             let urlInformation = uri.parse(url);
-            let transport = urlInformation.protocol == 'https:' ? https : http;
+            let transport = urlInformation.protocol == "https:" ? https : http;
 
-            if(urlInformation.port === null){
-                if(urlInformation.protocol == 'https:'){
+            if (urlInformation.port === null) {
+                if (urlInformation.protocol == "https:") {
                     urlInformation.port = 443;
                 } else {
                     urlInformation.protocol = 80;
@@ -26,19 +26,19 @@ class HttpRequest {
 
             let options = {
                 hostname: urlInformation.hostname,
-                port    : urlInformation.port,
-                path    : urlInformation.path,
-                method  : method,
-                headers : headers
+                port: urlInformation.port,
+                path: urlInformation.path,
+                method: method,
+                headers: headers
             };
 
             let req = transport.request(options, res => {
-                res.setEncoding('utf8');
-                res.on('data', data => response += data )
-                   .on('end', () => resolve(response) );
+                res.setEncoding("utf8");
+                res.on("data", data => response += data)
+                   .on("end", () => resolve(response));
             });
 
-            req.on('error', error => reject(error) );
+            req.on("error", error => reject(error));
 
             req.end(postBody);
         });
