@@ -31,7 +31,6 @@ function ConnectionPools(config = Config.database) {
             query() {
                 return pool.query.apply(pool, arguments)
                     .catch((error) => {
-                        console.log(arguments);
                         throw new Errors.Database(error.message);
                     });
             }
