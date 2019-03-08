@@ -2,7 +2,7 @@ const Factories                 = use('core/factories');
 const Errors                    = use('core/errors');
 
 const SessionFactory            = Factories('Sessions');
-const AccountsFactory            = Factories('Accounts');
+const AccountsFactory           = Factories('Accounts');
 
 function checkAuthInterceptor(body) {
     if (!this.request.headers["authorization"]) {
