@@ -3,7 +3,7 @@ const Config                    = use('config');
 
 const FN_ARGS = /^[^\(]*\([\{\s]*([^\)\}]*)[\}\s]*\)/m;
 const FN_ARG_SPLIT = /,/;
-const FN_ARG = /^\s*(\S+?)(id)?\s*(=\s*.+)?$/;
+const FN_ARG = /^\s*(\S+?)(Id)?\s*(=\s*.+)?$/;
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ID_PATTERN_END = '/(' + Config.router.primaryKeyPattern + ')';
 const ID_PATTERN = '/(' + Config.router.primaryKeyPattern + ')/';
@@ -44,7 +44,10 @@ const reflection = function(fn){
 
     fnTextArguments.match(FN_ARGS)[1].split(FN_ARG_SPLIT).forEach((arg) => {
         arg.replace(FN_ARG, (all, name, id, optional) => {
-            fnDescription.arguments[optional ? 'optional' : 'required'].push({name, varName: name + (id || '')});
+            fnDescription.arguments[optional ? 'optional' : 'required'].push({
+                name: name + (optional && id || ''),
+                varName: name + (id || '')
+            });
         });
     });
 
