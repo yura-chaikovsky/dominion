@@ -4,16 +4,16 @@ module.exports = new (function Repository() {
 
     this.db = new DBConnectionPool();
 
-    this.find = function (criteria, limit, offset, sort) {
+    this.find = function (criteria, limit, offset, order) {
         let fields = Object.keys(criteria);
         let condition = 'WHERE `' + fields.join('` = ? AND `') + '` = ?';
         let parameters = fields.map(field => typeof criteria[field] == 'object' ? JSON.stringify(criteria[field]) : criteria[field]);
-        let limitQuery, sortQuery;
+        let limitQuery, orderQuery;
 
-        if(sort === undefined) {
-            sortQuery = '';
+        if(order === undefined) {
+            orderQuery = '';
         } else {
-            sortQuery = 'ORDER BY ' + sort.replace(/^([+\-])([\w_]+)$/, (k, direction, field) => field + (direction === "+"? ' ASC' : ' DESC'));
+            orderQuery = 'ORDER BY ' + order.replace(/^([+\-])([\w_]+)$/, (k, direction, field) => field + (direction === "+"? ' ASC' : ' DESC'));
         }
 
         if (limit === undefined && offset === undefined) {
@@ -24,7 +24,7 @@ module.exports = new (function Repository() {
             throw new Error(`Both parameters the limit and offset are expected, or none. Given only ${isNaN(limit) ? 'offset' : 'limit'}`);
         }
 
-        let query = `SELECT * FROM ${this.__table__} ${fields.length ? condition : ''} ${sortQuery} ${limitQuery}`;
+        let query = `SELECT * FROM ${this.__table__} ${fields.length ? condition : ''} ${orderQuery} ${limitQuery}`;
 
         return this.db.execute(query, parameters)
             .then(([rows]) => rows);

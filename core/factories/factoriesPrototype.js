@@ -18,8 +18,8 @@ module.exports = new (function ModelFactory() {
         });
     };
 
-    this.find = function (criteria = {}, limit, offset, sort) {
-        return this.repo.find(criteria, limit, offset, sort)
+    this.find = function (criteria = {}, limit, offset, order) {
+        return this.repo.find(criteria, limit, offset, order)
             .then(rows => Promise.all(rows.map(row => this.new(row, false))));
     };
 
