@@ -13,7 +13,7 @@ module.exports = new (function Repository() {
         if(order === undefined) {
             orderQuery = '';
         } else {
-            orderQuery = 'ORDER BY ' + order.replace(/^([+\-])([\w_]+)$/, (k, direction, field) => field + (direction === "+"? ' ASC' : ' DESC'));
+            orderQuery = order.replace(/^(?:([+\-])([\w_]+)|(.*))$/, (k, direction, field, notMatched) => notMatched? '' : ('ORDER BY ' + field + (direction === "+"? ' ASC' : ' DESC')));
         }
 
         if (limit === undefined && offset === undefined) {
