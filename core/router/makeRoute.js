@@ -3,7 +3,7 @@ const Config                    = use('config');
 
 const FN_ARGS = /^[^\(]*\([\{\s]*([^\)\}]*)[\}\s]*\)/m;
 const FN_ARG_SPLIT = /,/;
-const FN_ARG = /^\s*(\S+?)(Id)?\s*(=\s*.+)?$/;
+const FN_ARG = /^\s*(\S+?)(id)?\s*(=\s*.+)?$/;
 const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
 const ID_PATTERN_END = '/(' + Config.router.primaryKeyPattern + ')';
 const ID_PATTERN = '/(' + Config.router.primaryKeyPattern + ')/';
