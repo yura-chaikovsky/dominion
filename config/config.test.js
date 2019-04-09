@@ -18,7 +18,7 @@ module.exports = {
         // e.g. * | ["example.com"] | () => {} (synchronous callback function with Message context returning array of allowed origins)
         origin: "*",
         methods: ["OPTIONS", "GET", "POST", "PUT", "DELETE"],
-        headers: ["Content-Type", "Set-Cookies", "Access-Token"],
+        headers: ["Content-Type", "Set-Cookies", "Authorization"],
         credentials: false,
         maxAge: 5 /* seconds */
     },
