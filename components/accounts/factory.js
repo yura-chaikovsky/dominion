@@ -43,12 +43,11 @@ const AccountsDefinition = {
 
     instance: {
         confirmOwner(session) {
-            if (!(session.rootOwner === true
-                || this.id === session.accounts.id)) {
+            if (session && (session.rootOwner === true || this.id === session.accounts.id)) {
+                return this;
+            } else {
                 throw new Errors.Forbidden("You don't have permission to perform this action");
             }
-
-            return this;
         },
 
         checkPassword(password) {
