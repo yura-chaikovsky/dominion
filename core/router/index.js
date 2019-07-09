@@ -51,7 +51,8 @@ class Router {
         });
         messagePromise
             .catch(function (error) {
-                if (error instanceof Errors.NotFound) {
+                if (error instanceof Errors.NotFound
+                    || (error instanceof Errors.Database && error.originalError.errno === 1452 /* ER_NO_REFERENCED_ROW_2 */)) {
                     this.response.status = this.response.statuses._404_NotFound;
                 } else if (error instanceof Errors.BadRequest) {
                     this.response.status = this.response.statuses._400_BadRequest;
