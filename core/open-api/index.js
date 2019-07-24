@@ -48,7 +48,8 @@ const OpenApi = {
     _models() {
         return [...Controllers.get()].map(([tag, route]) => {
             try {
-                return Factories(tag);
+                const modelName = tag.split("\/").map(cap => cap[0].toUpperCase() + cap.substring(1)).join('');
+                return Factories(modelName);
             }catch(e){
                 return null;
             }
@@ -157,6 +158,7 @@ const OpenApi = {
                 let argIndex = 0;
                 let collection = true;
                 let path, modelName;
+                controllerName = controllerName.split("\/").map(cap => cap[0].toUpperCase() + cap.substring(1)).join('');
 
 
                 if (this._models().map(model => model.__model__.name).includes(controllerName)) {

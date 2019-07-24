@@ -22,7 +22,7 @@ const PermissionsRepository = Repositories.create('permissions', {
     },
 
     getByRole(roleId){
-        let query = `SELECT *  FROM permissions
+        let query = `SELECT * FROM permissions
                      WHERE id IN
                      (SELECT permissions_id FROM roles_permissions WHERE roles_id = ? )`;
         return this.db.execute(query, [roleId])
