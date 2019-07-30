@@ -1,5 +1,5 @@
 # Dominion
-Simple Promise based Node.js framework for REST API
+Declarative Promise based Node.js framework for REST API
 
 ## Installation
 ```
