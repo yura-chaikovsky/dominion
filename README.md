@@ -96,16 +96,16 @@ and *request finalisation*. Then request promise chain gets executed:
  `factory` methods belongs to factory and and produce new model instances.  
 
 ### Controller
-File containing controller should export object containing list of request handlers and some
+File containing controller should export object containing list of request `handler` functions and some
 meta data. This object may have properties:
 
 `path` - domain part of an URL. Note, domain part is the last section of URL, 
          for example if controller returns models from `Users` domain, 
          urls can be `https://example.com/users`, `https://example.com/departments/42/users`.
          
-`permissions` - array of permissions that are required by all handlers in the controller.
+`permissions` - array of permissions that are required by all `handler`'s in the controller.
 
-`GET` `POST` `PUT` `DELETE` `OPTIONS` `WS` - arrays containing handlers (callbacks) for requests
+`GET` `POST` `PUT` `DELETE` `OPTIONS` `WS` - arrays containing `handler` functions for requests
         with specific http verbs or web sockets.          
 
 ```js
@@ -240,11 +240,11 @@ declaration's `path:` property it is used as model identified in URL:
 5. If names of required arguments has 'Id' suffix (e.g. `booksId`) it will be ignored in URL.     
 
 Note, all values extracted from URL are strings, consequently arguments in 
-`handlers` functions also are always `String` type.
+`handler` functions also are always `String` type.
 
 
 #### API Handlers
-`Handlers` function is executing with HTTP message context (`core/messages/index.js`). 
+`Handler` function is executing with HTTP message context (`core/messages/index.js`). 
 In other word, `this` point to object containing information about HTTP request and response.
 ```js
 function(booksId) {
@@ -254,7 +254,7 @@ function(booksId) {
 }
 ```
 #### Annotations
-Annotation comments are declared inside `handlers` functions. They can be used to add
+Annotation comments are declared inside `handler` functions. They can be used to add
 some meta information to an endpoint.
 
 For example, `@path:` annotation can be used to change auto-generated URL of an endpoint:
@@ -516,7 +516,7 @@ I know it feels counter-intuitive and smells like bad design, but it's not.
 Or, at least I think it is not.
 
 The point here you should never need to decorate API endpoint on component level
-or on single handler level. Such functionality should be moved to factories, models 
+or on single `handler` level. Such functionality should be moved to factories, models 
 or services.
 
 Interceptors should be used for actual global things like extracting 
