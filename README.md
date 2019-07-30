@@ -93,7 +93,7 @@ and *request finalisation*. Then request promise chain gets executed:
 5. And finally, response produced by all previous steps gets stringified and returned to a client.  
 
 ### Controller
-File containing controller should export object containing list of request `handler` functions and some
+File containing controller should export object with a list of request `handler` functions and some
 meta data. This object may have properties:
 
 `path` - domain part of an URL. Note, domain part is the last section of URL, 
