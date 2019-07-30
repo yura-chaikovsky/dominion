@@ -87,13 +87,10 @@ and *request finalisation*. Then request promise chain gets executed:
    for response interceptor, as `handler` is responsible to produce response that is
    ready to be send back to client. However, it may be used to perform some general actions 
    that depends on `handler`'s response, like set custom header.
-   4. Lastly router handles common exceptions produced by `Repositoy` or `Factories` and sets 
+   4. Lastly, router handles common exceptions produced by `Repositoy` or `Factories` and sets 
    proper status code (400 - for bad request, 404 - if model not found, 409 - for conflicts, etc). 
 
-5. Finally, response produced by all previous steps gets stringify and returned to a client.  
-
- There are 2 method types `factory` and `instance`. 
- `factory` methods belongs to factory and and produce new model instances.  
+5. And finally, response produced by all previous steps gets stringify and returned to a client.  
 
 ### Controller
 File containing controller should export object containing list of request `handler` functions and some
