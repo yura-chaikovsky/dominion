@@ -176,7 +176,7 @@ module.exports = {
 ```
 
 #### URL generation
-URL for API's endpoints is generated automatically from handler's function interface (passed arguments) 
+URL for API's endpoints is generated automatically from `handler` function interface (arguments list) 
 based on following rules:
 1. Property `path` from controller declaration is always the last section of URL.
 ```js
