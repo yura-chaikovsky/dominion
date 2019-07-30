@@ -43,7 +43,7 @@ module.exports = {
 This declarations is used only for requiring components on the fly independent from 
 order of requires in file.
 
-There are 3 default instances types:
+There are 3 default entities:
 1. Controllers
 2. Factories
 3. Repositories
@@ -237,7 +237,7 @@ function(booksId) {
 Annotation comments are declared inside `handlers` functions. They can be used to add
 some meta information to an endpoint.
 
-For example, `@path: ` annotation can be used to change auto-generated URL of an endpoint:
+For example, `@path:` annotation can be used to change auto-generated URL of an endpoint:
 ```js
 function() {
     // @path: /auth/token
