@@ -509,7 +509,7 @@ implement in case of writing custom `Repository`.
 ### Interceptors
 **Interceptors are global!** This means that no matter in what 
 component they are declared, they will be executed for *every* request.
-I know it feels counter-intuitive and smells like bad design, but it's not. 
+I know it feels counter-intuitive and smells like a bad design, but it's not. 
 Or, at least I think it is not.
 
 The point here you should never need to decorate API endpoint on component level
