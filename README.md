@@ -90,7 +90,7 @@ and *request finalisation*. Then request promise chain gets executed:
    4. Lastly, router handles common exceptions produced by `Repositoy` or `Factories` and sets 
    proper status code (400 - for bad request, 404 - if model not found, 409 - for conflicts, etc). 
 
-5. And finally, response produced by all previous steps gets stringify and returned to a client.  
+5. And finally, response produced by all previous steps gets stringified and returned to a client.  
 
 ### Controller
 File containing controller should export object containing list of request `handler` functions and some
