@@ -1,14 +1,14 @@
-#Dominion
+# Dominion
 Simple Promise based Node.js framework for REST API
 
-##Installation
+## Installation
 ```
 npm i https://github.com/yura-chaikovsky/dominion.git
 ```
 
-##Usage
+## Usage
 
-###Components
+### Components
 You can take "components" as 1:1 representation of restfull (or business) domains. 
 It's useful to organize components having each in separate folder. 
 Lets take `Users` model for example. Recommended file organization will be: 
@@ -25,7 +25,7 @@ Lets take `Users` model for example. Recommended file organization will be:
 - package-lock.json
 ```
 
-####Component declaration file
+#### Component declaration file
 
 Component dependencies are declared in `index.js` file:
 ```js
@@ -62,7 +62,7 @@ storage (NoSQL, cloud storage, flat file, etc).
 Commonly you'll need one set of controller/factory/repository in a component, 
 but it's possible to have multiple ones if needed.
 
-###API Request Lifecycle 
+### API Request Lifecycle 
 To understand how requests are processed lets look on their lifecycle, it's straight forward:
 1. On startup framework goes through all registered controllers (`core/controllers/index.js`), generates URL based 
 on functions interface and make mappings between URL's and those functions.
@@ -92,10 +92,10 @@ and *request finalisation*. Then request promise chain gets executed:
 
 5. Finally, response produced by all previous steps gets stringify and returned to a client.  
 
- Methods can be 2 types 
-`factory` and `instance`. `factory` methods belongs to factory and and produce new model instances.  
+ There are 2 method types `factory` and `instance`. 
+ `factory` methods belongs to factory and and produce new model instances.  
 
-###Controller
+### Controller
 File containing controller should export object containing list of request handlers and some
 meta data. This object may have properties:
 
@@ -175,7 +175,7 @@ module.exports = {
 };
 ```
 
-####URL's generation
+#### URL's generation
 URL for API's endpoints is generated automatically from handler's function interface (passed arguments) 
 based on following rules:
 1. Property `path` from controller declaration is always the last section of URL.
@@ -223,7 +223,33 @@ Note, all values extracted from URL are strings, consequently arguments in
 `handlers` functions also are always `String` type.
 
 
-###Models
+#### API Handlers
+`Handlers` function is executing with HTTP message context (`core/messages/index.js`). 
+In other word, `this` point to object containing information about HTTP request and response.
+```js
+function(booksId) {
+    console.log(this.request.body);
+    
+    this.response.headers["X-Items-Length"] = 42;
+}
+```
+#### Annotations
+Annotation comments are declared inside `handlers` functions. They can be used to add
+some meta information to an endpoint.
+
+For example, `@path: ` annotation can be used to change auto-generated URL of an endpoint:
+```js
+function() {
+    // @path: /auth/token
+    
+    return UsersFactory.get({email: this.request.body.email})
+        .then(user => user.validatePassword(this.request.body.password))
+        .then(user => user.createAuthToken())
+}
+```
+
+
+### Models
 Files containing models declaration should export object with model's properties and 
 prototypes for models factories and models instances.
 
@@ -289,7 +315,7 @@ module.exports = {
     }
 };
 ``` 
-####Factory Prototype
+#### Factory Prototype
 Default factory prototype (`core/factories/factoriesPrototype.js`) has methods:
  
  `.new( [modelData] )` 
@@ -321,7 +347,7 @@ UsersFactory.find({name: "Alice", status: "active"}, 10, 20, "+last_name")
 ```
 
 
-####Instance Prototype
+#### Instance Prototype
 Default instance prototype (`core/factories/modelsPrototype.js`) has methods:
 
 `.populate( {modelsData} )`
@@ -412,7 +438,7 @@ For example:
     });
 ```
 
-###Repositories
+### Repositories
 Files containing repository declaration should export instance 
 of Repository (`core/repositories/repositoryPrototype.js`) 
 representing external storage (e.g. database) related to specific model.
@@ -462,7 +488,7 @@ implement in case of writing custom `Repository`.
 
 
 
-###Interceptors
+### Interceptors
 **Interceptors are global!** This means that no matter in what 
 component they are declared, they will be executed for *every* request.
 I know it feels counter-intuitive and smells like bad design, but it's not. 
