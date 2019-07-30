@@ -181,23 +181,31 @@ based on following rules:
 1. Property `path` from controller declaration is always the last section of URL.
 ```js
 {
-    path: "books"
+    path: "books",
+    ...
+    GET: [
+        function () { }
+
+        // produces URL: 
+        // https://example.com/books    
+    ]
+
 }
-...
-function () { } 
-/* produces: 
-https://example.com/books
 ```
 2. Function's required arguments are used for path part of URL. If argument name equals to 
 declaration's `path` property it is used as model identified in URL:
 ```js
 {
     path: "books"
+    ...
+    GET: [
+        function (booksId) { }
+
+        // produces URL: 
+        // https://example.com/books/42    
+    ]
+
 }
-...
-function (booksId) { } 
-/* produces: 
-https://example.com/books/42
 ```
 3. If argument name is not equal to declaration's `path` property it is used as model's
  parent identified in URL. Identifiers from URL will be passed to function 
@@ -205,17 +213,29 @@ https://example.com/books/42
 ```js
 {
     path: "books"
+    ...
+    GET: [
+        function (shelvesId, booksId) { }
+
+        // produces URL: 
+        // https://example.com/shelves/42/books/21    
+    ]
+
 }
-...
-function (shelvesId, booksId) { } 
-/* produces: 
-https://example.com/shelves/42/books/21
 ```
 4. Function's optional arguments are treated as query parameters (section of URL after "?").
 ```js
-function (limit = 6, offset = 0) { } 
-/* produces: 
-https://example.com/users?limit=12&offset=0
+{
+    path: "books"
+    ...
+    GET: [
+        function (limit = 6, offset = 0) { }
+
+        // produces URL: 
+        // https://example.com/books?limit=12&offset=0    
+    ]
+
+}
 ```
 5. If names of required arguments has 'Id' suffix (e.g. `booksId`) it will be ignored in URL.     
 
