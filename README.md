@@ -178,7 +178,7 @@ module.exports = {
 #### URL generation
 URL for API's endpoints is generated automatically from `handler` function interface (arguments list) 
 based on following rules:
-1. Property `path` from controller declaration is always the last section of URL.
+1. Property `path:` from controller declaration is always the last section of URL.
 ```js
 {
     path: "books",
@@ -193,7 +193,7 @@ based on following rules:
 }
 ```
 2. Function's required arguments are used for path part of URL. If argument name equals to 
-declaration's `path` property it is used as model identified in URL:
+declaration's `path:` property it is used as model identified in URL:
 ```js
 {
     path: "books"
@@ -207,7 +207,7 @@ declaration's `path` property it is used as model identified in URL:
 
 }
 ```
-3. If argument name is not equal to declaration's `path` property it is used as model's
+3. If argument name is not equal to declaration's `path:` property it is used as model's
  parent identified in URL. Identifiers from URL will be passed to function 
  when it will be called. In following example, during execution `shelvesId` == 42 and `booksId` == 21:
 ```js
