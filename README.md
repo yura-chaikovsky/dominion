@@ -13,16 +13,16 @@ You can take "components" as 1:1 representation of restfull (or business) domain
 It's useful to organize components having each in separate folder. 
 Lets take `Users` model for example. Recommended file organization will be: 
 ```
-- components/
-| - users/             <-- `Users` component 
-| | - index.js
-| | - controller.js
-| | - factory.js
-| | - repository.js
-| - products/
-- index.js
-- package.json
-- package-lock.json
+| - components/
+| | - users/             <-- `Users` component 
+| | | - index.js
+| | | - controller.js
+| | | - factory.js
+| | | - repository.js
+| | - products/
+| - index.js
+| - package.json
+| - package-lock.json
 ```
 
 #### Component declaration file
@@ -175,7 +175,7 @@ module.exports = {
 };
 ```
 
-#### URL's generation
+#### URL generation
 URL for API's endpoints is generated automatically from handler's function interface (passed arguments) 
 based on following rules:
 1. Property `path` from controller declaration is always the last section of URL.
@@ -330,7 +330,7 @@ Default factory prototype (`core/factories/factoriesPrototype.js`) has methods:
  
  For example:
 ```js
-   UsersFactory.get({id: 42})
+UsersFactory.get({id: 42})
 ```    
     
  
@@ -374,6 +374,7 @@ book.isbn = "2000"
 ```  
 
 `.validate()`
+
 Validates all model's properties to match `Property` rules from model's properties declaration.
 
 
