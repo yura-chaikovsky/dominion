@@ -517,8 +517,8 @@ or on single `handler` level. Such functionality should be moved to factories, m
 or services.
 
 Interceptors should be used for actual global things like extracting 
-cookies from header, parsing multipart/form-data or converting response
-from JSON to XML.
+cookies from header, parsing multipart/form-data, logging, converting response
+from JSON to XML, etc.
 
  
 
