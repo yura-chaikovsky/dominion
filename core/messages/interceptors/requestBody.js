@@ -21,7 +21,7 @@ function requestInterceptorBodyParser() {
                 body = data || Buffer.concat(body).toString();
 
                 if(body === ''){
-                    resolve();
+                    return resolve();
                 }
 
                 switch (this.request.headers['content-type']) {
