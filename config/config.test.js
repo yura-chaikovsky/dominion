@@ -2,7 +2,8 @@ module.exports = {
     server: {
         host: "localhost",
         port: 3001,
-        url: "https://localhost"
+        apiUrl: "https://localhost",
+        clientUrl: "https://localhost"
     },
 
     router: {
