@@ -21,7 +21,7 @@ const NotificationEmailDefinition = {
         sender_from             : Property.string().max(255),
         sender_reply_to         : Property.string().max(255),
         subject                 : Property.string().max(255),
-        body                    : Property.string().max(64500),
+        body                    : Property.string(),
         recipient_to            : Property.object(),
         recipient_cc            : Property.object(),
         recipient_bcc           : Property.object(),
