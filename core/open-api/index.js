@@ -20,7 +20,7 @@ const OpenApi = {
                 "version": meta.version,
             }
         }},
-        _host:       (meta) => {return {"host": Config.server.url.replace(/https?:\/\//,"")}},
+        _host:       (meta) => {return {"host": Config.server.apiUrl.replace(/https?:\/\//,"")}},
         _basePath:   (meta) => {return {"basePath": "/" + Config.router.urlPrefix.slice(0, -1)}},
         _schemes:    (meta) => {return {"schemes": ["https"]}},
         _tags:       (meta) => {return {"tags": [...Controllers.get()].map(([tag]) => {return {"name": tag}} ).sort((a,b) => a.name.toLowerCase() < b.name.toLowerCase()? -1 : 1)}},
