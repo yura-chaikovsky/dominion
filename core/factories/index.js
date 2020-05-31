@@ -47,7 +47,12 @@ let factoryModel = function (factoryDescription) {
             set (value) {
                 value = this.scheme[propertyName]._inputModification(value);
                 this.scheme[propertyName]._validate(value, propertyName, factoryDescription.name);
-                this.__properties__[propertyName] = value;
+                Object.defineProperty(this.__properties__, propertyName, {
+                    value: value,
+                    writable: false,
+                    configurable: true,
+                    enumerable: !this.scheme[propertyName].isImmutable,
+                });
             },
             get () {
                 return this.__properties__[propertyName];
