@@ -55,6 +55,11 @@ class DefaultProperty extends PropertyPrototype {
         return this;
     }
 
+    immutable() {
+        this.isImmutable = true;
+        return this;
+    }
+
     example(exampleValue) {
         this.documentationExampleValue = exampleValue;
         return this;
