@@ -3,6 +3,7 @@ const Message = require('./../index');
 
 
 const JSON_CONTENT_TYPE = "application/json";
+const JSON_CONTENT_TYPE_WITH_ENCODING = "application/json; charset=utf-8";
 
 Message.request.addInterceptor(requestInterceptorBodyParser);
 
@@ -27,6 +28,7 @@ function requestInterceptorBodyParser() {
                 switch (this.request.headers['content-type']) {
 
                     case JSON_CONTENT_TYPE:
+                    case JSON_CONTENT_TYPE_WITH_ENCODING:
                         try{
                             resolve(JSONBodyParser(body, this.request));
                         }catch(error){
