@@ -77,7 +77,7 @@ const OpenApi = {
                 "properties": {
                     "id": {"type": "number", "example": 42},
                     "model": {"type": "string", "example": model.__model__.name},
-                    "link": {"type": "string", "example": `${model.__model__.name.toLowerCase()}/42`}
+                    "link": {"type": "string", "example": `${Config.router.urlPrefix}${model.__model__.name.toLowerCase()}/42`}
                 }
             };
 
