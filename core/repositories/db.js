@@ -13,6 +13,14 @@ function ConnectionPools(config = Config.database) {
             /** Used for the prepared statement protocol queries.
              *  It should be used for ALL queries except of DB manipulation. */
             execute(query, args = []) {
+                                
+                // workaround for 8.0.22 => https://github.com/sidorares/node-mysql2/issues/1239
+                for (const key in args) {
+                    const value = args[key];
+                    if (typeof value === 'number')
+                        args[key] = String(value);
+                }
+                
                 return pool.execute(query, args)
                     .catch((error) => {
                         let errorDatabase = new Errors.Database(error.message);
