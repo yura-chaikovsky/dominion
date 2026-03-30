@@ -34,8 +34,7 @@ const requestPrototype = {
     get ip (){
         return this.__request__.headers['x-forwarded-for']
             || this.__request__.connection.remoteAddress
-            || this.__request__.socket.remoteAddress
-            || this.__request__.connection.socket.remoteAddress;
+            || this.__request__.socket.remoteAddress;
     },
 
     cookies: {},
