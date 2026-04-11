@@ -34,7 +34,6 @@ let factoryModel = function (factoryDescription) {
     Object.assign(FactoryModelInstance, factoryDescription.factory);
     FactoryModelInstance.repo = factoryDescription.repository;
 
-    let Model = (new Function(`return function ${factoryDescription.name}(props){this.__properties__ = {}; this.__name__ = "${factoryDescription.name}"; props && this.populate(props)}`))();
     let Model = (new Function(`return function ${factoryDescription.name}(props){this.__properties__ = {}; this.__dirty_properties__ = new Set(); this.__name__ = "${factoryDescription.name}"; props && this.populate(props)}`))();
     Model.prototype = Object.create(ModelPrototype);
     Model.prototype.repo = factoryDescription.repository;
