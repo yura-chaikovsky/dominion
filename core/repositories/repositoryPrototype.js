@@ -35,6 +35,10 @@ module.exports = new (function Repository() {
         let query;
         let fields = Object.keys(model.__properties__);
         let parameters = fields.reduce((params, field) => {
+            if (!model.__unsaved__ && model.__dirty_properties__ && !model.__dirty_properties__.has(field)) {
+                return params;
+            }
+            
             let [key, value] = this._parametersFormat(model.__properties__[field]);
             params.placeholders.push(`\`${field}\` = ${key}`);
             params.values.push(value);
@@ -45,6 +49,9 @@ module.exports = new (function Repository() {
         if (model.__unsaved__) {
             query = `INSERT ${this.__table__} SET ${parameters.placeholders.join(',')}`;
         } else {
+            if (parameters.placeholders.length === 0) {
+                return Promise.resolve(model);
+            }
             query = `UPDATE ${this.__table__} SET ${parameters.placeholders.join(',')} WHERE ${this.__table__}.id = ?`;
             parameters.values.push(model.id);
         }
@@ -55,6 +62,9 @@ module.exports = new (function Repository() {
                     model.id = result.insertId;
                 }
                 model.__unsaved__ = false;
+                if (model.__dirty_properties__) {
+                    model.__dirty_properties__.clear();
+                }
                 return model;
             });
     };
