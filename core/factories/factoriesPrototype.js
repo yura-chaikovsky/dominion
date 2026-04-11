@@ -5,6 +5,9 @@ module.exports = new (function ModelFactory() {
     this.new = function (properties = {}, unsaved = true) {
         let newModel = new this.__model__(properties);
         newModel.__unsaved__ = unsaved;
+        if (!unsaved && newModel.__dirty_properties__) {
+            newModel.__dirty_properties__.clear();
+        }
         return Promise.resolve(Object.seal(newModel));
     };
 
