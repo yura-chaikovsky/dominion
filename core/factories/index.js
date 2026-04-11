@@ -27,6 +27,7 @@ Factories.define = function(factoryDescription){
 let factoryModel = function (factoryDescription) {
 
     let FactoryModel = (new Function(`return function ${factoryDescription.name + 'Factory'} (){ this.__cache__ = new Map(); this.__cacheDuration__ = 10 * 1000/*ms */; }`))();
+    
     FactoryModel.prototype = ModelFactoryPrototype;
     let FactoryModelInstance = new FactoryModel();
 
@@ -34,6 +35,7 @@ let factoryModel = function (factoryDescription) {
     FactoryModelInstance.repo = factoryDescription.repository;
 
     let Model = (new Function(`return function ${factoryDescription.name}(props){this.__properties__ = {}; this.__name__ = "${factoryDescription.name}"; props && this.populate(props)}`))();
+    let Model = (new Function(`return function ${factoryDescription.name}(props){this.__properties__ = {}; this.__dirty_properties__ = new Set(); this.__name__ = "${factoryDescription.name}"; props && this.populate(props)}`))();
     Model.prototype = Object.create(ModelPrototype);
     Model.prototype.repo = factoryDescription.repository;
     Model.prototype.scheme = factoryDescription.properties;
@@ -47,6 +49,13 @@ let factoryModel = function (factoryDescription) {
             set (value) {
                 value = this.scheme[propertyName]._inputModification(value);
                 this.scheme[propertyName]._validate(value, propertyName, factoryDescription.name);
+                
+                if (this.__properties__[propertyName] !== value) {
+                    if (this.__dirty_properties__) {
+                        this.__dirty_properties__.add(propertyName);
+                    }
+                }
+                
                 Object.defineProperty(this.__properties__, propertyName, {
                     value: value,
                     writable: false,
